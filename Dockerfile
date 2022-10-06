@@ -1,3 +1,5 @@
+# todos:
+# - make separate user
 FROM rocker/r-ver:4
 
 MAINTAINER Johannes Titz
