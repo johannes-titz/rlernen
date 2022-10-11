@@ -1,0 +1,89 @@
+---
+title: "Rlernen - FAQ"
+output:
+  learnr::tutorial:
+    progressive: false
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
+tutorial_options(exercise.startover = TRUE)
+```
+
+## Tag 1
+### Zur Kommentarfunktion: Gibt es nur #? Gibt es mehrzeilige Kommentare?
+
+Gute Frage! Tatsächlich habe ich Kommentare noch nicht erklärt. Sobald man eine Raute (#) schreibt, ignoriert R die entsprechende Zeile:
+
+```{r q1, exercise = TRUE}
+pi <- 3.14
+# das hier wird ignoriert
+# hilfreich um längeren Code zu strukturieren oder zu erklären was man tut
+# Radius
+z <- 16
+# Höhe
+a <- 1.5
+# Volumen
+pi*z*z*a
+```
+
+Mehrzeilige Kommentare gibt es von Haus aus nicht. Benutzt man aber eine Entwicklungsumgebung wie RStudio, so gibt es Shortcuts um mehrere Zeilen zu kommentieren. Bei Rstudio könnt Ihr einfach die zu kommentierenden Zeilen auswählen und dann ``Strg+Shift+C`` drücken. Das funktioniert auch um den Kommentar wieder zu entfernen. Ich werde versuchen die Kommentarfunktion direkt in eines der Tutorials einzubauen, da Kommentare sehr Hilfreich sind und zum Basiswissen gehören.
+
+### Welche Zeichen sind für Variablen erlaubt, wie lang dürfen die sein?
+
+Auch das ist eine gute Frage! Erlaubte Zeichen sind Buchstaben, Zahlen, der Punkt (.) und der Unterstrich (_). Beginnen muss eine Variable mit einem Buchstaben oder einezm Punkt (.), an zweiter Stelle darf jedoch keine Zahl stehen.
+
+Das hier klappt alles nicht:
+```{r q2a, exercise = TRUE, error = TRUE}
+var_name% # Sonderzeichen
+```
+
+```{r q2b, exercise = TRUE, error = TRUE}
+2var_name # Variable beginnt mit Zahl
+```
+
+```{r q2c, exercise = TRUE, error = TRUE}
+.2var_name # an zweiter Stelle ist eine Zahl
+```
+
+```{r q2d, exercise = TRUE, error = TRUE}
+_var_name # beginnt nicht mit Buchstabe oder Punkt (.)
+```
+
+### Bei der Pizzaaufgabe habe ich bei Senf wieder x vergeben... ich wollte von mir aus y nehmen, weil x ja schon vorher vergeben war, aber da kam immer ne Fehlermeldung. Irgendwo hab ich da einen Denkfehler glaube ich. Warum geht da nur x?
+
+Ich vermute Du meinst den folgenden Abschnitt:
+```{r q3, exercise = TRUE}
+senf <- factor(x = c("etwas", "viel", "kein", "etwas", "viel", "kein"),
+               levels = c("kein", "etwas", "viel"),
+               ordered = TRUE)
+senf
+```
+
+Der erste Parameter von ``factor`` ist ``x``, was auch in der Hilfe beschrieben ist. Hier bietet sich wieder die Funktionen-Analogie an. Haben wir eine mathematische Funktion $f(x_1, x_2)$ dann darf ich in der Formulierung der Funktion auch nur die Variablen $x_1$ und $x_2$ verwenden $f(x_1, x_2) = 0.5x_1+3x_2^2$. Zurück gibt ``factor`` einen Vektor, man sieht dann nicht mehr wie die Argumente von ``factor`` hießen. Deshalb kann man immer wieder ``x`` schreiben, wie gesagt, muss man es sogar, weil die Funktion ``factor`` das erwartet. Üblicherweise sind Funktionen lokal. Das heißt die definierten Variablen in Funktionen sind nur innerhalb der Funktion gültig. Sobald die Funktion beendet ist, werden alle diese Variablen wieder gelöscht.
+
+### Bei der Gehaltsaufgabe war in einer das Zuweisen mit "<-" und in der nächsten das Zuweisen mit "=". Geht hier beides, bei mir wurde zumindest bei beiden das gleiche ausgegeben? Ist <- prinzipiell durch = austauschbar?
+
+Es geht beides, aber das Gleichheitszeichen (``=``) für die Zuweisung zu verwenden ist schlechter Stil. Warum? Weil das Gleichheitszeichen konventionell nur bei Parametern von Funktionen verwendet wird.
+
+```{r q4, exercise = TRUE}
+# guter Stil:
+pi <- 3.14
+senf <- factor(x = c("etwas", "viel", "kein", "etwas", "viel", "kein"),
+               levels = c("kein", "etwas", "viel"),
+               ordered = TRUE)
+# schlechter Stil
+pi = 3.14
+senf = factor(x <- c("etwas", "viel", "kein", "etwas", "viel", "kein"),
+               levels <- c("kein", "etwas", "viel"),
+               ordered <- TRUE)
+```
+
+Die Analogie ist: Diesen saz kan mann zwahr versteen, aber es isst doch besser sich an die konventionele Rechtshreibung zu halten.
+
+Es gibt also einige Konventionen in der R-Community die man berücksichtigen sollte. Dies erleichtert es fremden Code zu lesen und zu verstehen. Es ist also keine Kleinigkeit und Ihr solltet Euch daran halten. Ein verbreiteter Style-Guide ist hier zu finden: https://style.tidyverse.org/
+
+Üblicherweise ist der Code in den Tutorials auch daran angelehnt. Falls es Abweichungen gibt, sagt mir bitte Bescheid, dann bessere ich nach. Bei der Gehaltsaufgabe habe ich bereits nachgebessert, es ist nun konsistent.

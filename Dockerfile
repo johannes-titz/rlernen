@@ -59,6 +59,7 @@ RUN R -e "rmarkdown::render('tag4.Rmd')"
 RUN R -e "rmarkdown::render('tag5.Rmd')"
 RUN R -e "rmarkdown::render('tag6.Rmd')"
 RUN R -e "rmarkdown::render('tag7.Rmd')"
+RUN R -e "rmarkdown::render('faq.Rmd')"
 
 RUN echo "local(options(shiny.port = 3838, shiny.host = '0.0.0.0'))" > .Rprofile
 
