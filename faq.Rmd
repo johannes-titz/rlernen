@@ -10,7 +10,6 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
-tutorial_options(exercise.startover = TRUE)
 ```
 
 ## Tag 1
