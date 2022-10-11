@@ -1,7 +1,7 @@
 *
 Dockerfile
 .git
-!tag*
+!tag*.Rmd
 !DESCRIPTION
 !data
 !images
