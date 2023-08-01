@@ -1,5 +1,5 @@
 ---
-title: "Rlernen - FAQ"
+title: "FAQ"
 output:
   learnr::tutorial:
     progressive: false
