@@ -33,6 +33,7 @@ Imports:
     shiny,
     sjPlot,
     tidyr,
-    WebPower
+    WebPower,
+    librarian
 Remotes:  
     sctyner/memer
