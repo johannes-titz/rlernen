@@ -46,11 +46,11 @@ modus <- function(x){
 # data <- data[,-1]
 # data$Vegetarier <- data$Vegetarier.
 # data$Vegetarier. <- NULL
-# saveRDS(data, "tag3/www/ws19.RData")
+# saveRDS(data, "data/ws19.rds")
 # write.csv(data, "data.csv", row.names = FALSE)
 # system("scp ~/programming/rkurs/WS19b.csv titz@login.tu-chemnitz.de:public_html/data.csv")
 # vllt. auf rki umsteigen: https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0
-data <- readRDS("data/ws19.RData")
+data <- readRDS("data/ws19.rds")
 ```
 
 ## Einführung
