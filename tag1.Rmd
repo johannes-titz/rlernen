@@ -634,7 +634,7 @@ q_n(160, "Was ist der erste Wert bei `groesse`?")
 
 **Aufgabe**
 
-Zu guter letzt, SPSS-Daten mit dem Namen `mea.sav`, wieder unter `data`. Wir lesen sie über das Hilfspaket `foreign` ein (mehr zu Paketen an Tag 2). Der Befehl heißt `read.spss` und wir wollen am Ende einen Dataframe bekommen, weshalb ich schon mal `to.data.frame` auf `TRUE` gesetzt habe (Details zu TRUE/FALSE kommen noch im Laufe des Tutorials).
+Zu guter letzt, SPSS-Daten mit dem Namen `mea.sav`, wieder unter `data`. Wir lesen sie über das Hilfspaket `foreign` ein (mehr zu Paketen an Tag 2). Der Befehl heißt `read.spss` und wir wollen am Ende einen Dataframe bekommen, weshalb ich schon mal `to.data.frame` auf `TRUE` gesetzt habe (Details zu `TRUE/FALSE` kommen noch im Laufe des Tutorials).
 
 ```{r mea, exercise = T}
 mea <- ____(____, to.data.frame = TRUE)
@@ -915,7 +915,6 @@ Der Datensatz wurde tatsächlich unter `data/youtuber.csv` gespeichert. Das Tren
 ```{r laden, exercise = TRUE}
 
 ```
-
 
 ```{r laden-solution}
 read.table("data/youtuber.csv", header = F, sep = ";")
