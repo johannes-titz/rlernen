@@ -334,21 +334,14 @@ Wie Du siehst, ist das Filtern sehr mächtig, obwohl es im Grunde darauf hinausl
 
 Um Deinen Freunden die massiven theoretischen Skills, die Du nun hast, zu demonstrieren, brauchst Du einen größeren Datensatz. Einen Datensatz, der bei UND ODER NICHT nicht gleich einknickt. Was passt schon besser zu einer leckeren Pizza Speciale als ein guter Film? Nur ein guter Film? Deine Freunde wollen den *besten* Film. Wir ziehen uns einen Datensatz der 5000 am besten bewerteten Filme (im Jahr 2016) der IMDB von hier: https://raw.githubusercontent.com/devashishpatel/IMDB-Top-5000/master/movie_metadata.csv
 
-Ich habe diesen Datensatz bereits unter dem Verzeichnis `data` als `imdb.rds` abgespeichert. Deine erste Aufgabe ist es ihn zu laden und die ersten paar Zeilen auszugeben:
+Ich habe diesen Datensatz bereits unter dem Verzeichnis `data` als `imdb.rds` abgespeichert. Wir laden ihn zunächst und geben ihn aus:
 
-```{r laden, exercise = TRUE}
-imdb <- ____
-head(imdb)
+```{r laden}
+imdb <- readRDS("data/imdb.rds")
+imdb
 ```
 
-<div id="laden-hint">
-<pre>
-imdb <- readRDS("data/imdb.rds")
-head(imdb)
-</pre>
-</div>
-
-Einen guten Eindruck über die Art der Variablen erhält man über `describe` (aus dem `psych`-Paket, was ich für Dich schon geladen habe, mehr dazu später). Standardmäßig werden bei `describe` nicht-numerische Variablen in numerische umgewandelt, also aufpassen bei der Interpretation!
+Einen guten Eindruck über die Art der Variablen erhält man über `describe` (aus dem `psych`-Paket, was ich für Dich schon geladen habe, mehr dazu später). Standardmäßig werden bei `describe` nicht-numerische Variablen (markiert mit einem Asterisk: <b>*</b>) in numerische umgewandelt, also aufpassen bei der Interpretation!
 
 ```{r echo = TRUE}
 describe(imdb)
