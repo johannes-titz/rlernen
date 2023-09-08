@@ -8,7 +8,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-librarian::shelf(ez, sjPlot)
+librarian::shelf(ez, sjPlot, learnr)
+source("setup.R")
 
 data <- readRDS("data/ws19.rds")
 imdb <- readRDS("data/imdb.rds")
@@ -23,7 +24,6 @@ unterricht <- data.frame(av = av,
                    wid = 1:20)
 vlf5 <- data.frame(av = matrix(c(18, 18, 20, 17, 9, 16, 25, 24, 16)),
                    gruppe = rep(c("placebo", "einfache Dosis", "doppelte Dosis"), each = 3))
-vlf5
 ```
 
 ## Einführung
@@ -48,28 +48,29 @@ Da die Regressions-Analyse Intervallskalenniveau voraussetzt, schaust Du Dir die
 
 Bevor wir das Modell bauen, müssen wir das Alter des Filmes aus dem Erscheinungsjahr berechnen:
 
-```{r}
+```{r, echo = TRUE}
 imdb$age <- 2020 - imdb$title_year
 ```
 
 Und nun das Modell:
 
-```{r}
+```{r, echo = TRUE}
 model1 <- lm(imdb_score ~ budget + duration + age, data = imdb)
 summary(model1)
 ```
 
-Mit `lm` machen wir ein **l**ineares **M**odell, was äquivalent zu einer Regression ist. Die Syntax bedient sich hier der Formelsprachweise von `R`. Zunächst kommt die AV, dann die Tilde `~` und dann die UVs mit einem `+` voneinander getrennt. Genau wie beim Boxplot mit mehreren UVs (siehe Tag 3). Schließlich sagen wir `lm` noch in welchem Datensatz sich diese Variablen befinden. Das ist sehr praktisch, ansonsten müssten wir immer wieder `data$` vor die Variablen schreiben (`data$imdb_score ~ data$action + ...`), was viel mehr Tipparbeit wäre.
+Mit `lm` machen wir ein **l**ineares **M**odell, was äquivalent zu einer Regression ist. Die Syntax bedient sich hier der Formelschreibweise von `R`. Zunächst kommt die AV, dann die Tilde `~` und dann die UVs mit einem `+` voneinander getrennt. Genau wie beim Boxplot mit mehreren UVs (siehe Tag 3). Schließlich sagen wir `lm` noch in welchem Datensatz sich diese Variablen befinden. Das ist sehr praktisch, ansonsten müssten wir immer wieder `data$` vor die Variablen schreiben (`data$imdb_score ~ data$action + ...`), was viel mehr Tipparbeit wäre.
 
 Der Output erfolgt dann am einfachsten über `summary`, wobei dies zugegebenerweise etwas unübersichtlich ist. Wir können uns hier eines schönen Pakets von Daniel Lüdecke bedienen:
-```{r, eval=FALSE}
-install.packages(sjPlot)
+
+```{r, eval=FALSE, echo = TRUE}
+install.packages("sjPlot")
 library(sjPlot)
 ```
 
 Und nun:
 
-```{r}
+```{r, echo = TRUE}
 tab_model(model1)
 ```
 
@@ -86,42 +87,36 @@ question("Wie kann man den Einfluss des Alters eines Films auf seine Bewertung i
 ```
 
 ```{r model1-mpc2, echo=FALSE}
-question("Welche Bewertung bekommt ein Film, der 0 Jahre alt ist und 120 Minuten geht. (Ignoriere hierfür den Effekt des Budgets.)",
-  answer("6.83", correct = TRUE),
-  answer("4.46"),
-  answer("4.43"),
-  answer("7.21"),
-  answer("5.98"),
-  random_answer_order = T
-)
+q_n(6.83, "Welche Bewertung bekommt ein Film, der 0 Jahre alt ist und 120 Minuten geht. (Ignoriere hierfür den Effekt des Budgets. Runde auf 2 Dezimalstellen)")
 ```
 
 Überraschenderweise hat das Budget keinen Einfluss auf die Bewertung, aber durchaus die Länge des Films. Wir erinnern uns, dass bei IMDB auch Serien enthalten sind, die eventuell generell schlechter bewertet werden als Filme. Aber die Variable Film/Serie ist ja nicht intervallskaliert, also können wir sie nicht in die Regression aufnehmen. Falsch gedacht! Es spricht nichts dagegen dichotome Variablen in eine Regression aufzunehmen:
 
-```{r}
+```{r, echo = TRUE}
 imdb$film <- imdb$duration > 75
 ```
 
-```{r}
+```{r, echo = TRUE}
 model2 <- lm(imdb_score ~ budget + duration + age + film, data = imdb)
 tab_model(model2)
 ```
 Der Effekt der Serie lässt sich hier einfach als Mittelwertsunterschied lesen. Wenn `film == 0`, dann ist es eine Serie und wir sind bei einer Schätzung von 5.33 (wenn budget, duration und age 0 wären). Ist es ein Film, dann müssen wir 1.02 abziehen. Heißt also einfach nur, dass Serien generell besser bewertet werden -- überraschend, denn spontan hätte ich das Gegenteil erwartet. Aber vielleicht ist der Grund für die bessere Bewertung von Serien ein Selektionsprozess: Personen, denen die Serie gefällt (Fans also) machen sich die Mühe eine Bewertung abzugeben, wohingegen jemand der die Serie nicht mag, sie einfach nicht schaut und keine Bewertung abgibt. Bei Filmen könnte dieser Prozess anders ablaufen.
 
-Trotz des riesigen Effekts von Film/Serie bleibt der Einfluss der Dauer erhalten (immer noch 0.02). Da unsere theoretischen Überlegungen hierzu eher primitiver Natur sind, wollen wir hier erst mal nicht tiefer graben. Stattdessen überlegst Dir nun, dass das Genre sicher auch eine Rolle spielt. Action-Filme werden Deiner Ansicht nach besser bewertet als andere Filme.
+Trotz des riesigen Effekts von Film/Serie bleibt der Einfluss der Dauer erhalten (immer noch 0.02). Da unsere theoretischen Überlegungen hierzu eher primitiver Natur sind, wollen wir erst mal nicht tiefer graben. Stattdessen überlegst Dir nun, dass das Genre sicher auch eine Rolle spielt. Action-Filme werden Deiner Ansicht nach besser bewertet als andere Filme.
 
-Wir erstellen uns also eine Variable für Action-Film/kein Action-Film. Das stellt uns schon vor eine Herausforderung, denn üblicherweise wird ein Film in mehrere Kategorien sortiert (z. B. Action und Komödie). Wir nutzen hier reguläre Ausdrücke über `grepl` um die Variable zu erstellen. Reguläre Ausdrücke sind ein Thema über welches man einen separaten Kurs halten könnte. Hier sollst Du nur wissen, dass es so etwas gibt und wie man es im einfachsten Fall verwendet.
+Wir erstellen uns also eine Variable für Action-Film/kein Action-Film. Das stellt uns schon vor eine Herausforderung, denn üblicherweise wird ein Film in mehrere Kategorien sortiert (z. B. Action und Komödie). Wir nutzen hier reguläre Ausdrücke über `grepl` um die Variable zu erstellen. Reguläre Ausdrücke sind ein Thema über welches man einen separaten Kurs halten könnte. Hier sollst Du nur lernen, dass es so etwas gibt und wie man es im einfachsten Fall verwendet.
 
-```{r}
+```{r, echo = TRUE}
 imdb$action <- grepl("Action", imdb$genres)
 ```
 
 `grepl` durchsucht alle Strings und gibt 1 zurück, falls der Target-String vorkommt, ansonsten 0. Wir bekommen also eine Dummy-Variable. Und nun können wir das Modell bauen:
 
-```{r}
+```{r, echo = TRUE}
 model2 <- lm(imdb_score ~ budget + duration + age + film + action, data = imdb)
 tab_model(model2)
 ```
+
 Okay, Action-Filme werden tatsächlich eher schlechter bewertet, vielleicht weil sie nicht gerade deep sind.
 
 Du bist schon recht zufrieden mit dem Modell und empfiehlst der Schauspielerin in Serien zu spielen, die wenig Action enthalten und bald ausgestrahlt werden, denn alte Produktionen werden tendenziell schlechter bewertet. Aber Deine Auftraggeberin ist noch nicht vollends zufrieden. Sie schlägt vor ins Modell Regisseure und Schauspieler einzubeziehen. Mache zunächst Dummy-Variablen für die Regisseure Christopher Nolan, Stanley Kubrick und Guy Ritchie (Variable `director_name`) sowie den Schauspieler Christian Bale in der Hauptrolle (Variable `actor_1_name`), rechne anschließend die Regression (die bisherigen Variablen sollen drin bleiben).
@@ -140,14 +135,7 @@ tab_model(model1)
 ```
 
 ```{r chisq-mpc, echo=FALSE}
-question("Um wie viel besser werden Filme von Christopher Nolan (im Vergleich zu anderen Regisseuren) beurteilt unter Kontrolle der restlichen Variablen?",
-  answer("1.45", correct = TRUE),
-  answer("0.99"),
-  answer("0.33"),
-  answer("1.58"),
-  answer("0.25"),
-  random_answer_order = T
-)
+q_n(1.45, "Um wie viel besser werden Filme von Christopher Nolan (im Vergleich zu anderen Regisseuren) beurteilt unter Kontrolle der restlichen Variablen?")
 ```
 
 ```{r chisq-mpc2, echo=FALSE}
@@ -182,19 +170,19 @@ Die Experimentalgruppe bekam ein Medikament, die Kontrollgruppe ein Placebo. Die
 
 An Tag 4 haben wir die Berechnung in `R` durchgeführt:
 
-```{r}
+```{r, echo = TRUE}
 t.test(c(-.09, .01, .03, -.31, .34), c(-.26, -.26, -.21, -.08), var.equal = TRUE)
 ```
 
 Wir hätten stattdessen auch eine Regression rechnen können:
 
-```{r}
+```{r, echo = TRUE}
 av <- c(-.09, .01, .03, -.31, .34, -.26, -.26, -.21, -.08)
 uv <- c(rep(1, 5), rep(0, 4))
 tab_model(lm(av ~ uv))
 ```
 
-Du siehst, der $p$-Wert von 0.156 ist identisch zum $p$-Wert beim normalen $t$-Test. Außerdem kannst Du die Durchschnittswerte für die Gruppen ablesen. Wenn die UV 0 ist (KG), dann ist nur der Intercept relevant und es kommt -0.20 heraus. Wenn die UV 1 ist (EG), dann wird zum Intercept 0.2 addiert und wir sind bei 0. Der Unterschied beträgt also 0.2 in der Flugleistung (für Kontext siehe die Übungsaufgaben).
+Du siehst, der $p$-Wert von 0.156 ist identisch zum $p$-Wert beim normalen $t$-Test. Außerdem kannst Du die Durchschnittswerte für die Gruppen ablesen. Wenn die UV 0 ist (KG), dann ist nur der Intercept relevant und es kommt -0.20 heraus. Wenn die UV 1 ist (EG), dann wird zum Intercept 0.2 addiert und wir sind bei 0. Der Unterschied beträgt also 0.2 in der Flugleistung (für mehr Kontext, schau Dir die [Übungsaufgabe](https://johannestitz.com/en/post/2022-11-15-bungsmaterialien-methodenlehre-i/) an).
 
 ```{r tuebung-mpc, echo=FALSE}
 question("Wann kann man den $t$-Test nicht durch eine Regression ersetzen? (Mehrere Antworten können richtig sein.)",
@@ -235,7 +223,7 @@ question("Obwohl die $p$-Werte beider Vorgehensweisen identisch sind, unterschei
 
 Äquivalent ist die Regression auch zur ANOVA, allerdings nur für den einfaktoriellen Fall. Schauen wir uns ein Beispiel aus der Vorlesung an (Folie 5):
 
-```{r}
+```{r, echo = TRUE}
 vlf5 <- data.frame(av = matrix(c(18, 18, 20, 17, 9, 16, 25, 24, 16)),
                    gruppe = rep(c("placebo", "einfache Dosis", "doppelte Dosis"), each = 3))
 vlf5
@@ -243,21 +231,22 @@ vlf5
 
 Die ANOVA ist:
 
-```{r warning=FALSE}
+```{r warning=FALSE, echo = TRUE}
 vlf5$wid <- 1:9
 ezANOVA(vlf5, dv = av, between = gruppe, wid = wid, detailed = TRUE)
 ```
+
 Die Regression:
 
-```{r}
-summary(lm(av~gruppe, data = vlf5))
+```{r, echo = TRUE}
+summary(lm(av ~ gruppe, data = vlf5))
 ```
 
 Der gleiche $F$-Wert, der gleiche $p$-Wert und die gleiche Effektgröße.
 
 Nun Du. In Methodenlehre I haben wir untersucht, ob die Art des Unterrichts einen Einfluss auf die Lernleistung hat:
 
-```{r}
+```{r, echo = TRUE}
 av <- matrix(c(2, 1, 3, 3, 1, 3, 4, 3, 5, 0, 6, 8, 7, 4, 10, 5, 5, 5, 3, 2))
 unterricht <- data.frame(av = av, 
                    uv = rep(c("Gruppenunterricht", "Selbststudium",
@@ -278,13 +267,7 @@ summary(lm(av ~ uv, data = unterricht))
 ```
 
 ```{r anova-mpc, echo=FALSE}
-question("Wie groß ist $R^2$ in beiden Modellen?",
-  answer("0.60", correct = TRUE),
-  answer("0.70"),
-  answer("0.50"),
-  answer("0.40"),
-  random_answer_order = T
-)
+q_n(0.6034, "Wie groß ist $R^2$ in beiden Modellen? (Gerundet auf 4 Dezimalstellen)")
 ```
 
 Für die mehrfaktorielle ANOVA wird die Sache schon schwieriger. An Tag 4 haben wir eine ANOVA (aus der Vorlesung auf Folie 12) nachgerechnet:
@@ -293,7 +276,7 @@ Für die mehrfaktorielle ANOVA wird die Sache schon schwieriger. An Tag 4 haben 
 <img src="images/anova_vorlesung_f12.png" width="600">
 <hr>
 
-```{r}
+```{r, echo = TRUE}
 vlf12 <- data.frame(av = c(18, 18, 20, 13, 15, 9, 17, 9, 16, 15, 17, 22, 25, 
                            24, 16, 17, 12, 18),
                     wid = 1:18,
@@ -304,21 +287,22 @@ ezANOVA(data = vlf12, dv = av, between = c(geschlecht, medikament), wid = wid, d
 
 In diesem Fall kommt nicht das gleiche heraus wie bei einer Regression:
 
-```{r}
+```{r, echo = TRUE}
 summary(lm(av ~ geschlecht * medikament, data = vlf12))
 ```
+
 Man beachte hier die Spezifikation der Interaktion über `geschlecht * medikament`, `R` macht dann ganz automatisch die Dummykodierung für uns.
 
-$R^2$ ist zwar identisch zur ANOVA, aber die anderen Werte unterscheiden sich. Zum Beispiel gibt es in der ANOVA kein Äquivalent zum $F$-Wert für das Gesamtmodell der Regression. Aber das können wir schnell beheben. Der $F$-Wert der Regression bezieht sich auf die Gruppeneinteilung der Regression, sie unterscheidet also nicht zwischen den einzelnen Faktoren (es gibt nur eine Gruppenvariable, nicht zwei!). Das Ganze können wir auch mit einer ANOVA nachbauen, indem wir so tun als gäbe es nur eine Gruppenvariable:
+In der ANOVA gibt es kein Äquivalent zum $F$-Wert für das Gesamtmodell der Regression. Aber das können wir schnell beheben. Der $F$-Wert der Regression bezieht sich auf die Gruppeneinteilung der Regression, sie unterscheidet also nicht zwischen den einzelnen Faktoren (es gibt nur eine Gruppenvariable, nicht zwei!). Das Ganze können wir auch mit einer ANOVA nachbauen, indem wir so tun als gäbe es nur eine Gruppenvariable:
 
-```{r}
+```{r, echo = TRUE}
 vlf12$group <- as.factor(rep(1:6, each = 3))
 vlf12
 ```
 
-Nun würden wir erwarten, dass der gleiche $F$-Wert herauskommt wie bei der Regression (2.684), wenn wir `group`als between-Faktor verwenden (statt `medikament` und `geschlecht`)
+Nun würden wir erwarten, dass der gleiche $F$-Wert herauskommt wie bei der Regression (2.684), wenn wir `group` als between-Faktor verwenden (statt `medikament` und `geschlecht`)
 
-```{r}
+```{r, echo = TRUE}
 ezANOVA(data = vlf12, dv = av, between = c(group), wid = wid, detailed = T)
 ```
 
@@ -330,19 +314,19 @@ Die Linearität der linearen Regression bezieht sich auf die Parameter, nicht au
 
 In `R` gibt es den Datensatz `mtcars`, der Informationen zu 32 Automobilen von 1974 enthält. Wir vermuten, dass die Beziehung zwischen Verbrauch (Miles/(US) gallon) und Gewicht (1000 lbs) nicht-linear ist. Machen wir zunächst eine Abbildung:
 
-```{r}
+```{r, echo = TRUE}
 plot(mtcars$wt, mtcars$mpg)
 lines(lowess(x = mtcars$wt, y = mtcars$mpg))
 ```
 
 Eine leichte nicht-Linearität ist zu erkennen. Wir können laut Potenzleiter entweder $x$ oder $y$ mit einem Exponenten der kleiner 1 ist versehen. Üblicherweise transformiert man eher $x$, da die Interpretation für ein transformiertes $y$ schwierig ist. Aber wir müssen nicht unbedingt transformieren, sondern können einfach die gewünschte Beziehung mit `lm` spezifizieren. Vergleichen wir mal einen linearen Zusammenhang mit einem Exponenten von 0.5.
 
-```{r}
+```{r, echo = TRUE}
 tab_model(lm(mpg ~ wt, data = mtcars),        # model 1, linearer Zusammenhang
           lm(mpg ~ I(wt^0.5), data = mtcars)) # model 2, nicht-linearer Zusammenhang
 ```
 
-Zu Beachten ist hier die Syntax `I(wt^0.5)`, das ermöglicht die direkte Umwandlung der Variable, ohne, dass wir sie vorher transformieren müssen. Wenn wir die Modelle aufschreiben würden, wären sie:
+Zu Beachten ist hier die Syntax `I(wt^0.5)`, was die direkte Umwandlung der Variable ermöglicht, ohne, dass wir sie vorher transformieren müssen. Wenn wir die Modelle aufschreiben würden, wären sie:
 
 $\mathrm{mpg} = b_0 +  b_1  \cdot \mathrm{wt}+ e$
 
@@ -354,7 +338,7 @@ $\mathrm{mpg} = 37.29 - 5.34 \mathrm{wt} + e$
 
 $\mathrm{mpg} = 54.75 -19.55 \cdot \mathrm{wt}^{0.5}  + e$
 
-Und welches Modell ist besser? Man sollte hier zum einen theoretische Argumente anführen, zum anderen statistische. Zu den statistischen gehört $R^2$, welches für das nicht-lineare Modell etwas höher ist. Vermutlich könnten wir auch einen besseren Exponenten finden, im Idealfall aus der Theorie abgeleitet, aber das sparen wir uns hier.
+Und welches Modell ist besser? Man sollte hier zum einen theoretische Argumente anführen, zum anderen statistische. Zu den statistischen gehört $R^2$, welches für das nicht-lineare Modell etwas höher ist. Vermutlich könnten wir auch einen besseren Exponenten finden, im Idealfall aus der Theorie abgeleitet!
 
 Füge nun noch zu dem existierenden Modell die Variable `hp` (Horsepower) hinzu. Wähle für den Exponenten 1 (linearer Zusammenhang), 0.5 und 0.1 und vergleiche die Modelle miteinander.
 
@@ -390,13 +374,7 @@ plot(mtcars$hp, mtcars$mpg)
 lines(lowess(x = mtcars$hp, y = mtcars$mpg))
 ```
 ```{r hp-mpc, echo=FALSE}
-question("Wie viele Autos haben mehr als 250 PS?",
-  answer("2", correct = TRUE),
-  answer("1"),
-  answer("3"),
-  answer("4"),
-  random_answer_order = T
-)
+q_n(1, "Wie viele Autos haben mehr als 250 PS?")
 ```
 
 Bevor wir das Thema abschließen, worauf bezieht sich denn nun die Linearität bei linearen Regressionen? Schau Dir hierzu die nächste Aufgabe an:
@@ -417,13 +395,13 @@ $\frac{\partial y}{\partial b_i}$
 
 und schaut ob diese von anderen Parametern abhängen. Wenn Du das machst, wirst Du sehen, dass nur eine Gleichung nicht-linear ist, die vierte: $\frac{\partial y}{\partial b_1} = e^{b_2x}$ und $\frac{\partial y}{\partial b_2} = b_1x e^{b_2x}$.
 
-Beide Ableitungen sind abhängig von einem anderen Parameter ($b_2$, $b_1$), also ist das Modell nicht-linear.
+Beide Ableitungen sind abhängig von einem anderen Parameter ($b_2$, $b_1$), also ist das Modell nicht-linear. Mehr dazu hier: https://youtu.be/40w50jAOBsY?feature=shared
 
 ## Standardisierung
 
 Standardisierte Regressionskoeffizienten bekommen wir nicht automatisch in `R`. Du hast hier zwei Möglichkeiten. Die einfache ist:
 
-```{r}
+```{r, echo = TRUE}
 tab_model(lm(mpg ~ wt + hp, data = mtcars), show.std = T)
 ```
 
@@ -431,10 +409,11 @@ Wir benutzen hier also einfach `tab_model` und sagen, dass wir standardisierte K
 
 Alternativ kannst Du auch die Variablen vorher selbst $z$-standardisieren:
 
-```{r}
+```{r, echo = TRUE}
 mtcars_standardisiert <- as.data.frame(scale(mtcars))
 mtcars_standardisiert
 ```
+
 Und nun nochmal das Modell rechnen:
 
 ```{r}
@@ -443,7 +422,7 @@ tab_model(lm(mpg ~ wt + hp, data = mtcars_standardisiert))
 
 Du siehst, es kommt das gleiche heraus.
 
-Probier Du es nun. Mache ein Modell, bei dem Du die Zeit für 1/4 Meile vorhersagst (`qsec`) aus den PS und dem Gewicht. Berechne die standardisierten Koeffizienten.
+Probier Du es nun. Mache ein Modell, bei dem Du die Zeit für 1/4 Meile vorhersagst (`qsec`) aus den PS (`hp`) und dem Gewicht (`wt`). Berechne die standardisierten Koeffizienten.
 
 ```{r mtcars2, exercise=TRUE}
 
@@ -494,7 +473,7 @@ Heute sollst Du mal weniger `R` wiederholen und Dich stattdessen intensiver mit 
 
 Prüfe Deine Funktion anhand des folgenden Beispiels:
 
-```{r}
+```{r, echo = TRUE}
 lm(qsec ~ hp, data = mtcars)
 ```
 
@@ -504,12 +483,13 @@ lm(qsec ~ hp, data = mtcars)
 
 ```{r eigenereg-solution}
 meine_regression <- function(x, y){
-  slope = cor(x, y) * sd(y) / sd(x)
-  intercept = mean(y) - slope * mean(x)
+  slope <- cor(x, y) * sd(y) / sd(x)
+  intercept <- mean(y) - slope * mean(x)
   c(slope, intercept)
 }
 meine_regression(mtcars$hp, mtcars$qsec)
 ```
+
 Wenn Du immer noch nicht genug hast, dann versuche eine eigene Funktion für die multiple Regression zu schreiben.
 
 <!-- Kann man auch den $t$-Test für abhängige Stichproben mit einer Regression berechnen? Dieser Frage sollst Du mit einem Beispiel aus der Vorlesung nachgehen. Auf Folie 21 in der ANOVA-Vorlesung hatten wir folgende Daten: -->
