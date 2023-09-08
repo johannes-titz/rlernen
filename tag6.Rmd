@@ -8,14 +8,10 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-library(learnr)
-library(ez)
+librarian::shelf(ez, sjPlot)
 
-library(sjPlot)
-
-#knitr::opts_chunk$set(fig.width=7, fig.height=4.9)
-data <- readRDS("data/ws19.RData")
-imdb <- readRDS("data/imdb.RData")
+data <- readRDS("data/ws19.rds")
+imdb <- readRDS("data/imdb.rds")
 imdb$age <- 2020 - imdb$title_year
 imdb$film <- imdb$duration > 75
 imdb$action <- grepl("Action", imdb$genres)
@@ -40,11 +36,11 @@ Vielleicht erinnerst Du Dich noch an die Filme-Datenbank aus Tag 2. Stell Dir vo
 
 Laden wir uns erst mal die Daten:
 
-```{r, eval=FALSE}
-imdb <- read.csv("https://raw.githubusercontent.com/devashishpatel/IMDB-Top-5000/master/movie_metadata.csv")
+```{r, eval=FALSE, echo = TRUE}
+imdb <- readRDS("data/imdb.rds")
 ```
 
-```{r}
+```{r, echo = TRUE}
 imdb
 ```
 
@@ -62,6 +58,7 @@ Und nun das Modell:
 model1 <- lm(imdb_score ~ budget + duration + age, data = imdb)
 summary(model1)
 ```
+
 Mit `lm` machen wir ein **l**ineares **M**odell, was äquivalent zu einer Regression ist. Die Syntax bedient sich hier der Formelsprachweise von `R`. Zunächst kommt die AV, dann die Tilde `~` und dann die UVs mit einem `+` voneinander getrennt. Genau wie beim Boxplot mit mehreren UVs (siehe Tag 3). Schließlich sagen wir `lm` noch in welchem Datensatz sich diese Variablen befinden. Das ist sehr praktisch, ansonsten müssten wir immer wieder `data$` vor die Variablen schreiben (`data$imdb_score ~ data$action + ...`), was viel mehr Tipparbeit wäre.
 
 Der Output erfolgt dann am einfachsten über `summary`, wobei dies zugegebenerweise etwas unübersichtlich ist. Wir können uns hier eines schönen Pakets von Daniel Lüdecke bedienen:
