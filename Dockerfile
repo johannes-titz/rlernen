@@ -34,24 +34,29 @@ RUN apt-get install -y libgmp3-dev
 RUN apt-get install -y libxml2-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN R -e "install.packages('pak')"
+#RUN R -e "install.packages('pak')"
 
 RUN mkdir /root/rlernen.de
 WORKDIR /root/rlernen.de
-COPY DESCRIPTION .
+#COPY DESCRIPTION .
 # only copy description first
 
 # does not work
 # RUN R -e "pak::local_system_requirements('ubuntu', '20.04', execute = TRUE, sudo = F, echo =T)"
 
-RUN R -e "pak::local_install_deps(ask = F)"
+# with librarian this might not really be needed as render should
+# do it automatically, but we need librarian for that first?
+# RUN R -e "pak::local_install_deps(ask = F)"
 # unclear why this does not work the other way
-RUN R -e "pak::pkg_install('sctyner/memer')"
+# RUN R -e "pak::pkg_install('sctyner/memer')"
+Run R -e "install.packages('librarian')"
 # remove binaries
 RUN strip /usr/local/lib/R/site-library/*/libs/*.so
 # now copy everything
+# or maybe just copy what is needed?
 COPY . .
 
+# need for deps and maybe caching
 RUN R -e "rmarkdown::render('tag1.Rmd')"
 RUN R -e "rmarkdown::render('tag2.Rmd')"
 RUN R -e "rmarkdown::render('tag3.Rmd')"
