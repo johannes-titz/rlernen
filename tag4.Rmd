@@ -7,7 +7,7 @@ output:
   learnr::tutorial:
     allow_skip: yes
     progressive: no
-    langauge: de
+    language: de
 ---
 
 ```{r setup, include=FALSE}
