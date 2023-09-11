@@ -1,15 +1,19 @@
 ---
 title: "7. FA, CA"
 runtime: shiny_prerendered
+tutorial:
+  version: 2.0
 output:
   learnr::tutorial:
     allow_skip: yes
     progressive: no
+    language: de
 ---
 
 ```{r setup, include=FALSE}
-library(learnr)
-library(qgraph) # for big5 data set
+source("setup.R")
+librarian::shelf(learnr, qgraph, psych)
+knitr::opts_chunk$set(fig.width=7, fig.height=4.9, echo = TRUE)
 
 monate <- readr::read_csv("data/monate.csv")
 data(big5)
@@ -31,7 +35,7 @@ Im Paket `qgraph` finden wir die Daten `big5`:
 
 ```{r eval=FALSE}
 install.packages("qgraph")
-library("qgraph")
+library(qgraph)
 ```
 
 Die Daten laden:
@@ -64,6 +68,7 @@ Wie kommen wir auf die Kommunalitäten? Das gleiche Prozedere wie für die Eigen
 ```{r}
 sum(fa$loadings[1,]^2)
 ```
+
 Heißt also, dass von der Gesamt-Varianz des ersten Items 31% durch die 5 Faktoren erklärt wird.
 
 Es stellt sich nun noch die Frage ob die Extraktion von 5 Faktoren gerechtfertigt ist. Hierfür können wir uns die Eigenwerte visuell anschauen und eine Parallel-Analyse durchführen. Dafür brauchen wir das Paket `psych`:
@@ -77,26 +82,27 @@ Und nun:
 options(mc.cores = 1)
 ```
 
-```{r}
+```{r parallel, cache = TRUE}
 fa.parallel(big5, fa = "fa")
 ```
 
 Die Parallelanalyse schlägt 18 Faktoren vor. Man sieht bei dem Plot allerdings nicht so viel, aber wir können auch auf die einzelnen Werte von `fa.parallel` zugreifen und uns nur die ersten 30 Faktoren anschauen:
 
-```{r}
+```{r, cache = TRUE}
 parallel <- fa.parallel(big5, fa = "fa", plot = FALSE)
 index <- seq(30)
-plot(index, parallel$fa.values[index], type ="b", col = "blue", ylim = c(0, 20))
+plot(index, parallel$fa.values[index], type = "b", col = "blue", ylim = c(0, 20))
 points(index, parallel$fa.sim[index], type = "b", col = "red")
 ```
 
-Schon besser, wir sehen nun dass ab Faktor 19 die Parallelanalyse einen größeren Eigenwert produziert als er empirisch herauskommt, deshalb extrahieren wir 18. Die Eigenwerte aus der Parallel-Analyse entstehen aus unkorrelierten Daten, rein zufällig so zu sagen. Und das ist natürlich eine sinnvolle Grenze für einen bedeutsamen Eigenwert.
+Schon besser, wir sehen nun, dass ab Faktor 19 die Parallelanalyse einen größeren Eigenwert (genauer gesagt das 95% Quantil der Eigenwerte) produziert als er empirisch herauskommt, deshalb extrahieren wir 18. Die Eigenwerte aus der Parallel-Analyse entstehen aus unkorrelierten Daten, rein zufällig so zu sagen. Und das ist natürlich eine sinnvolle Grenze für einen bedeutsamen Eigenwert.
 
-Übrigens, nach dem Kaiser-Kriterium könnten wir 29 Faktoren extrahieren. Die Big Five sind also tatsächlich eher ein Kompromiss aus möglichst wenig Faktoren und halbwegs guter Varianzaufklärung. Eine andere Anzahl an Faktoren wäre statistisch durchaus zu rechtfertigen, jedoch fehlt uns hier natürlich eine theoretische Betrachtung. So gibt es ja auch Facetten von den Big Five, die eben diese weiteren (Unter-)Faktoren rechtfertigen. Wir wollen hier aber nicht weiter darüber diskutieren, denn das würde den Rahmen eines `R`-Kurses sprengen.  
+Übrigens, nach dem Kaiser-Kriterium könnten wir 29 Faktoren extrahieren. Die Big Five sind also tatsächlich eher ein Kompromiss aus möglichst wenig Faktoren und halbwegs guter Varianzaufklärung. Eine andere Anzahl an Faktoren wäre statistisch durchaus zu rechtfertigen, jedoch fehlt uns hier natürlich eine theoretische Betrachtung. So gibt es ja auch Facetten von den Big Five, die eben diese weiteren (Unter-)Faktoren begründen Wir wollen hier aber nicht weiter darüber diskutieren, denn das würde den Rahmen eines `R`-Kurses sprengen.  
 
 Gut, das sind die Basics für die Faktorenanalyse und die kannst Du jetzt üben. In der Vorlesung bewerteten die Studenten wie gut ihnen die Monate des Jahres gefallen. Damit wurde dann eine Faktorenanalyse gerechnet um die vier Jahreszeiten zu extrahieren. Die Daten sind:
 
 ```{r}
+monate <- read.csv("data/monate.csv")
 monate
 ```
 
@@ -111,23 +117,11 @@ fa.parallel(monate, fa = "fa")
 ```
 
 ```{r model1-mpc1, echo=FALSE}
-question("Wie viele Faktoren sollten nach der Parallel-Analyse extrahiert werden?",
-  answer("4", correct = TRUE),
-  answer("3"),
-  answer("2"),
-  answer("1"),
-  random_answer_order = T
-)
+q_n(4, "Wie viele Faktoren sollten nach der Parallel-Analyse extrahiert werden?")
 ```
 
 ```{r model1-mpc2, echo=FALSE}
-question("Wie viele Faktoren sollten nach dem Kaiser-Kriterium extrahiert werden?",
-  answer("2", correct = TRUE),
-  answer("3"),
-  answer("1"),
-  answer("4"),
-  random_answer_order = T
-)
+q_n(2, "Wie viele Faktoren sollten nach dem Kaiser-Kriterium extrahiert werden?")
 ```
 
 Berechne nun die Faktorenanalyse und extrahiere 4 Faktoren.
@@ -137,19 +131,12 @@ Berechne nun die Faktorenanalyse und extrahiere 4 Faktoren.
 ```
 
 ```{r fa-solution}
-fa <- factanal(monate, factors = 4, rotation="varimax")
+fa <- factanal(monate, factors = 4, rotation = "varimax")
 fa
 ```
 
-
 ```{r fa-mpc, echo=FALSE}
-question("Wie groß ist die Varianzaufklärung durch die 4 Faktoren",
-  answer(".553", correct = TRUE),
-  answer(".089"),
-  answer("1.074"),
-  answer("0.877"),
-  random_answer_order = T
-)
+q_n(.553, "Wie groß ist die Varianzaufklärung durch die 4 Faktoren (gerundet auf 3 Dezimalstellen)")
 ```
 
 Berechne nun die Kommunalitäten der Monate (Hinweis: benutze die Funktion `rowSums`):
@@ -180,7 +167,7 @@ Die Cluster-Analyse kann für ähnliche Zwecke wie die Faktorenanalyse verwendet
 
 ```{r}
 cors <- cor(monate)
-cors
+as.data.frame(cors)
 ```
 
 Nun die Cluster-Analyse:
@@ -217,8 +204,9 @@ Den wollen wir jetzt mal Clustern. Im Gegensatz zum letzten Beispiel müssen wir
 
 ```{r mtcars-solution}
 mtcars_stand <- scale(mtcars)
-distance <- dist(mtcars_stand)
-as.data.frame(as.matrix(distance))
+distance <- as.matrix(dist(mtcars_stand))
+distance
+which(distance == max(distance), arr.ind = T) # für nachfolgende Frage
 ```
 
 ```{r mtcars-mpc, echo=FALSE}
@@ -243,13 +231,7 @@ plot(fit)
 ```
 
 ```{r mtcars2-mpc, echo=FALSE}
-question("Wenn man bei einer Distanz von 30 abschneidet, wie viele Cluster entstehen dann?",
-  answer("2", correct = TRUE),
-  answer("1"),
-  answer("3"),
-  answer("4"),
-  random_answer_order = T
-)
+q_n(2, "Wenn man bei einer Distanz von 30 abschneidet, wie viele Cluster entstehen dann?")
 ```
 
 ```{r mtcars2-mpc2, echo=FALSE}
@@ -271,44 +253,42 @@ Extrahiere nun 3 Cluster und zeige an, wie viele Autos pro Cluster entstehen.
 ```{r mtcars3-solution}
 fit <- hclust(distance, method = "ward.D")
 groups <- cutree(fit, 3) 
+groups
 table(groups)
 ```
 
 ```{r mtcars2-mpc3, echo=FALSE}
-question("Zu welchem Cluster gehört der Maserati Bora?",
-  answer("1", correct = TRUE),
-  answer("2"),
-  answer("3"),
-  answer("4"),
-  random_answer_order = T
-)
+q_n(1, "Zu welchem Cluster gehört der Maserati Bora?")
 ```
 
-Sehr gut! Du hast nun gelernt wie man eine einfache Cluster-Analyse in `R` rechnen kann und wie man ein Dendrogramm erstellt. Das soll es für heute auch schon gewesen sein. Willst Du Dich intensiver mit der Cluster-Analyse beschäftigen, wirst Du online viele Materialien finden. Das gleiche trifft auch auf die Faktorenanalyse zu. Einen Tipp gebe ich aber trotzdem noch: Das Buch *Multivariate Analysemethoden* von Backhaus und Kollegen gibt ausgezeichnete Einführungen in beide Themen. Auch die ANOVA ist dort sehr intuitiv erklärt. Ein Must-Have für die Methodenlehre!
+Sehr gut! Du hast nun gelernt wie man eine einfache Cluster-Analyse in `R` rechnen kann und wie man ein Dendrogramm erstellt. Das soll es für heute auch schon gewesen sein. Willst Du Dich intensiver mit der Cluster-Analyse beschäftigen, wirst Du online viele Materialien finden. Das gleiche trifft auch auf die Faktorenanalyse zu. Einen Tipp gebe ich aber trotzdem noch: Das Buch *Multivariate Analysemethoden* von Backhaus und Kollegen gibt ausgezeichnete Einführungen in beide Themen. Auch die ANOVA ist dort sehr intuitiv erklärt. Ein Must-Have für jeden Methodiker! Außerdem findest Du sehr gute und knappe Kommando-Übersichten für die Faktoren-Analyse und Cluster-Analyse in den Essential R Cheatsheets (https://www.amazon.de/dp/B0BZ2T71CQ).
 
 ## Ausblick
+
 Statt weitere Übungsaufgaben zu rechnen, schauen wir uns heute mal kurz an was wir in diesem Kurs gelernt haben und was Du als nächstes in Deiner `R`-Karriere machen solltest.
 
 Wir haben uns zum Großteil an der Vorlesung Methodenlehre II orientiert und die meisten statistischen Verfahren, die in der Psychologie verwendet werden, kurz abgehandelt. Dazu zählen natürlich $t$-Test, ANOVA und prominente non-parametrische Verfahren. Das alles haben wir sowohl für unabhängige als auch abhängige Stichproben gemacht. Eine Besonderheit stellt die Kontrast-Analyse dar, die sehr nützlich ist, aber leider kaum verwendet wird, da sie den meisten nicht bekannt ist. 
 
-Anschließend haben wir uns intensiv mit der Regression befasst, wohl das wichtigste Thema der Methodenlehre. Zum Schluss haben wir uns die Faktoren- und Cluster-Analyse angeschaut. Neben den statistischen Verfahren, weißt Du auch wie Du einfache Abbildungen erstellst, Daten selektierst und filterst und eigene Funktionen schreibst. 
+Anschließend haben wir uns intensiv mit der Regression befasst, wohl das wichtigste Thema der Methodenlehre. Zum Schluss haben wir uns die Faktoren- und Cluster-Analyse angeschaut. Neben den statistischen Verfahren, weißt Du auch wie Du einfache Abbildungen erstellst, Daten selektierst und filterst und eigene Funktionen schreibst. Außerdem kannst Du auch Power-Analysen durchführen und Standard-Plots erstellen. 
 
-Das ist insgesamt ganz schön viel für einen halben Kurs (zweiwöchig), Du bist also gut gerüstet für die nächsten statistisch-analytischen Schlachten. Aber Du solltest Dich auch nicht überschätzen. Es gibt noch viel zu lernen. Was solltest Du als nächstes tun?
+Das ist insgesamt ganz schön viel für einen R-Kurs. Du bist also gut gerüstet für die nächsten statistisch-analytischen Schlachten. Aber Du solltest Dich auch nicht überschätzen. Es gibt noch viel zu lernen. Was solltest Du als nächstes tun?
 
 Falls Du es noch nicht getan hast, installiere Dir `R` und Rstudio auf deinen Rechner: https://jjallaire.shinyapps.io/learnr-tutorial-00-setup/ 
 
 Probiere dann aus, ob Du die Übungsaufgaben, die wir hier durchgearbeitet haben, auch lokal (auf Deinem Rechner) nachvollziehen kannst.
 
-Lerne wie Du Daten einliest (z. B. https://www.datacamp.com/community/tutorials/r-data-import-tutorial).
+Lerne wie Du Daten lokal einliest (zusätzlich zu den hier gezeigten Übungen schau Dir dazu z. B. auch https://www.datacamp.com/community/tutorials/r-data-import-tutorial an).
 
 Lerne `dplyr` und `ggplot2`. Tutorials dafür gibt es wie Sand am Meer. 
 
-Schaue Dir Videos auf Youtube zu `R` an.
+Schaue Dir Videos auf Youtube zu `R` an. Z. B. https://youtube.com/@methodenmonster
 
-Lies Dir Blogs zu `R` auf https://www.r-bloggers.com durch.
+Lies Dir Blogs zu `R` auf https://www.r-bloggers.com durch. Schau auch gerne bei meinem Blog vorbei: https://johannestitz.com
 
 Lies Dir Fragen zu `R` auf https://www.stackoverflow.com durch. Melde Dich dort an und stelle eigene Fragen.
 
 Kauf Dir ein `R`-Buch und arbeite es durch. *R in Action* von Matloff oder *A handbook of statistical anylses using R* von Hothorn sind zwei mögliche Kandidaten.
 
 All das wird notwendig sein, wenn Du wirklich gut werden willst! Dein Mindset sollte sein: Wie mache ich das in `R`? Welche Varianten gibt es eine bestimmte Analyse oder Berechnung durchzuführen? Schreibe ich guten Code? Wie schreibe ich besseren Code? Wenn Du stetig an Deinen `R`-Skills arbeitest, dauert es nicht mehr lange, bis andere Dich fragen, ob Du ihnen bei einem `R`-Problem helfen kannst. Du wirst eventuell auch kleinere Projekte übernehmen und dafür Geld verlangen können. Und irgendwann schreibst Du vielleicht sogar Deine eigenen `R`-Packages.  (☉_☉)
+
+Die Reise geht weiter!
