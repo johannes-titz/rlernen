@@ -1,10 +1,13 @@
 ---
 title: "6. Regression"
 runtime: shiny_prerendered
+tutorial:
+  version: 2.0
 output:
   learnr::tutorial:
     allow_skip: yes
     progressive: no
+    language: de
 ---
 
 ```{r setup, include=FALSE}
