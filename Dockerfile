@@ -50,11 +50,20 @@ WORKDIR /root/rlernen.de
 # unclear why this does not work the other way
 # RUN R -e "pak::pkg_install('sctyner/memer')"
 Run R -e "install.packages('librarian')"
+
+# minimum deps
+Run R -e "librarian::shelf('rmarkdown')"
+Run R -e "librarian::shelf('shiny')"
+Run R -e "librarian::shelf('learnr')"
+
 # remove binaries
 RUN strip /usr/local/lib/R/site-library/*/libs/*.so
+
 # now copy everything
 # or maybe just copy what is needed?
 COPY . .
+
+RUN ls
 
 # need for deps and maybe caching
 RUN R -e "rmarkdown::render('tag1.Rmd')"
@@ -64,6 +73,7 @@ RUN R -e "rmarkdown::render('tag4.Rmd')"
 RUN R -e "rmarkdown::render('tag5.Rmd')"
 RUN R -e "rmarkdown::render('tag6.Rmd')"
 RUN R -e "rmarkdown::render('tag7.Rmd')"
+
 RUN R -e "rmarkdown::render('faq.Rmd')"
 
 RUN echo "local(options(shiny.port = 3838, shiny.host = '0.0.0.0'))" > .Rprofile

@@ -1,6 +1,9 @@
 *
 Dockerfile
 .git
+!faq.Rmd
+!setup.R
+!help.R
 !tag*.Rmd
 !DESCRIPTION
 !data
