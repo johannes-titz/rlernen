@@ -28,6 +28,8 @@ librarian::shelf(psych, meme)
 #     return(p)
 # }
 
+knitr::opts_chunk$set(fig.width=7, fig.height=4.9)
+
 modus <- function(x) {
   tab <- table(x)
   max_frequency <- max(table(x))
