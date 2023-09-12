@@ -13,7 +13,7 @@ output:
 ```{r setup, include=FALSE}
 source("setup.R")
 librarian::shelf(learnr, qgraph, psych)
-knitr::opts_chunk$set(fig.width=7, fig.height=4.9, echo = TRUE)
+knitr::opts_chunk$set(fig.width=7, fig.height=4.9, echo = TRUE, cache = TRUE)
 
 monate <- read.csv("data/monate.csv")
 data(big5)

@@ -12,6 +12,8 @@ output:
 
 ```{r setup, include=FALSE}
 source("setup.R")
+# slows down substantially 
+#knitr::opts_chunk$set(cache = TRUE)
 
 #--------extra libs
 librarian::shelf(psych)

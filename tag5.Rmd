@@ -13,6 +13,8 @@ output:
 ```{r setup, include=FALSE}
 source("setup.R")
 librarian::shelf(WebPower, ppcor)
+# leads to problems
+#knitr::opts_chunk$set(cache = TRUE)
 
 # Daten für Gutachter-Aufgabe
 a <- c(19, 27, 9, 13, 8, 27)

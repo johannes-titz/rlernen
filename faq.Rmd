@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
 ```
 
 ## Tag 1
+
 ### Zur Kommentarfunktion: Gibt es nur #? Gibt es mehrzeilige Kommentare?
 
 Gute Frage! Tatsächlich habe ich Kommentare noch nicht erklärt. Sobald man eine Raute (#) schreibt, ignoriert R die entsprechende Zeile:
@@ -52,7 +53,9 @@ var_name% # Sonderzeichen
 _var_name # beginnt nicht mit Buchstabe oder Punkt (.)
 ```
 
-### Bei der Pizzaaufgabe habe ich bei Senf wieder x vergeben... ich wollte von mir aus y nehmen, weil x ja schon vorher vergeben war, aber da kam immer ne Fehlermeldung. Irgendwo hab ich da einen Denkfehler glaube ich. Warum geht da nur x?
+### Bei der Pizzaaufgabe habe ich bei Senf wieder x vergeben... 
+
+...ich wollte von mir aus y nehmen, weil x ja schon vorher vergeben war, aber da kam immer ne Fehlermeldung. Irgendwo hab ich da einen Denkfehler glaube ich. Warum geht da nur x?
 
 Ich vermute Du meinst den folgenden Abschnitt:
 ```{r q3, exercise = TRUE}
@@ -64,7 +67,9 @@ senf
 
 Der erste Parameter von ``factor`` ist ``x``, was auch in der Hilfe beschrieben ist. Hier bietet sich wieder die Funktionen-Analogie an. Haben wir eine mathematische Funktion $f(x_1, x_2)$ dann darf ich in der Formulierung der Funktion auch nur die Variablen $x_1$ und $x_2$ verwenden $f(x_1, x_2) = 0.5x_1+3x_2^2$. Zurück gibt ``factor`` einen Vektor, man sieht dann nicht mehr wie die Argumente von ``factor`` hießen. Deshalb kann man immer wieder ``x`` schreiben, wie gesagt, muss man es sogar, weil die Funktion ``factor`` das erwartet. Üblicherweise sind Funktionen lokal. Das heißt die definierten Variablen in Funktionen sind nur innerhalb der Funktion gültig. Sobald die Funktion beendet ist, werden alle diese Variablen wieder gelöscht.
 
-### Bei der Gehaltsaufgabe war in einer das Zuweisen mit "<-" und in der nächsten das Zuweisen mit "=". Geht hier beides, bei mir wurde zumindest bei beiden das gleiche ausgegeben? Ist <- prinzipiell durch = austauschbar?
+### Bei der Gehaltsaufgabe war in einer das Zuweisen mit "<-" und in der nächsten das Zuweisen mit "="... 
+
+...Geht hier beides, bei mir wurde zumindest bei beiden das gleiche ausgegeben? Ist <- prinzipiell durch = austauschbar?
 
 Es geht beides, aber das Gleichheitszeichen (``=``) für die Zuweisung zu verwenden ist schlechter Stil. Warum? Weil das Gleichheitszeichen konventionell nur bei Parametern von Funktionen verwendet wird.
 
