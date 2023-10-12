@@ -175,7 +175,11 @@ a <- 1.5
 pi*z*z*a
 ```
 
-```{r pizza2mpc, echo=FALSE}
+```{r pizza2mpc}
+pi <- 3.14
+z <- 16
+a <- 1.5
+pi*z*z*a
 q_n(pi*z*z*a)
 ```
 
