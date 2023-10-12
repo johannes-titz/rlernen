@@ -11,7 +11,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(cache = F)
+knitr::opts_chunk$set(cache = T)
 librarian::shelf(foreign)
 source("setup.R")
 ```
@@ -179,7 +179,6 @@ pi*z*z*a
 pi <- 3.14
 z <- 16
 a <- 1.5
-pi*z*z*a
 q_n(pi*z*z*a)
 ```
 
