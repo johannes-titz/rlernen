@@ -17,6 +17,10 @@ librarian::shelf(foreign)
 source("setup.R")
 ```
 
+## Hinweise
+
+Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, brauchte für dieses Tutorial ungefähr 1,5h. Als absoluter Einsteiger wirst Du vermutlich etwas mehr Zeit benötigen. Klicke auf "Nächstes Kapitel" und es geht los.
+
 ## Arithmetik mit der kleinen Nervensäge
 
 Dein R-Kurs beginnt gerade, aber Deine kleine Schwester nervt schon seit Stunden, dass Du ihre Mathe-Hausaufgaben überprüfen sollst bevor sie diese an den Lehrer schickt. "Wenn R so toll ist, dann kannst Du das doch bestimmt damit machen", sagt sie. Das stimmt, denn R ist eine Turing-Maschine.
