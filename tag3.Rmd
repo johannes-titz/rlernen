@@ -8,6 +8,7 @@ output:
     allow_skip: yes
     progressive: no
     language: de
+    css: css/custom.css
 ---
 
 ```{r setup, include=FALSE}
