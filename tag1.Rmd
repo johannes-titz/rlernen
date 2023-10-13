@@ -249,7 +249,6 @@ preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
 durchmesser <- c(26, 26, 26, 32, 32, 32)
 volumen <- (pi * (durchmesser / 2)^2 * 1)
 preis_pro_kubikcm <- preis / volumen
-preis_pro_kubikcm
 grid <- expand.grid(c("Speciale", "Funghi", "Margherita"), c("26cm", "32cm"))
 answers <- paste(grid$Var1, grid$Var2)
 answers_true <- ifelse(preis_pro_kubikcm <= 0.015, T, F)
