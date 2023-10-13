@@ -151,7 +151,7 @@ pi*z*z*a
 
 ```{r pizza1, echo=FALSE}
 question(
-  "Welcher Berechnung entspricht pi*z*z*a in der letzten Zeile des obigen R-Codes?",
+  "Welcher Berechnung entspricht pi\\*z\\*z\\*a in der letzten Zeile des obigen R-Codes?",
   answer("Dem Volumen eines Zylinders mit Radius $z$ und Höhe $a$", correct = T),
   answer("Dem Volumen eines Zylinders mit Radius $a$ und Höhe $z$"),
   answer("Der Fläche eines Zylinders mit Radius $z$ und Höhe $a$"),
