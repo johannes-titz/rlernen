@@ -262,7 +262,7 @@ table(groups)
 q_n(1, "Zu welchem Cluster gehört der Maserati Bora?")
 ```
 
-Sehr gut! Du hast nun gelernt wie man eine einfache Cluster-Analyse in `R` rechnen kann und wie man ein Dendrogramm erstellt. Das soll es für heute auch schon gewesen sein. Willst Du Dich intensiver mit der Cluster-Analyse beschäftigen, wirst Du online viele Materialien finden. Das gleiche trifft auch auf die Faktorenanalyse zu. Einen Tipp gebe ich aber trotzdem noch: Das Buch *Multivariate Analysemethoden* von Backhaus und Kollegen gibt ausgezeichnete Einführungen in beide Themen. Auch die ANOVA ist dort sehr intuitiv erklärt. Ein Must-Have für jeden Methodiker! Außerdem findest Du sehr gute und knappe Kommando-Übersichten für die Faktoren-Analyse und Cluster-Analyse in den Essential R Cheatsheets (https://www.amazon.de/dp/B0BZ2T71CQ).
+Sehr gut! Du hast nun gelernt wie man eine einfache Cluster-Analyse in `R` rechnen kann und wie man ein Dendrogramm erstellt. Das soll es für heute auch schon gewesen sein. Willst Du Dich intensiver mit der Cluster-Analyse beschäftigen, wirst Du online viele Materialien finden. Das gleiche trifft auch auf die Faktorenanalyse zu. Einen Tipp gebe ich aber trotzdem noch: Das Buch *Multivariate Analysemethoden* von Backhaus und Kollegen gibt ausgezeichnete Einführungen in beide Themen. Auch die ANOVA ist dort sehr intuitiv erklärt. Ein Must-Have für jeden Methodiker! Außerdem findest Du sehr gute und knappe Kommando-Übersichten für die Faktoren-Analyse und Cluster-Analyse in den Essential R Cheatsheets (https://johannestitz.com/post/2023-10-03-rcheatsheets2/).
 
 ## Ausblick
 
