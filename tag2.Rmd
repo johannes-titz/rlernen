@@ -570,7 +570,7 @@ q_n(2015, "In welchem Jahr war die Standardabweichung des IMDB-Scores am größt
 
 Nicht schlecht! Wie versprochen, war dies nur ein kurzes Kapitel. Der Grund dafür ist, dass es noch andere Pakete gibt um Daten zu gruppieren und zu aggregieren, die Du Dir später sicher selbst anchauen wirst. Früher oder später wirst Du vermutlich nur noch solche Spezial-Pakete benutzen. Am Anfang ist es aber günstig die Befehle zu benutzen die `R` von Haus aus anbietet, denn die meisten `R`-Programmierer benutzen sie und Du willst ja nicht in der Out-Group sein. Nein, Quatsch. Der eigentlich Grund ist, dass Du mit diesen Menschen kommunizieren willst und sie auch mit Dir. Dafür brauchst Du die Basics. Aber sobald Du diese beherrschst, kannst Du Dein Vokabular um ein paar geschmeidigere Ausdrücke erweitern. `describeBy` aus dem `psych`-Paket ist ein Beispiel dafür, aber es gibt noch Hundert andere. Schritt für Schritt wirst Du eine Präferenz für bestimmte Pakete entwickeln und so Deinen eigenen R-Stil entwickeln. Z. B. gibt es R-Folks, die lieber `tidyverse` benutzen, aber andere lieben `data.table`:
 
-![](images/Dtr7sjCVYAAfbeJ.jpg:large){width=450}
+![](images/Dtr7sjCVYAAfbeJ.jpg){width=450}
 
 Was Dir besser gefällt, wirst Du erst später merken. Lass Dir von niemandem einreden, welcher Ansatz besser ist, probier verschiedene Pakete einfach aus und entscheide selbst.
 
