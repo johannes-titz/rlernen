@@ -19,7 +19,7 @@ source("setup.R")
 
 ## Hinweise
 
-Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, brauchte für dieses Tutorial ungefähr 1,5h. Als absoluter Einsteiger wirst Du vermutlich etwas mehr Zeit benötigen. Klicke auf "Nächstes Kapitel" und es geht los.
+Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, bewertete dieses Tutorial insgesamt mit einer Schwierigkeit von 5.5 (0=sehr leicht, 10=sehr schwer). Sie brauchte für dieses Tutorial ungefähr 1.5h. Als absoluter Einsteiger wirst Du vermutlich etwas mehr Zeit benötigen. Klicke auf "Nächstes Kapitel" und es geht los.
 
 ## Arithmetik mit der kleinen Nervensäge
 
