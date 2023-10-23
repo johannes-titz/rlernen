@@ -8,7 +8,7 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-library(learnr)
+librarian::shelf(learnr)
 knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
 ```
 
