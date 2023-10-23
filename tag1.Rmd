@@ -254,7 +254,7 @@ answers <- paste(grid$Var1, grid$Var2)
 answers_true <- ifelse(preis_pro_kubikcm <= 0.015, T, F)
 answers_final <- Map(function(x, y) answer(x, correct = y), answers, answers_true)
 names(answers_final) <- NULL
-answers_final <- append(answers_final, list("Welche Pizza kann Dein Freund bestellen? (nicht teuerer als 1.5 Cent / cm³)", allow_retry = T, random_answer_order = F), 0)
+answers_final <- append(answers_final, list("Welche Pizza kann Dein Freund bestellen? (nicht teuerer als 1.5 Cent / cm³)", random_answer_order = F), 0)
 do.call(question, answers_final)
 ```
 
@@ -339,8 +339,7 @@ question(
   answer("5 x 4"),
   answer("6 x 6"),
   answer("5 x 5"),
-  random_answer_order = T,
-  allow_retry = T
+  random_answer_order = T
 )
 ```
 
