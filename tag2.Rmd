@@ -29,6 +29,11 @@ imdb_top <- imdb[imdb$imdb_score >= 8.9 &
 starwars <- readRDS("data/starwars.rds")
 ```
 
+
+## Hinweise
+
+Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, bewertete dieses Tutorial insgesamt mit einer Schwierigkeit von 7.5 (0=sehr leicht, 10=sehr schwer). Die besonders schweren Aufgaben sind nochmals separat gekennzeichnet. Sie brauchte für dieses Tutorial ungefähr 2h 15min. Klicke auf "Nächstes Kapitel" und es geht los.
+
 ## Selektieren
 
 Unser Pizza-Datensatz vom ersten Tag ist mit drei Pizzen recht langweilig, aber wir können uns auch mal alle Pizzen der Pizzeria anschauen, die ich unter `data` als `pizzen_komplett` gespeichert habe:
@@ -38,7 +43,13 @@ data <- read.csv("data/pizzen_komplett.csv")
 data
 ```
 
-Eine Menge Daten, an denen wir uns nun auslassen können. Bei fast jeder statistischen Analyse ist man gezwungen bestimmte Fälle und Variablen zu selektieren. Im einfachsten Fall ist das ähnlich zu einem Matrix-Index. Sagen wir mal, wir möchten gerne Zeile 10, Spalte 2 (der Preis der Diavolo Pizza, 8.0). In Matrix-Index-Notation wäre dies $\mathrm{data}_{10,2}$ und in R fast genau so:
+Eine Menge Daten, an denen wir uns nun auslassen können. Bei fast jeder statistischen Analyse ist man gezwungen bestimmte Fälle und Variablen zu selektieren. Im einfachsten Fall ist das ähnlich zu einem Matrix-Index. Falls Du Dich mit Matrizen noch nicht auskennst, ist das nicht schlimm, hier ein Primer:
+
+![Schema für eine Matrix, CC BY SA Leovilok](images/593px-Matrix_german.svg.png){width=250px}
+
+<br>Im Grunde ist eine Matrix eine Art Tabelle, in der Zahlen drin stehen, ganz ähnlich zum Dataframe.
+
+Sagen wir mal, wir möchten vom Pizza-Datensatz gerne Zeile 10, Spalte 2 (der Preis der Diavolo Pizza, 8.0). In Matrix-Index-Notation wäre dies $\mathrm{data}_{10,2}$ und in R fast genau so:
 
 ```{r echo=TRUE}
 data[10, 2]
@@ -403,6 +414,10 @@ imdb[imdb$imdb_score >= 8.9 & imdb$num_voted_users >= 10000,
      c("movie_title", "imdb_score", "num_voted_users")]
 ```
 
+```{r imdb3-question, echo = F}
+q_n(12, "Wie viele Filme bleiben übrig?")
+```
+
 Das sieht schon besser aus, allerdings sind noch TV-Serien drin, in diesem Fall Dekalog, sogar 2 Mal! Wir wollen aber keine TV-Serien. Leider hat der Datensatz keine Variable, die angibt ob der "Film" ein richtiger Film ist oder nur eine Serie. Schauen wir uns nochmal die Variablen des Dataframes an:
 
 ```{r imdb3b}
@@ -420,7 +435,7 @@ question("Welche Variable könnte man benutzen um TV-Serien herauszufiltern?",
 )
 ```
 
-Dann probier es mit dieser Variable aus! Füge zu unseren bestehenden Filtern noch einen hinzu. Benutze diesmal das logische UND, kombiniert mit dem logischen NICHT (``!``).
+Dann probier es mit dieser Variable aus! 60min ist sicherlich eine gute Grenze. Füge zu unseren bestehenden Filtern noch einen hinzu. Benutze diesmal das logische UND, kombiniert mit dem logischen NICHT (``!``).
 
 ```{r imdb4, exercise = TRUE}
 imdb[imdb$imdb_score >= 8.9 & imdb$num_voted_users >= 10000 & !(____),
@@ -475,7 +490,7 @@ imdb_top[order(imdb_top$imdb_score, decreasing = TRUE), ]
 
 Schöne Liste. Dann musst du jetzt nur noch genug Zeit finden um Deine Kulturlücken zu füllen und Dir die am besten bewerteten Filme (laut IMDB) anzuschauen. Hinweis: die hier verwendeten Daten sind natürlich nicht ganz aktuell (von 2016) und es kann auch in den Top10 auf IDMB Schwankungen geben. Diese Filme hier werden aber wohl auf absehbare Zeit zumindest in den Top20 bleiben.
 
-Einer Deiner Freund meint jedoch, dass die Auswahl nicht überzeugt. Er empfiehlt stattdessen alle Filme bei denen der Regisseur (**director_name**) Christopher Nolan oder Guy Ritchie ist. Hierfür brauchst Du das logische ODER (`|`). Probier es mal aus. Als Variablen habe ich Dir schon  **movie_title**, **imdb_score** und **director_name** vorbereitet, es fehlt nur noch der richtige Filter.
+Einer Deiner Freunde meint jedoch, dass die Auswahl nicht überzeugt. Er empfiehlt stattdessen alle Filme bei denen der Regisseur (**director_name**) Christopher Nolan oder Guy Ritchie ist. Hierfür brauchst Du das logische ODER (`|`). Probier es mal aus. Als Variablen habe ich Dir schon  **movie_title**, **imdb_score** und **director_name** vorbereitet, es fehlt nur noch der richtige Filter.
 
 ```{r imdb6, exercise = TRUE}
 imdb[____ | ____,
@@ -498,7 +513,7 @@ question("Welcher Film in der Auswahl ist ein Duplikat (ist zweimal gelistet)?",
 )
 ```
 
-Swept Away (Score: 3.6) lehrt uns, dass Berfüliches und Privates lieber getrennt bleiben sollten: Madonna (zwischenzeitlich die Frau von Guy Ritchie) war ja eine Sängerin, keine Schauspielerin. Bis auf diese Ausnahme auch keine schlechte Auswahl an Filmen. Auf jeden Fall genug Stoff für die nächsten Wochen.
+Swept Away (Score: 3.6) lehrt uns, dass Berufliches und Privates lieber getrennt bleiben sollten: Madonna (zwischenzeitlich die Frau von Guy Ritchie) war ja eine Sängerin, keine Schauspielerin. Bis auf diese Ausnahme auch keine schlechte Auswahl an Filmen. Auf jeden Fall genug Stoff für die nächsten Wochen.
 
 Bevor Du nun aber direkt mit dem ersten Film startest, machen wir noch ein Thema. Filtern ist nämlich nur die halbe Geschichte. Zu wissen, wie man gruppiert und aggregiert, macht Dich erst zu einem vollständigen R-Profi. Ich verspreche, dass das Kapitel schnell geht.
 
@@ -568,7 +583,7 @@ describeBy(imdb_gefiltert, "title_year")
 q_n(2015, "In welchem Jahr war die Standardabweichung des IMDB-Scores am größten?")
 ```
 
-Nicht schlecht! Wie versprochen, war dies nur ein kurzes Kapitel. Der Grund dafür ist, dass es noch andere Pakete gibt um Daten zu gruppieren und zu aggregieren, die Du Dir später sicher selbst anchauen wirst. Früher oder später wirst Du vermutlich nur noch solche Spezial-Pakete benutzen. Am Anfang ist es aber günstig die Befehle zu benutzen die `R` von Haus aus anbietet, denn die meisten `R`-Programmierer benutzen sie und Du willst ja nicht in der Out-Group sein. Nein, Quatsch. Der eigentlich Grund ist, dass Du mit diesen Menschen kommunizieren willst und sie auch mit Dir. Dafür brauchst Du die Basics. Aber sobald Du diese beherrschst, kannst Du Dein Vokabular um ein paar geschmeidigere Ausdrücke erweitern. `describeBy` aus dem `psych`-Paket ist ein Beispiel dafür, aber es gibt noch Hundert andere. Schritt für Schritt wirst Du eine Präferenz für bestimmte Pakete entwickeln und so Deinen eigenen R-Stil entwickeln. Z. B. gibt es R-Folks, die lieber `tidyverse` benutzen, aber andere lieben `data.table`:
+Nicht schlecht! Wie versprochen, war dies nur ein kurzes Kapitel. Der Grund dafür ist, dass es noch andere Pakete gibt um Daten zu gruppieren und zu aggregieren, die Du Dir später sicher selbst anschauen wirst. Früher oder später wirst Du vermutlich nur noch solche Spezial-Pakete benutzen. Am Anfang ist es aber günstig die Befehle zu benutzen die `R` von Haus aus anbietet, denn die meisten `R`-Programmierer benutzen sie und Du willst ja nicht in der Out-Group sein. Nein, Quatsch. Der eigentliche Grund ist, dass Du mit diesen Menschen kommunizieren willst und sie auch mit Dir. Dafür brauchst Du die Basics. Aber sobald Du diese beherrschst, kannst Du Dein Vokabular um ein paar geschmeidigere Ausdrücke erweitern. `describeBy` aus dem `psych`-Paket ist ein Beispiel dafür, aber es gibt noch Hundert andere. Schritt für Schritt wirst Du eine Präferenz für bestimmte Pakete entwickeln und so Deinen eigenen R-Stil entwickeln. Z. B. gibt es R-Folks, die lieber `tidyverse` benutzen, aber andere lieben `data.table`:
 
 ![](images/Dtr7sjCVYAAfbeJ.jpg){width=450}
 
