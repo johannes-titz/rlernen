@@ -144,7 +144,7 @@ z <- 14
 a <- 1
 ```
 
-Wie man sieht, kann man Variablen über den Zuweisungsoperator `<-` Werte zuweisen. Der Zuweisungsoperator besteht aus dem "kleiner als"-Symbol `<` und einem Minus `-`, zusammengesetzt sieht es dann aus wie ein nachs links zeigender Pfeil. Man beachte hier zudem, dass das Dezimaltrennzeichen bei R ein Punkt und kein Komma ist (3.14 und nicht 3,14). Das Komma wird stattdesen bei Aufzählungen benutzt (3,14 wäre also 3 und 14). Gut merken, denn das ist ein häufiger Fehler bei Einsteigern..
+Wie man sieht, kann man Variablen über den Zuweisungsoperator `<-` Werte zuweisen. Der Zuweisungsoperator besteht aus dem "kleiner als"-Symbol `<` und einem Minus `-`, zusammengesetzt sieht es dann aus wie ein nach links zeigender Pfeil. Man beachte hier zudem, dass das Dezimaltrennzeichen bei R ein Punkt und kein Komma ist (3.14 und nicht 3,14). Das Komma wird stattdessen bei Aufzählungen benutzt (3,14 wäre also 3 und 14). Gut merken, denn das ist ein häufiger Fehler bei Einsteigern..
 
 Das Rechnen mit Variablen ist dann genauso einfach wie das Rechnen mit Zahlen:
 
@@ -623,7 +623,7 @@ question("Wie heißen die Variablen-Namen?",
 
 **Aufgabe**
 
-Lies die Datei `ws19.rds` aus dem Verzechnis `data` ein:
+Lies die Datei `ws19.rds` aus dem Verzeichnis `data` ein:
 
 ```{r ws19, exercise = TRUE}
 ws19 <- ____
