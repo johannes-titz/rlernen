@@ -12,6 +12,10 @@ q_n <- function(answer, text = "Was kommt heraus?") {
   )
 }
 
+question <- function(...) {
+  learnr::question(..., allow_retry = T)
+}
+
 # imdb <- read.csv("https://raw.githubusercontent.com/devashishpatel/IMDB-Top-5000/master/movie_metadata.csv")
 # saveRDS(imdb, "data/imdb.rds")
 # saveRDS(readRDS("data/pizza.RData"), "data/pizza.rds")
