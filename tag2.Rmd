@@ -559,7 +559,7 @@ describeBy(imdb_auswahl, imdb_auswahl$color)
 
 In der ersten Zeile verkleinere ich den Dataframe auf 4 Variablen, ansonsten wird die ganze Geschichte unübersichtlich. In der zweiten Zeile benutze ich die Funktion ``describeBy`` und übergebe als erstes Argument den Dataframe und als zweites Argument die Gruppierungsvariable (Farbfilm oder nicht, `imdb_auswahl$color`). Zurück bekomme ich Statistiken für die drei Kategorien von **color**: Black and White, Color und den Rest, der nicht klassifiziert war (steht hier ganz oben). Was können wir erkennen? Es gibt wenige Schwarz-Weiß-Filme ($n=209$), diese liegen aber in der Bewertung über den Farb-Filmen (Mittelwert von 7.23 versus 6.41 in Spalte `mean`). Liegt vielleicht daran, dass es früher wenig Low-Budget-Filme gab. Entweder hat man einen passablen Film gemacht oder gar keinen.
 
-Nun Du! Selektiere zunächst aus dem Dataframe **imdb** die Variablen **imdb_score**, **movie_title** und **title_year**. Wähle anschließend alle Filme aus, die ab 2010 produziert wurden. Vergleiche schließlich den Datensatz über ``DescribeBy`` gruppiert nach dem Jahr (**title_year**):
+Nun Du! Selektiere zunächst aus dem Dataframe **imdb** die Variablen **imdb_score**, **movie_title** und **title_year**. Wähle anschließend alle Filme aus, die ab 2010 produziert wurden. Vergleiche schließlich den Datensatz über ``DescribeBy`` gruppiert nach dem Jahr (**title_year**). *Achtung: diese Aufgabe ist sehr anspruchsvoll, da sie mehrere Schritte erfordert. Nimm Dir dafür also etwas mehr Zeit und versuche Schritt für Schritt voranzukommen. Wenn Du es nicht schaffst, nicht schlimm, schau Dir einfach die Musterlösung an und versuch es in einer Woche nochmal.*
 
 ```{r aggregieren3, exercise = TRUE}
 
@@ -725,7 +725,7 @@ question("Wie heißt die Person in Zeile 5?",
 )
 ```
 
-Wähle alle Fälle aus, deren Größe (`height`) größer oder gleich 190 ist und sortiere sie aufsteigend.
+Wähle alle Fälle aus, deren Größe (`height`) größer oder gleich 190 ist und sortiere sie aufsteigend. *Achtung: diese Aufgabe ist recht anspruchsvoll, da man die Funktion `order` verwenden muss. Wenn Du nicht weiterkommst, geh nochmal im Tutorial zu einer Aufgabe zurück, die ebenfalls die Funktion `order` verwendet. Im Zweifelsfall kannst Du Dir auch die Musterlösung anschauen und die Aufgabe in einer Woche nochmal probieren zu lösen.*
 
 ```{r exercise2, exercise=TRUE}
 
