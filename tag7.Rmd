@@ -20,6 +20,12 @@ monate <- read.csv("data/monate.csv")
 data(big5)
 mtcars_stand <- scale(mtcars)
 distance <- dist(mtcars_stand)
+
+options(mc.cores = 1)
+librarian::shelf(simpleCache)
+simpleCache::setCacheDir("cache")
+simpleCache("parallel", {fa.parallel(big5, fa = "fa")})
+parallel <- parallel
 ```
 
 ## Einführung
@@ -79,18 +85,21 @@ library(psych)
 ```
 
 Und nun:
-```{r echo=FALSE}
-options(mc.cores = 1)
+
+```{r parallel, eval = F}
+parallel <- fa.parallel(big5, fa = "fa")
+plot(parallel)
+parallel$nfact
 ```
 
-```{r parallel, cache = TRUE}
-fa.parallel(big5, fa = "fa")
+```{r parallel-real, echo = F}
+plot(parallel)
+parallel$nfact
 ```
 
 Die Parallelanalyse schlägt 18 Faktoren vor. Man sieht bei dem Plot allerdings nicht so viel, aber wir können auch auf die einzelnen Werte von `fa.parallel` zugreifen und uns nur die ersten 30 Faktoren anschauen:
 
-```{r, cache = TRUE}
-parallel <- fa.parallel(big5, fa = "fa", plot = FALSE)
+```{r}
 index <- seq(30)
 plot(index, parallel$fa.values[index], type = "b", col = "blue", ylim = c(0, 20))
 points(index, parallel$fa.sim[index], type = "b", col = "red")
