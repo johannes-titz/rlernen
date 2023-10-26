@@ -44,8 +44,8 @@ WORKDIR /root/rlernen.de
 
 # writeLines(paste0(paste0("'", desc::desc_get_deps()[, 2], "'", collapse = ","), "deps.txt")
 Run R -e "install.packages(c('cofad','ez','knitr','learnr','ppcor','printr', \
-'psych','qgraph','rmarkdown','shiny','sjPlot','WebPower','librarian','meme',
-simpleCache))"
+'psych','qgraph','rmarkdown','shiny','sjPlot','WebPower','librarian','meme', \
+'simpleCache'))"
 
 # minimum deps
 # Run R -e "librarian::shelf('rmarkdown')"
