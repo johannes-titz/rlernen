@@ -9,3 +9,4 @@ Dockerfile
 !data
 !images
 !css
+!cache
