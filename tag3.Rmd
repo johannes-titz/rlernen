@@ -316,7 +316,7 @@ modus <- function(x) {
 modus(data$alter)
 ```
 
-Der Aufruf der gesamten Funktion läuft über den Namen, den wir der Funktion gegeben haben (`modus`) und die Parameter, die die Funktion hat, in diesem Fall nur einer (`x`). Wir können den Parameter beim Aufruf bennen, was etwas sauberer ist:
+Der Aufruf der gesamten Funktion läuft über den Namen, den wir der Funktion gegeben haben (`modus`) und die Parameter, die die Funktion hat, in diesem Fall nur einer (`x`). Wir können den Parameter beim Aufruf benennen, was etwas sauberer ist:
 
 ```{r function2, echo = TRUE}
 modus(x = data$alter)
@@ -656,7 +656,7 @@ question("Was hast Du gerne berechnet?",
 )
 ```
 
-Erstelle eine Kreuztabelle zu den Variablen Studium und Geschlecht. Die Tabelle soll die relative Häufigkeit angeben und auf 2 Dezimastellen gerundet sein. Falls Du nicht weißt wie man rundet, finde es durch eine Websuche heraus.
+Erstelle eine Kreuztabelle zu den Variablen Studium und Geschlecht. Die Tabelle soll die relative Häufigkeit angeben und auf 2 Dezimalstellen gerundet sein. Falls Du nicht weißt wie man rundet, finde es durch eine Websuche heraus.
 
 ```{r tab, exercise=TRUE}
 
@@ -770,6 +770,6 @@ Hierfür bekommst Du aber keinen Tipp, außer, dass es wirklich geht und dass es
 # in der Hall of Fame!
 ```
 
-Biser haben die letzte Aufgabe nur zwei Personen geschafft
+Bisher haben die letzte Aufgabe nur zwei Personen geschafft
 
 **HALL OF FAME: Aline Mangold, Victoria Nöther**
