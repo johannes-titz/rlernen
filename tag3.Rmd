@@ -14,21 +14,7 @@ output:
 ```{r setup, include=FALSE}
 source("setup.R")
 librarian::shelf(psych, meme)
-knitr::opts_chunk$set(cache = TRUE)
-# 
-# meme_get <- function(memename) 
-# {
-#     if (!is.character(memename)) {
-#         stop("Error: memename must be a character. See meme_list().")
-#     }
-#     idx <- which(memer::blankmemes$name == memename)
-#     # filepath <- paste0("images/", memer::blankmemes$filename[idx])
-#     # p <- magick::image_read(filepath)
-#     #p <- magick::image_read(images[[idx]])
-#     p <- system.file(paste0("extdata/", memer::blankmemes$filename[idx]), package = "memer")
-#     p <- magick::image_read(png::readPNG(p))
-#     return(p)
-# }
+knitr::opts_chunk$set(cache = FALSE)
 
 knitr::opts_chunk$set(fig.width=7, fig.height=4.9)
 
@@ -62,6 +48,10 @@ data <- readRDS("data/students.rds")
 # # data <- janitor::clean_names(data)
 # saveRDS(data, "data/students.rds")
 ```
+
+## Hinweise
+
+Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, bewertete dieses Tutorial insgesamt mit einer Schwierigkeit von 5 (0=sehr leicht, 10=sehr schwer). Sie brauchte für dieses Tutorial ungefähr 1h 45min (ohne die letzte Übungsaufgabe). Klicke auf "Nächstes Kapitel" und es geht los.
 
 ## Einführung
 
@@ -154,7 +144,7 @@ Gib mir den relativen Anteil der Punkte in Deutsch nach dem Geschlecht aus. Die 
 
 ```
 
-```{r deskp3-hint}
+```{r deskp3-hint-1}
 # Schau Dir die Befehle von oben an. Es gibt ein sehr ähnliches Beispiel.
 ```
 
@@ -346,7 +336,7 @@ Funktionen wirken am Anfang sehr kompliziert. Im Grunde sind sie es aber nicht, 
 
 ```
 
-```{r funktion1-hint}
+```{r funktion1-hint-1}
 mw <- function(x){
   # und hier nun Dein Code
 }
@@ -396,7 +386,7 @@ Respekt! Wenn Funktionen schreiben mal nicht einen Heidenspaß macht...
 
 ![](images/fun.png){width=350}
 
-Nun aber wieder zum Ernst des Lebens. Was hatten wir noch in Methodenlehre I? Na klar, Abbildungen!
+Nun aber wieder zum Ernst des Lebens. Was hatten wir noch in Methodenlehre 1? Na klar, Abbildungen!
 
 <!-- Achtung. Ich verwende hier ``na.rm = TRUE``. Wenn ich das nicht mache, bekomme ich einen Fehler. Warum? Weil manche Personen ihre Abiturnote nicht angegeben haben. Wie bekomme ich das heraus? Wir können uns eine Tabelle mit NA-Werten ausgeben lassen: -->
 
@@ -458,7 +448,7 @@ plot(data$mathe, data$deutsch, pch = 20, col = rgb(red = 0, green = 0, blue = 1,
 
 Was passiert hier? Wir machen einen Plot, der als Argument 1 die $x$-Achse aufnimmt, als Argument 2 die $y$-Achse. Dann übergeben wir noch `pch`, steht für plotting character. (Probier mal andere Zahlen aus!) Und schließlich noch über `col` die Farbe. Hierfür verwenden wir wiederum eine andere Funktion, `rgb`, und geben dort die Transparenz an. Probier für `alpha` andere Werte aus (zwischen 0 und 1).
 
-Plots, die man heutzutage in den meisten Publikationen sieht, zeigen Mittelwerte und Standardfehler. Hierfür können wir das Hilfspaket `psych` benutzen. Dort gibt es die Funktion `error.bars?`:
+Plots, die man heutzutage in den meisten Publikationen sieht, zeigen Mittelwerte und Standardfehler. Hierfür können wir das Hilfspaket `psych` benutzen. Dort gibt es die Funktion `error.bars`:
 <!-- Nicht vergessen, wir müssen es vorab laden (und ggf. installieren). -->
 
 ```{r eye, exercise = TRUE, exercise.eval = TRUE}
@@ -492,7 +482,7 @@ Nun der gleiche Boxplot, aber gruppiert nach Vegetarier und Meditation:
 
 ```
 
-```{r plot2-hint}
+```{r plot2-hint-1}
 # Syntax für boxplot ist: AV ~ UV1 + UV2
 ```
 
@@ -511,7 +501,7 @@ question("Welche Gruppe hat den niedrigsten Median in Lebenszufriedenheit?",
 )
 ```
 
-Nun bitte noch ein Stamm-Blatt-Diagramm für die Körpergröße:
+Nun bitte noch ein Stamm-Blatt-Diagramm für die Körpergröße (Variable `groesse`):
 
 ```{r plot3, exercise=TRUE}
 
@@ -610,7 +600,7 @@ cor(data$abi, data$lebenszufriedenheit)
 q_n(17, "Wie groß ist die aufgeklärte *Varianz* in der Lebenszufriedenheit durch die Abiturnote? (in Prozent auf eine ganze Zahl gerundet)")
 ```
 
-Zum Abschluss hätte ich gerne noch die Mittelwerte und das 68%-Konfidenzintervall für das Mögen von Hunden und Katzen (Variablen `hunde_m` und `katzen_m`). Nutze hier für die Funktion `error.bars` aus dem `psych` Paket und den Parameter `alpha` (Achtung: Alpha ist nich das Konfidenzniveau!).
+Zum Abschluss hätte ich gerne noch die Mittelwerte und das 68%-Konfidenzintervall für das Mögen von Hunden und Katzen (Variablen `hunde_m` und `katzen_m`). Nutze hier für die Funktion `error.bars` aus dem `psych` Paket und den Parameter `alpha` (Achtung: Alpha ist nicht das Konfidenzniveau!).
 
 ```{r plot7, exercise=TRUE}
 
@@ -643,7 +633,7 @@ Programmiere eine eigene Funktion, die eine Variable $z$-standardisiert. Wende S
 
 ```
 
-```{r test-hint}
+```{r test-hint-1}
 zstandardisere <- function(x){
   (x - mean(x)) / sd(x)
 }
@@ -769,7 +759,7 @@ Hierfür bekommst Du aber keinen Tipp, außer, dass es wirklich geht und dass es
 
 ```
 
-```{r meme-hint}
+```{r meme-hint-1}
 # schau nochmal, was so im data-Ordner liegt und finde heraus welche Pakete 
 # geladen sind, dann siehst Du nämlich welches Paket ich benutzt habe...
 ```
