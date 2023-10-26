@@ -9,8 +9,14 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 librarian::shelf(learnr)
-knitr::opts_chunk$set(echo = FALSE, cache = TRUE)
+knitr::opts_chunk$set(echo = FALSE, cache = F)
 ```
+
+## Allgemein
+
+### Warum kann ich bei den Hinweisen nicht zurück gehen?
+
+Das ist ein immer noch fehlendes Feature des Pakets learnr: https://github.com/rstudio/learnr/issues/115.
 
 ## Tag 1
 
