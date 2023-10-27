@@ -14,7 +14,7 @@ output:
 ```{r setup, include=FALSE}
 source("setup.R")
 librarian::shelf(ez, cofad)
-knitr::opts_chunk$set(cache = TRUE)
+knitr::opts_chunk$set(cache = F)
 
 #  data sets -------
 
@@ -174,7 +174,8 @@ cor.test(data$sport, data$lebenszufriedenheit)
 ```
 
 ```{r cor-mpc, echo=FALSE}
-q_n(2.2687, "Wie groß ist der t-Wert?")
+test <- cor.test(data$sport, data$lebenszufriedenheit)
+q_n(round(test$statistic, 2), "Wie groß ist der t-Wert? Runde auf 2 Dezimalstellen.")
 ```
 
 ### Konfidenzintervalle
