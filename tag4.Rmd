@@ -277,7 +277,7 @@ meineanova$ANOVA$SSn
 meineanova$ANOVA$SSd
 ```
 
-Dann rechne mal den Effekt für den Faktor Geschlecht (1) über den $F$-Wert und (2) über die Quadratsummen. Falls die Formeln hierfür nicht in Deiner Formelsammlung stehen, dann schau mal hier nach: <a href="https://stats.stackexchange.com/questions/41861/calculating-eta-squared-from-f-and-df" taret="_blank">https://stats.stackexchange.com/questions/41861/calculating-eta-squared-from-f-and-df</a>
+Dann rechne mal den Effekt für den Faktor Geschlecht (1) über den $F$-Wert und (2) über die Quadratsummen. Falls die Formeln hierfür nicht in Deiner Formelsammlung stehen, dann schau mal hier nach: <a href="https://stats.stackexchange.com/questions/41861/calculating-eta-squared-from-f-and-df" target="_blank">https://stats.stackexchange.com/questions/41861/calculating-eta-squared-from-f-and-df</a>
 
 ```{r anova-effect, exercise=TRUE, eval = TRUE, warning=FALSE}
 meineanova <- ezANOVA(data = data, wid = id, between = c(vegetarier, geschlecht), 
