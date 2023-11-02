@@ -36,6 +36,10 @@ musik <- data.frame(reading_test = c(27, 25, 30, 29, 30, 33, 31, 35,
                                             "classic", "jazz"), each = 8)))
 ```
 
+## Hinweise
+
+Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, bewertete dieses Tutorial insgesamt mit einer Schwierigkeit von 5.5 (0=sehr leicht, 10=sehr schwer). Sie brauchte für dieses Tutorial ungefähr 1h40min. Klicke auf "Nächstes Kapitel" und es geht los.
+
 ## Einführung
 
 Nachdem wir die deskriptive Statistik so weit erst mal abgehandelt haben, machen wir heute Inferenzstatistik. Ich warne Dich schon mal vor: das wird etwas trocken und recht anstrengend, aber am Ende kannst Du dann schon ungefähr die Hälfte der Tests aus der Methodenlehre in `R` nachrechnen. Das ist wirklich praktisch, denn so kannst Du auch Übungsaufgaben aus der Methodenlehre nachprüfen. Bald bist Du vollkommen autonom was die Statistik angeht!
@@ -180,7 +184,7 @@ q_n(round(test$statistic, 2), "Wie groß ist der t-Wert? Runde auf 2 Dezimalstel
 
 ### Konfidenzintervalle
 
-Konfidenzintervalle haben wir bei allen bisherigen Tests stets angezeigt bekommen. Deshalb verzichte ich hier auf eine gesonderte Behandlung. Man kann auch immer die Konfidenz festlegen (Parameter `conf.level`). Es gibt sicher ein Dutzend Pakete, die Konfidenzintervalle extra berechnen können. Aber bisher haben wir keine Extrawünsche, also benutzen wir base `R`. Nur zur Übung, berechne mir das 99%-Konfidenzintervall für den Mittelwertsunterschied in der Lebenszufriedenheit zwischen weiblichen und männlichen Studierenden über die Funktion `t.test`. Geh von Varianzgleichheit aus.
+Konfidenzintervalle haben wir bei allen bisherigen Tests stets angezeigt bekommen. Deshalb verzichte ich hier auf eine gesonderte Behandlung. Man kann auch immer die Konfidenz festlegen (Parameter `conf.level`). Es gibt sicher ein Dutzend Pakete, die Konfidenzintervalle extra berechnen können. Aber bisher haben wir keine Extrawünsche, also benutzen wir base `R`. Nur zur Übung, berechne mir das 99%-Konfidenzintervall für den Mittelwertsunterschied in der Lebenszufriedenheit zwischen weiblichen und männlichen Studierenden über die Funktion `t.test`. Geh von Varianzgleichheit aus. **Hinweis**: Es geht um das Konfidenzintervall für die Differenz weiblich-männlich, nicht männlich-weiblich.
 
 ```{r conf, exercise=TRUE}
 
@@ -229,12 +233,12 @@ Nun zur Syntax, schauen wir uns diese nochmal genau an:
 ezANOVA(data = data, wid = id, between = c(vegetarier, geschlecht), dv = abi)
 ```
 
-Der Parameter `wid` gibt die ID für die Person an. Diese ist zwingend notwendig, da bei Within-Designs mehrere Messungen pro Person vorhanden sind. Um alles konsistent zu halten wird sie auch bei einer reinen between-ANOVA benötigt. `between` nimmt die UVs auf und `dv` (dependent variable) die AV. Über den Parameter `data` spezifizieren wir den Dataframe in dem die Variablen id, Vegetarier, Geschlecht und Abi vorhanden sind. Tatsächlich ist das eine Besonderheit, denn bisher haben wir Variablennamen eher in Anführungszeichen geschrieben: z. B.  `data[, c("vegetarier", "geschlecht")]`. Bei der `ez`-Syntax ist das nicht notwendig, man kann (oder eher muss) direkt die Variablennamen hinschreiben. Falls Du mal Fehlermeldungen bekommen solltest, prüfe in beide Richtungen, ob Du Anführungszeichen eventuell vergessen oder fälschlicherweise gesetzt hast (bei anderen Befehlen als `ez`).
+Der Parameter `wid` gibt die ID für die Person an. Diese ist zwingend notwendig, da bei Within-Designs mehrere Messungen pro Person vorhanden sind. Um alles konsistent zu halten wird sie auch bei einer reinen between-ANOVA benötigt. `between` nimmt die UVs auf und `dv` (dependent variable) die AV. Über den Parameter `data` spezifizieren wir den Dataframe in dem die Variablen id, Vegetarier, Geschlecht und Abi vorhanden sind. Tatsächlich ist das eine Besonderheit, denn bisher haben wir Variablennamen eher in Anführungszeichen geschrieben: z. B.  `data[, c("vegetarier", "geschlecht")]`. Bei der `ez`-Syntax ist das nicht notwendig, man kann direkt die Variablennamen hinschreiben. Falls Du mal Fehlermeldungen bekommen solltest, prüfe in beide Richtungen, ob Du Anführungszeichen eventuell vergessen oder fälschlicherweise gesetzt hast (bei anderen Befehlen als `ez`).
 
-Das Folgende ist falsch, da Abi nicht in Anführungszeichen gesetzt werden darf:
+Das Folgende ist falsch, da `wid` nicht in Anführungszeichen gesetzt werden darf:
 
 ```{r, error=TRUE, warning=FALSE, echo = T}
-ezANOVA(data = data, wid = "id", between = c(vegetarier, geschlecht), dv = "abi")
+ezANOVA(data = data, wid = "id", between = c(vegetarier, geschlecht), dv = abi)
 ```
 
 Auch das Folgende ist falsch, da hier die Variablen in Anführungszeichen gesetzt werden müssen.
@@ -261,7 +265,7 @@ ezANOVA(data = data, wid = id, between = c(vegetarier, geschlecht), dv = abi,
         detailed = TRUE)
 ```
 
-Jetzt kannst Du über die SS (Sum of Squares) $\eta^2$ und $\eta_p^2$ *per Hand* berechnen. 
+Jetzt kannst Du über die SSn (Sum of Squares numerator) $\eta^2$ und $\eta_p^2$ *per Hand* berechnen. 
 
 Nun, um ganz ehrlich zu sein haben wir hier eine unbalancierte ANOVA und davor warnt uns `ezANOVA` auch. $\eta^2$ ist somit nicht genau der Wert, den wir bei einer Berechnung per Hand bekämen. Das kannst Du nachprüfen, in dem Du mal aus dem $F$-Wert $\eta^2$ berechnest (klar geht das!) und mal aus den Quadratsummen. Die Formelsammlung ist Dein Freund. Zugriff auf die Werte bekommst Du folgendermaßen:
 
@@ -273,7 +277,7 @@ meineanova$ANOVA$SSn
 meineanova$ANOVA$SSd
 ```
 
-Dann rechne mal den Effekt für den Faktor Geschlecht (1) über den $F$-Wert und (2) über die Quadratsummen:
+Dann rechne mal den Effekt für den Faktor Geschlecht (1) über den $F$-Wert und (2) über die Quadratsummen. Falls die Formeln hierfür nicht in Deiner Formelsammlung stehen, dann schau mal hier nach: https://stats.stackexchange.com/questions/41861/calculating-eta-squared-from-f-and-df
 
 ```{r anova-effect, exercise=TRUE, eval = TRUE, warning=FALSE}
 meineanova <- ezANOVA(data = data, wid = id, between = c(vegetarier, geschlecht), 
@@ -297,7 +301,7 @@ q_n(0.0457, "Wie groß ist Eta-Quadrat für den Faktor Geschlecht wenn man es au
 q_n(0.0456, "Wie groß ist Eta-Quadrat für den Faktor Geschlecht wenn man es aus den Quadratsummen berechnet? (gerundet auf 4 Dezimalstellen)")
 ```
 
-Ja, der Unterschied ist nicht groß, aber er ist vorhanden und man muss ihn irgendwie erklären. Des Rätsels Lösung liegt, wie schon angedeutet, darin, dass unsere ANOVA nicht balanciert ist. Wir haben nicht gleich viele Personen in den vier Bedingungen. Wenn wir jetzt diskutieren was man da machen kann, sitzen wir noch morgen hier. Merk Dir: Du machst Dir und allen anderen Menschen das Leben viel einfacher, wenn Du ein balanciertes Design hast. Das erreichst Du durch ein richtiges Experiment (UV manipulieren, AV messen, zufällige Zuweisung der Probanden auf die Bedingungen), bei dem alle Zellen gleich viele Probanden haben. Fertig!
+Ja, der Unterschied ist nicht groß, aber er ist vorhanden und man muss ihn irgendwie erklären. Des Rätsels Lösung liegt, wie schon angedeutet, darin, dass unsere ANOVA nicht balanciert ist. Wir haben nicht gleich viele Personen in den vier Bedingungen. Wenn wir jetzt diskutieren was man da machen kann, sitzen wir noch morgen hier. Merk Dir: Du machst Dir und allen anderen Menschen das Leben viel leichter, wenn Du ein balanciertes Design hast. Das erreichst Du durch ein richtiges Experiment (UV manipulieren, AV messen, zufällige Zuweisung der Probanden auf die Bedingungen), bei dem alle Zellen gleich viele Probanden haben. Fertig!
 
 Okay, genug geredet. Rechne nun eine ANOVA für die Lebenszufriedenheit in Abhängigkeit von den Faktoren Meditation und Haustier.
 
@@ -306,13 +310,13 @@ Okay, genug geredet. Rechne nun eine ANOVA für die Lebenszufriedenheit in Abhä
 ```
 
 ```{r anova-solution}
-ezANOVA(data = data, wid = id, between = c(meditation, gaustier),
+ezANOVA(data = data, wid = id, between = c(meditation, haustier),
         dv = lebenszufriedenheit,
         detailed = TRUE)
 ```
 
 ```{r anova3-mpc, echo=FALSE}
-q_n(10.998, "Wie groß ist die Quadratsumme für den Faktor Meditation?")
+q_n(10.998, "Wie groß ist die Quadratsumme für den Faktor Meditation? Runde auf 3 Dezimalstellen.")
 ```
 
 ### Abhängige Stichproben
@@ -397,14 +401,14 @@ In der Übung kamen wir auf ein $r_\mathrm{effect size}$ von 0.93. Wir schauen e
 <img src="images/ka_lambda.png" width="600">
 
 ```{r, echo = T}
-mw <- c(15, 17, 13, 15, 23, 19)
-lambda <- rep(mw - mean(mw), each = 5)
+group_means <- c(15, 17, 13, 15, 23, 19)
+lambda <- rep(group_means - mean(group_means), each = 5)
 lambda
 ```
 
 Das `rep` mit `each=5` brauchen wir, da wir für jede Person ein Lambda benötigen -- dieses ist für die einzelnen Gruppen konstant (5 Personen pro Gruppe). Nun korrelieren wir die Lambdas mit den Werten der AV:
 
-```{r}
+```{r, echo = T}
 cor(av, lambda)
 ```
 
