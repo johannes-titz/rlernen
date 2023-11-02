@@ -277,7 +277,7 @@ meineanova$ANOVA$SSn
 meineanova$ANOVA$SSd
 ```
 
-Dann rechne mal den Effekt für den Faktor Geschlecht (1) über den $F$-Wert und (2) über die Quadratsummen. Falls die Formeln hierfür nicht in Deiner Formelsammlung stehen, dann schau mal hier nach: https://stats.stackexchange.com/questions/41861/calculating-eta-squared-from-f-and-df
+Dann rechne mal den Effekt für den Faktor Geschlecht (1) über den $F$-Wert und (2) über die Quadratsummen. Falls die Formeln hierfür nicht in Deiner Formelsammlung stehen, dann schau mal hier nach: <a href="https://stats.stackexchange.com/questions/41861/calculating-eta-squared-from-f-and-df" taret="_blank">https://stats.stackexchange.com/questions/41861/calculating-eta-squared-from-f-and-df</a>
 
 ```{r anova-effect, exercise=TRUE, eval = TRUE, warning=FALSE}
 meineanova <- ezANOVA(data = data, wid = id, between = c(vegetarier, geschlecht), 
@@ -544,7 +544,7 @@ calc_contrast(dv = reading_test, within = music,
 q_n(1.863, "Wie groß ist $g_\\mathrm{contrast}$?")
 ```
 
-Gut gemacht! Der Tag war ziemlich "intense". Wir haben den Großteil der Signifikanztests aus der Methodenlehre behandelt -- in nur einer Sitzung! Ziemlich trocken, aber vielleicht hast Du auch hier und da gemerkt was man aus Daten rauskitzeln kann. Zum Beispiel sind Männer signifikant größer als Frauen und das Abitur in unserer Stichprobe ist abhängig vom Geschlecht. Das sind keine überragenden Erkenntnisse, aber von nun an hast Du das Werkzeug um eigene Fragestellungen statistisch zu untersuchen. Wolltest Du nicht schon immer mal wissen welche Unterschiede und Gemeinsamkeiten es zwischen Menschen gibt? Mach eine Umfrage unter Deinen Freunden. Oder vermesse Dich selbst: fang an zu laufen und tracke die Geschwindigkeit über die Zeit. Wirst Du signifikant besser? Fang an zu meditieren und tracke Dein Stressniveau! Wie groß ist der Effekt? Du bist längst so weit eigenständig Daten zu sammeln und auszuwerten.
+Gut gemacht! Der Tag war ziemlich "intense". Wir haben den Großteil der Signifikanztests aus der Methodenlehre behandelt -- in nur einer Sitzung! Ziemlich trocken, aber vielleicht hast Du auch hier und da gemerkt was man aus Daten rauskitzeln kann. Zum Beispiel sind Männer signifikant größer als Frauen und das Abitur in unserer Stichprobe ist abhängig vom Geschlecht. Das sind keine überragenden Erkenntnisse, aber von nun an hast Du das Werkzeug um eigene Fragestellungen statistisch zu untersuchen. Wolltest Du nicht schon immer mal wissen welche Unterschiede und Gemeinsamkeiten es zwischen Menschen gibt? Mach eine Umfrage unter Deinen Freunden. Oder vermesse Dich selbst: Fang an zu laufen und tracke die Geschwindigkeit über die Zeit. Wirst Du signifikant besser? Fang an zu meditieren und tracke Dein Stressniveau! Wie groß ist der Effekt? Du bist längst so weit eigenständig Daten zu sammeln und auszuwerten.
 
 ![](images/43.jpg)
 
@@ -582,7 +582,7 @@ q_n(0.1558, "Wie groß ist der $p$-Wert? (gerundet auf 4 Dezimalstellen)")
 
 ### Eigene Funktion für $t$-Test
 
-Schreibe eine eigene Funktion um den $t$-Wert zu berechnen. Nutze dafür notfalls die Formeln aus der Formelsammlung. Die Funktion sollte als Parameter zwei Vektoren haben. Als Rückgabewert den $t$-Wert. Du kannst natürlich die Funktionen `mean` und `var` einsetzen. Zur Überprüfung, ob Deine Funktion funktioniert, rechne nochmal den $t$-Test aus der vorherigen Aufgabe.
+Schreibe eine eigene Funktion um den $t$-Wert zu berechnen. Nutze dafür notfalls die Formeln aus der Formelsammlung. Die Funktion sollte als Parameter zwei Vektoren haben. Als Rückgabewert den $t$-Wert. Du kannst natürlich die Funktionen `mean` und `var` einsetzen. Hilfreich könnten auch `sqrt` und `length` sein. Zur Überprüfung, ob Deine Funktion funktioniert, rechne nochmal den $t$-Test aus der vorherigen Aufgabe.
 
 ```{r funktion, exercise=TRUE}
 
@@ -607,6 +607,7 @@ Rechne die Kontrastanalyse aus der Vorlesung auf Folie 21 mit `cofad` nach:
 <img src="images/ka_vorlesung_f21.png" width="600">
 <hr>
 
+**Hinweis**: `cofad` erwartet, dass die ID-Variable und Gruppen-Variable ein `factor` ist. Benutze also `as.factor` bei der Erstellung dieser Variablen.
 
 ```{r kauebung, exercise=TRUE}
 
