@@ -67,7 +67,6 @@ COPY . .
 
 # need for deps and maybe caching
 RUN R -e "rmarkdown::render('tag1.Rmd')"
-
 RUN R -e "rmarkdown::render('tag2.Rmd')"
 RUN R -e "rmarkdown::render('tag3.Rmd')"
 RUN R -e "rmarkdown::render('tag4.Rmd')"
