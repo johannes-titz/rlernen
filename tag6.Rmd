@@ -14,11 +14,11 @@ output:
 ```{r setup, include=FALSE}
 librarian::shelf(ez, sjPlot, learnr)
 source("setup.R")
-knitr::opts_chunk$set(cache = TRUE)
+knitr::opts_chunk$set(cache = F)
 
 data <- readRDS("data/ws19.rds")
 imdb <- readRDS("data/imdb.rds")
-imdb$age <- 2020 - imdb$title_year
+imdb$age <- as.numeric(format(Sys.Date(), "%Y")) - imdb$title_year
 imdb$film <- imdb$duration > 75
 imdb$action <- grepl("Action", imdb$genres)
 
@@ -54,8 +54,11 @@ Da die Regressions-Analyse Intervallskalenniveau voraussetzt, schaust Du Dir die
 Bevor wir das Modell bauen, müssen wir das Alter des Filmes aus dem Erscheinungsjahr berechnen:
 
 ```{r, echo = TRUE}
-imdb$age <- 2020 - imdb$title_year
+current_year <- as.numeric(format(Sys.Date(), "%Y"))
+imdb$age <- current_year - imdb$title_year
 ```
+
+Das sieht etwas kryptisch aus, aber `Sys.Date` gibt einfach nur das aktuelle Datum zurück und über `format` holen wir uns dann das aktuelle Jahr. Das ist ein Detail, was nicht ganz so wichtig ist. Wir wollen einfach nur das aktuelle Alter des Films berechnen.
 
 Und nun das Modell:
 
@@ -92,10 +95,13 @@ question("Wie kann man den Einfluss des Alters eines Films auf seine Bewertung i
 ```
 
 ```{r model1-mpc2, echo=FALSE}
-q_n(6.83, "Welche Bewertung bekommt ein Film, der 0 Jahre alt ist und 120 Minuten geht. (Ignoriere hierfür den Effekt des Budgets. Runde auf 2 Dezimalstellen)")
+model1 <- lm(imdb_score ~ budget + duration + age, data = imdb)
+b <- coef(model1)
+res <- sum(round(c(b[1], b[3]*120), 2))
+q_n(res, "Welche Bewertung bekommt ein Film, der 0 Jahre alt ist und 120 Minuten geht. (Ignoriere hierfür den Effekt des Budgets. Runde auf 2 Dezimalstellen)")
 ```
 
-Überraschenderweise hat das Budget keinen Einfluss auf die Bewertung, aber durchaus die Länge des Films. Wir erinnern uns, dass bei IMDB auch Serien enthalten sind, die eventuell generell schlechter bewertet werden als Filme. Aber die Variable Film/Serie ist ja nicht intervallskaliert, also können wir sie nicht in die Regression aufnehmen. Falsch gedacht! Es spricht nichts dagegen dichotome Variablen in eine Regression aufzunehmen:
+Überraschenderweise hat das Budget keinen signifikanten Einfluss auf die Bewertung, aber durchaus die Länge des Films. Wir erinnern uns, dass bei IMDB auch Serien enthalten sind, die eventuell generell schlechter bewertet werden als Filme. Aber die Variable Film/Serie ist ja nicht intervallskaliert, also können wir sie nicht in die Regression aufnehmen. Falsch gedacht! Es spricht nichts dagegen dichotome Variablen in eine Regression aufzunehmen:
 
 ```{r, echo = TRUE}
 imdb$film <- imdb$duration > 75
@@ -140,7 +146,13 @@ tab_model(model1)
 ```
 
 ```{r chisq-mpc, echo=FALSE}
-q_n(1.45, "Um wie viel besser werden Filme von Christopher Nolan (im Vergleich zu anderen Regisseuren) beurteilt unter Kontrolle der restlichen Variablen?")
+imdb$nolan <- grepl("Christopher Nolan", imdb$director_name)
+imdb$kubrick <- grepl("Stanley Kubrick", imdb$director_name)
+imdb$ritchie <- grepl("Guy Ritchie", imdb$director_name)
+imdb$bale <- grepl("Christian Bale", imdb$actor_1_name)
+model1 <- lm(imdb_score ~ budget + duration + age + film + action + nolan + kubrick + ritchie + bale, data = imdb)
+res <- round(coef(model1)["nolanTRUE"], 2)
+q_n(res, "Um wie viel besser werden Filme von Christopher Nolan (im Vergleich zu anderen Regisseuren) beurteilt unter Kontrolle der restlichen Variablen? Runde auf 2 Dezimalstellen.")
 ```
 
 ```{r chisq-mpc2, echo=FALSE}
