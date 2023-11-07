@@ -97,7 +97,7 @@ question("Wie kann man den Einfluss des Alters eines Films auf seine Bewertung i
 ```{r model1-mpc2, echo=FALSE}
 model1 <- lm(imdb_score ~ budget + duration + age, data = imdb)
 b <- coef(model1)
-res <- sum(round(c(b[1], b[3]*120), 2))
+res <- sum(round(c(b[1], b[3]), 2) * c(1, 120))
 q_n(res, "Welche Bewertung bekommt ein Film, der 0 Jahre alt ist und 120 Minuten geht. (Ignoriere hierfür den Effekt des Budgets. Runde auf 2 Dezimalstellen)")
 ```
 
