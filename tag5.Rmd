@@ -53,6 +53,10 @@ data <- readRDS("data/students.rds")
 data <- data[data$geschlecht %in% c("weiblich", "männlich"),]
 ```
 
+## Hinweise
+
+Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, bewertete dieses Tutorial insgesamt mit einer Schwierigkeit von 6 (0=sehr leicht, 10=sehr schwer). Sie brauchte für dieses Tutorial ungefähr 1h10min. Klicke auf "Nächstes Kapitel" und es geht los.
+
 ## Einführung
 
 Leider musst Du Dich heute noch weiter mit statistischen Tests beschäftigen, genauer gesagt nonparametrischen Tests. Diese verwenden wir, wenn die untersuchten Variablen kein Intervallskalenniveau haben oder die Voraussetzungen für einen statistischen Test nicht erfüllt sind (z. B. keine Normalverteilung in der Population). Dazu gibt es zwei Dinge zu sagen: (1) in der Psychologie wird das Intervallskalenniveau so gut wie nie erreicht -- die Psychologen tun aber gerne trotzdem so als ob, sie "spielen" Intervallskalenniveau. (2) Bootstrapping und Permutationstests wären eigentlich die bessere Alternative um das Problem zu lösen, werden aber erst im Masterstudium ausführlich behandelt.
@@ -325,7 +329,7 @@ question("Warum könnte die Ungenauigkeit aus der letzten Aufgabe gewollt sein?"
          random_answer_order = T)
 ```
 
-Du planst eine eigene Studie und gehst von einem Effekt von $d=0.6$ aus, das $\alpha$-Niveau legst Du auf 0.10 fest. Du würdest gerne wissen wie groß die Power Deiner Studie in Abhängigkeit der Stichprobengröße ist. Dafür willst Du eine Abbildung erstellen; auf der $x$-Achse die Stichprobengröße und auf der $y$-Achse die Power. Die minimale Stichprobengröße soll 10 sein, die maximale 500 (in 10er-Schritten). Erstelle mit Hilfe der Funktion `wp.t` zunächst die Daten, greife dann auf die Stichprobengröße und Power zu und erstelle, die Abbildung.
+Du planst eine eigene Studie und gehst von einem Effekt von $d=0.6$ aus, das $\alpha$-Niveau legst Du auf 0.10 fest. Du würdest gerne wissen wie groß die Power Deiner Studie in Abhängigkeit der Stichprobengröße ist. Dafür willst Du eine Abbildung erstellen; auf der $x$-Achse die Stichprobengröße und auf der $y$-Achse die Power. Die minimale Stichprobengröße soll 10 sein, die maximale 500 (in 10er-Schritten, schau Dir hierfür die Hilfs-Funktion `seq` an). Erstelle mit Hilfe der Funktion `wp.t` zunächst die Daten, greife dann auf die Stichprobengröße und Power zu und erstelle, die Abbildung.
 
 ```{r powerstudie, exercise=TRUE}
 
@@ -480,7 +484,7 @@ colnames(vl) <- c("Gewichtsverlust", "Sport", "Kalorienaufnahme", "Alter")
 vl 
 ```
 
-Der Zusammenhang zwischen Gewichtsverlust und Sport, ohne den Einfluss von Kalorienaufnahme soll berechnet werden.
+Der Zusammenhang zwischen Gewichtsverlust und Sport, ohne den Einfluss von Kalorienaufnahme soll berechnet werden. Achtung: Das ist für Anfänger eine recht anspruchsvolle Aufgabe, für die Du etwas Zeit einplanen solltest.
 
 ```{r parcor2, exercise=TRUE}
 
