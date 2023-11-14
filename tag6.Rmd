@@ -94,11 +94,18 @@ question("Wie kann man den Einfluss des Alters eines Films auf seine Bewertung i
 )
 ```
 
+Welche Bewertung bekommt ein Film, der 0 Jahre alt ist und 120 Minuten geht? (Ignoriere hierfür den Effekt des Budgets. Runde auf 2 Dezimalstellen)
+
+```{r calculator, exercise = TRUE}
+
+```
+
+
 ```{r model1-mpc2, echo=FALSE}
 model1 <- lm(imdb_score ~ budget + duration + age, data = imdb)
 b <- coef(model1)
 res <- sum(round(c(b[1], b[3]), 2) * c(1, 120))
-q_n(res, "Welche Bewertung bekommt ein Film, der 0 Jahre alt ist und 120 Minuten geht. (Ignoriere hierfür den Effekt des Budgets. Runde auf 2 Dezimalstellen)")
+q_n(res, "Welche Bewertung bekommt ein Film, der 0 Jahre alt ist und 120 Minuten geht? (Ignoriere hierfür den Effekt des Budgets. Runde auf 2 Dezimalstellen.)")
 ```
 
 Überraschenderweise hat das Budget keinen signifikanten Einfluss auf die Bewertung, aber durchaus die Länge des Films. Wir erinnern uns, dass bei IMDB auch Serien enthalten sind, die eventuell generell schlechter bewertet werden als Filme. Aber die Variable Film/Serie ist ja nicht intervallskaliert, also können wir sie nicht in die Regression aufnehmen. Falsch gedacht! Es spricht nichts dagegen dichotome Variablen in eine Regression aufzunehmen:
@@ -391,7 +398,7 @@ plot(mtcars$hp, mtcars$mpg)
 lines(lowess(x = mtcars$hp, y = mtcars$mpg))
 ```
 ```{r hp-mpc, echo=FALSE}
-q_n(1, "Wie viele Autos haben mehr als 250 PS?")
+q_n(2, "Wie viele Autos haben mehr als 250 PS?")
 ```
 
 Bevor wir das Thema abschließen, worauf bezieht sich denn nun die Linearität bei linearen Regressionen? Schau Dir hierzu die nächste Aufgabe an:
@@ -433,7 +440,7 @@ mtcars_standardisiert
 
 Und nun nochmal das Modell rechnen:
 
-```{r}
+```{r, echo = TRUE}
 tab_model(lm(mpg ~ wt + hp, data = mtcars_standardisiert))
 ```
 
