@@ -31,6 +31,10 @@ vlf5 <- data.frame(av = matrix(c(18, 18, 20, 17, 9, 16, 25, 24, 16)),
                    gruppe = rep(c("placebo", "einfache Dosis", "doppelte Dosis"), each = 3))
 ```
 
+## Hinweise
+
+Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, bewertete dieses Tutorial insgesamt mit einer Schwierigkeit von 5 (0=sehr leicht, 10=sehr schwer). Sie brauchte für dieses Tutorial ungefähr 1h50min. Klicke auf "Nächstes Kapitel" und es geht los.
+
 ## Einführung
 
 Regression ist das Allheilmittel der Psychologie, denn sie ist nicht nur von selbst sehr nützlich, auch kann man mit ihr die am häufigsten verwendeten Verfahren wie ANOVA und $t$-Test berechnen. Wenn also ein Methode der Statistik wirklich wichtig für Psychologen ist, so ist das die Regression. Deshalb schauen wir sie uns heute etwas genauer an. Wir fangen mit einem einfachen Beispiel an, bei dem wir die Bewertung von Filmen vorhersagen möchten. Dann versuchen wir die Äquivalenz zum $t$-Test und zur ANOVA aufzuzeigen. Anschließend kommt der Höhepunkt: mit einer linearen Regression lassen sich auch nicht-lineare Zusammenhänge modellieren. Linear ist nicht gleich linear! Zum Schluss schauen wir uns zwei einfache Wege an zu standardisierten Regressionskoeffizienten zu kommen, die `R` standardmäßig nicht ausgibt.
