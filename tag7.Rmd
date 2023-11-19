@@ -28,6 +28,10 @@ simpleCache("parallel", {fa.parallel(big5, fa = "fa")})
 parallel <- parallel
 ```
 
+## Hinweise
+
+Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, bewertete dieses Tutorial insgesamt mit einer Schwierigkeit von 7.5 (0=sehr leicht, 10=sehr schwer). Sie brauchte für dieses Tutorial ungefähr 1h15min. Klicke auf "Nächstes Kapitel" und es geht los.
+
 ## Einführung
 
 Was ist die Kernkompetenz von Psychologen? Meiner Ansicht nach lernen Psychologen in Ihrem Studium zum Großteil Softskills wie *sich auf viele Prüfungen gleichzeitig vorbereiten*, *gute Vorträge halten* oder *Hausarbeiten schreiben*. Das lernt man auch in anderen Studiengängen. Was man jedoch in anderen Studiengängen nicht lernt ist die systematische Entwicklung von Fragebögen, die eine hohe Qualität aufweisen. Hierfür benötigt man die Faktorenanalyse, die sowohl in der Methodenlehre als auch in der Diagnostik gelehrt wird. Was Du heute lernst, wirst Du also noch häufiger im Studium sehen.
@@ -107,7 +111,7 @@ points(index, parallel$fa.sim[index], type = "b", col = "red")
 
 Schon besser, wir sehen nun, dass ab Faktor 19 die Parallelanalyse einen größeren Eigenwert (genauer gesagt das 95% Quantil der Eigenwerte) produziert als er empirisch herauskommt, deshalb extrahieren wir 18. Die Eigenwerte aus der Parallel-Analyse entstehen aus unkorrelierten Daten, rein zufällig so zu sagen. Und das ist natürlich eine sinnvolle Grenze für einen bedeutsamen Eigenwert.
 
-Übrigens, nach dem Kaiser-Kriterium könnten wir 29 Faktoren extrahieren. Die Big Five sind also tatsächlich eher ein Kompromiss aus möglichst wenig Faktoren und halbwegs guter Varianzaufklärung. Eine andere Anzahl an Faktoren wäre statistisch durchaus zu rechtfertigen, jedoch fehlt uns hier natürlich eine theoretische Betrachtung. So gibt es ja auch Facetten von den Big Five, die eben diese weiteren (Unter-)Faktoren begründen Wir wollen hier aber nicht weiter darüber diskutieren, denn das würde den Rahmen eines `R`-Kurses sprengen.  
+Übrigens, nach dem Kaiser-Kriterium könnten wir 29 Faktoren extrahieren. Die Big Five sind also tatsächlich eher ein Kompromiss aus möglichst wenig Faktoren und halbwegs guter Varianzaufklärung. Eine andere Anzahl an Faktoren wäre statistisch durchaus zu rechtfertigen, jedoch fehlt uns hier natürlich eine theoretische Betrachtung. So gibt es ja auch Facetten von den Big Five, die eben diese weiteren (Unter-)Faktoren begründen. Wir wollen hier aber nicht weiter darüber diskutieren, denn das würde den Rahmen eines `R`-Kurses sprengen.  
 
 Gut, das sind die Basics für die Faktorenanalyse und die kannst Du jetzt üben. In der Vorlesung bewerteten die Studenten wie gut ihnen die Monate des Jahres gefallen. Damit wurde dann eine Faktorenanalyse gerechnet um die vier Jahreszeiten zu extrahieren. Die Daten sind:
 
@@ -118,7 +122,7 @@ monate
 
 Rechne für die Daten eine Faktorenanalyse. Prüfe zuerst mit einer Parallel-Analyse wie viele Faktoren extrahiert werden sollten:
 
-```{r faparallel, exercise=TRUE}
+```{r faparallel, exercise=TRUE, warning =F}
 
 ```
 
@@ -149,7 +153,7 @@ fa
 q_n(.553, "Wie groß ist die Varianzaufklärung durch die 4 Faktoren (gerundet auf 3 Dezimalstellen)")
 ```
 
-Berechne nun die Kommunalitäten der Monate (Hinweis: benutze die Funktion `rowSums`):
+Berechne nun die Kommunalitäten der Monate (Hinweis: benutze die Funktion `rowSums`, Hilfe: `help(rowSums, base))`:
 
 ```{r fa-komm, exercise=TRUE}
 
@@ -283,21 +287,21 @@ Anschließend haben wir uns intensiv mit der Regression befasst, wohl das wichti
 
 Das ist insgesamt ganz schön viel für einen R-Kurs. Du bist also gut gerüstet für die nächsten statistisch-analytischen Schlachten. Aber Du solltest Dich auch nicht überschätzen. Es gibt noch viel zu lernen. Was solltest Du als nächstes tun?
 
-Falls Du es noch nicht getan hast, installiere Dir `R` und Rstudio auf deinen Rechner: https://jjallaire.shinyapps.io/learnr-tutorial-00-setup/ 
+Falls Du es noch nicht getan hast, installiere Dir `R` und Rstudio auf deinen Rechner: <a href="https://jjallaire.shinyapps.io/learnr-tutorial-00-setup/" target="_blank">https://jjallaire.shinyapps.io/learnr-tutorial-00-setup/</a>
 
 Probiere dann aus, ob Du die Übungsaufgaben, die wir hier durchgearbeitet haben, auch lokal (auf Deinem Rechner) nachvollziehen kannst.
 
-Lerne wie Du Daten lokal einliest (zusätzlich zu den hier gezeigten Übungen schau Dir dazu z. B. auch https://www.datacamp.com/community/tutorials/r-data-import-tutorial an).
+Lerne wie Du Daten lokal einliest (zusätzlich zu den hier gezeigten Übungen schau Dir dazu z. B. auch <a href="https://www.datacamp.com/community/tutorials/r-data-import-tutorial" target="_blank">datacamp</a> an).
 
 Lerne `dplyr` und `ggplot2`. Tutorials dafür gibt es wie Sand am Meer. 
 
-Schaue Dir Videos auf Youtube zu `R` an. Z. B. https://youtube.com/@methodenmonster
+Schaue Dir Videos auf Youtube zu `R` an. Z. B. <a href="https://youtube.com/@methodenmonster" target="_blank">methodenmonster</a>
 
-Lies Dir Blogs zu `R` auf https://www.r-bloggers.com durch. Schau auch gerne bei meinem Blog vorbei: https://johannestitz.com
+Lies Dir Blogs zu `R` auf <a href="https://www.r-bloggers.com" target="_blank">r-bloggers</a> durch. Schau auch gerne bei meinem Blog vorbei: <a href="https://johannestitz.com" target="_blank">https://johannestitz.com</a>
 
-Lies Dir Fragen zu `R` auf https://www.stackoverflow.com durch. Melde Dich dort an und stelle eigene Fragen.
+Lies Dir Fragen zu `R` auf <a href="https://www.stackoverflow.com" target="_blank">stackoverflow</a> durch. Melde Dich dort an und stelle eigene Fragen.
 
-Kauf Dir ein `R`-Buch und arbeite es durch. *R in Action* von Matloff oder *A handbook of statistical anylses using R* von Hothorn sind zwei mögliche Kandidaten.
+Kauf Dir ein `R`-Buch und arbeite es durch. *R in Action* von Matloff oder *A handbook of statistical analyses using R* von Hothorn sind zwei mögliche Kandidaten.
 
 All das wird notwendig sein, wenn Du wirklich gut werden willst! Dein Mindset sollte sein: Wie mache ich das in `R`? Welche Varianten gibt es eine bestimmte Analyse oder Berechnung durchzuführen? Schreibe ich guten Code? Wie schreibe ich besseren Code? Wenn Du stetig an Deinen `R`-Skills arbeitest, dauert es nicht mehr lange, bis andere Dich fragen, ob Du ihnen bei einem `R`-Problem helfen kannst. Du wirst eventuell auch kleinere Projekte übernehmen und dafür Geld verlangen können. Und irgendwann schreibst Du vielleicht sogar Deine eigenen `R`-Packages.  (☉_☉)
 
