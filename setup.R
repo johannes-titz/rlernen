@@ -4,6 +4,8 @@ source("help.R")
 knitr::opts_chunk$set(echo = FALSE, cache = FALSE, fig.width=7, fig.height=4.9)
 tutorial_options(exercise.startover = TRUE)
 
+Sys.setenv("TUTORIAL_DATA_DIR" = "data")
+
 q_n <- function(answer, text = "Was kommt heraus?") {
   question_numeric(
     text,
