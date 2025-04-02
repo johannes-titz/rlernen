@@ -1,0 +1,961 @@
+---
+title: "1. Einführung in R"
+runtime: shiny_prerendered
+description: >
+  Einführung: Arithmetik, Variablen, Dataframes, Speichern und Laden von Daten, Funktionen
+tutorial:
+  version: 2.1
+output:
+  learnr::tutorial:
+    allow_skip: yes
+    progressive: no
+    language: de
+    css: css/custom.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = T)
+librarian::shelf(foreign)
+source("setup.R")
+```
+
+## Hinweise
+
+Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, bewertete dieses Tutorial insgesamt mit einer Schwierigkeit von 5.5 (0=sehr leicht, 10=sehr schwer). Sie brauchte für dieses Tutorial ungefähr 1.5h. Als absoluter Einsteiger wirst Du vermutlich etwas mehr Zeit benötigen. Klicke auf "Nächstes Kapitel" und es geht los.
+
+## Arithmetik mit der kleinen Nervensäge
+
+Dein R-Kurs beginnt gerade, aber Deine kleine Schwester nervt schon seit Stunden, dass Du ihre Mathe-Hausaufgaben überprüfen sollst bevor sie diese an den Lehrer schickt. "Wenn R so toll ist, dann kannst Du das doch bestimmt damit machen", sagt sie. Das stimmt, denn R ist eine Turing-Maschine.
+
+Du schaust Dir die Aufgaben an:
+
+a)  $5462+124$
+b)  $8733-9000$
+c)  $12 \cdot 24$
+d)  $16^4$
+e)  $\frac{801}{3}$
+f)  $\sqrt[4]{256}$
+
+"Alles nur Arithmetik", denkst Du Dir und gibst die erste Zeile in R ein (drücke auf die **Code ausführen**-Schaltfläche rechts um den Befehl auszuführen):
+
+```{r a1, exercise=TRUE}
+5462+124
+```
+
+Das klappt. Also löst Du auch die restlichen Aufgaben. ACHTUNG: copy-pasten klappt nicht, Du musst die Zahlen eintippen!
+
+**Aufgabe b**
+
+$8733-9000$
+
+```{r a2, exercise=TRUE}
+
+```
+
+```{r a2-solution}
+8733-9000
+```
+
+```{r a2mpc, echo=FALSE}
+q_n(-267)
+```
+
+**Aufgabe c**
+
+$12 \cdot 24$
+
+```{r a3, exercise=TRUE}
+
+```
+
+```{r a3-solution}
+12*24
+```
+
+```{r a3mpc, echo=FALSE}
+q_n(288)
+```
+
+**Aufgabe d**
+
+$16^4$
+
+```{r a4, exercise=TRUE}
+
+```
+
+```{r a4-solution}
+16^4
+```
+
+```{r a4mpc, echo=FALSE}
+q_n(65536)
+```
+
+```{r a4-hint}
+# Finde heraus welches Symbol fürs Potenzieren verwendet wird (z. B. bei einer Suchmaschine Deiner Wahl).
+```
+
+**Aufgabe e**
+
+$\frac{801}{3}$
+
+```{r a5, exercise = TRUE}
+
+```
+
+```{r a5-solution}
+801/3
+```
+
+```{r a5mpc, echo=FALSE}
+q_n(267)
+```
+
+**Aufgabe f**
+
+Die letzte Aufgabe erfordert allerdings einen Umweg, da R keinen Befehl kennt um die vierte Wurzel aus einer Zahl zu ziehen.
+
+$\sqrt[4]{256}$
+
+```{r a6, exercise=TRUE}
+
+```
+
+```{r a6-solution}
+256^(1/4)
+```
+
+```{r a6-hint}
+# Wie lässt sich die vierte Wurzel aus 256 anders schreiben?
+```
+
+```{r a6mpc, echo=FALSE}
+q_n(4)
+```
+
+Du zeigst Deiner Schwester die Ergebnisse und sie sagt nur cool und lakonisch zwei Worte: "R fetzt!". Du selbst lässt Dich nicht so leicht beeindrucken, denn das Rechnen mit Zahlen ist was für Kinder. Du suchst die ultimative Herausforderung und willst mit Variablen rechnen!
+
+## Variablen, Skalare, Vektoren, Pizzen
+
+Die einfachste Form von Variablen sind Skalare, Variablen mit nur einem Wert:
+
+```{r pizza0, echo = T}
+pi <- 3.14
+z <- 14
+a <- 1
+```
+
+Wie man sieht, kann man Variablen über den Zuweisungsoperator `<-` Werte zuweisen. Der Zuweisungsoperator besteht aus dem "kleiner als"-Symbol `<` und einem Minus `-`, zusammengesetzt sieht es dann aus wie ein nach links zeigender Pfeil. Man beachte hier zudem, dass das Dezimaltrennzeichen bei R ein Punkt und kein Komma ist (3.14 und nicht 3,14). Das Komma wird stattdessen bei Aufzählungen benutzt (3,14 wäre also 3 und 14). Gut merken, denn das ist ein häufiger Fehler bei Einsteigern..
+
+Das Rechnen mit Variablen ist dann genauso einfach wie das Rechnen mit Zahlen:
+
+```{r pizza0b, echo = T}
+pi*z*z*a
+```
+
+**Kleine Zwischenfrage:**
+
+```{r pizza1, echo=FALSE}
+question(
+  "Welcher Berechnung entspricht pi\\*z\\*z\\*a in der letzten Zeile des obigen R-Codes?",
+  answer("Dem Volumen eines Zylinders mit Radius $z$ und Höhe $a$", correct = T),
+  answer("Dem Volumen eines Zylinders mit Radius $a$ und Höhe $z$"),
+  answer("Der Fläche eines Zylinders mit Radius $z$ und Höhe $a$"),
+  answer("Der Fläche eines Zylinders mit Radius $a$ und Höhe $z$"),
+  random_answer_order = T
+)
+```
+
+**Aufgabe**
+
+Ändere den **Durchmesser** der Pizza auf 32 und die Höhe auf 1.5. Führe die Berechnung erneut durch:
+
+```{r pizza2, exercise = TRUE, exercise.lines = 6}
+
+```
+
+```{r pizza2-solution}
+pi <- 3.14
+z <- 16
+a <- 1.5
+pi*z*z*a
+```
+
+```{r pizza2mpc}
+pi <- 3.14
+z <- 16
+a <- 1.5
+q_n(pi*z*z*a)
+```
+
+Möchte man mehrere Werte einer Variablen zuweisen, so benötigt man den *combine*-Operator `c`:
+
+```{r, echo = T}
+z <- c(14, 15, 16)
+a <- c(2, 1.5, 1)
+```
+
+Im Grunde könnte man sagen, immer wenn ein `c()` zu sehen ist, kann man auch einfach "Vektor" denken (Kommas trennen die Elemente des Vektors). Da R vektor-orientiert ist, gehen nun auch solche Berechnungen:
+
+```{r, echo = T}
+pi*z*z*a
+```
+
+Multiplizieren wir also Vektoren mit Skalaren, weiß R, dass er die Skalare auf die Länge der Vektoren bringen muss. Das ist ziemlich clever und geht in vielen anderen Programmiersprachen nicht!
+
+**Aufgabe**
+
+Bei einer veganen Pizzeria gibt es zwei Größen von Pizzen, 26 cm und 32 cm (Durchmesser). Heute ist Pizza-Tag und Du und Deine Freunde wollen jeweils eine Pizza bestellen. Da Du schon Erfahrung mit der Pizzeria hast, empfiehlst Du die folgenden drei Pizzen:
+
+|      Pizza |  ⌀ 26  |  ⌀ 32   |
+|-----------:|:------:|:-------:|
+|   Speciale | 9.00 € | 12.50 € |
+|     Funghi | 8.00 € | 11.50 € |
+| Margherita | 6.00 € | 9.50 €  |
+
+Bei der Bestellung erfahrt Ihr, dass alle Pizzen eine Höhe von 1 cm haben. Einer Deiner Freunde ist knapp bei Kasse und sagt, dass er nicht mehr als 1.5 Cent pro Kubikzentimeter Pizza ausgeben möchte (er ist leicht nerdig, ja). Welche Pizzen kommen für ihn in Frage? Führe eine geeignete Berechnung in R durch. Erstelle dafür zunächst die Variablen *Durchmesser* (oder *Radius*) und *Preis*. Berechne dann das Volumen der Pizza und anschließend den Preis pro Kubikzentimeter.
+
+```{r pizza4, exercise = TRUE}
+
+```
+
+```{r pizza4-solution}
+preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
+durchmesser <- c(26, 26, 26, 32, 32, 32)
+volumen <- (pi * (durchmesser / 2)^2 * 1)
+preis_pro_kubikcm <- preis / volumen
+preis_pro_kubikcm
+```
+
+```{r pizza4-hint-1}
+preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
+```
+
+```{r pizza4-hint-2}
+durchmesser <- c(26, 26, 26, 32, 32, 32)
+```
+
+```{r pizza4-hint-3}
+volumen <- (pi * (durchmesser / 2)^2 * 1)
+```
+
+```{r pizza4-hint-4}
+# Was Du willst ist der Preis für einen Kubikzentimeter (Teile den Preis durch das Volumen).
+preis_pro_kubikcm <- preis / volumen
+preis_pro_kubikcm
+```
+
+```{r pizza4mpc}
+preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
+durchmesser <- c(26, 26, 26, 32, 32, 32)
+volumen <- (pi * (durchmesser / 2)^2 * 1)
+preis_pro_kubikcm <- preis / volumen
+grid <- expand.grid(c("Speciale", "Funghi", "Margherita"), c("26cm", "32cm"))
+answers <- paste(grid$Var1, grid$Var2)
+answers_true <- ifelse(preis_pro_kubikcm <= 0.015, T, F)
+answers_final <- Map(function(x, y) answer(x, correct = y), answers, answers_true)
+names(answers_final) <- NULL
+answers_final <- append(answers_final, list("Welche Pizza kann Dein Freund bestellen? (nicht teuerer als 1.5 Cent / cm³)", random_answer_order = F), 0)
+do.call(question, answers_final)
+```
+
+Ihr gebt die Bestellung auf und genießt diesen Abend jeden Kubikzentimeter Pizza.
+
+![](images/life-pizza-meme.png)
+
+## Dataframes
+
+Zwar war die Lösung des Pizza-Problems in R zielführend, aber die Ausgabe des Ergebnisses als Vektor ist etwas unübersichtlich. Praktischer wäre eine Art Tabelle, bei der wir alle Variablen zu einer bestimmten Pizza direkt sehen. Und so eine Tabelle gibt es in R unter der Bezeichnung **Dataframe**. Wenn Du also Dataframe hörst, denke einfach: Tabelle.
+
+Aus den bisherigen Vektoren lässt sich ein solcher Dataframe leicht konstruieren:
+
+```{r, echo = T}
+pi <- 3.14
+preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
+durchmesser <- c(26, 26, 26, 32, 32, 32)
+preis_pro_kubikcm <- preis / (pi * (durchmesser / 2)^2 * 1)
+# nun erstellen wir den Dataframe:
+d <- data.frame(preis, durchmesser, preis_pro_kubikcm)
+#  und geben ihn aus
+d
+```
+
+Wir verwenden also das Kommando `data.frame` und schreiben dann dort Vektoren mit Komma getrennt hinein. Beachte, dass ich am Ende für die Ausgabe den Dataframe nochmals hinschreibe (die letzte Zeile `d`), ansonsten würde `R` ihn nicht anzeigen, sondern nur erstellen.
+
+Die Ausgabe sieht schon ganz gut aus, aber wir hätten gerne noch die Namen der Pizzen:
+
+```{r, echo = T}
+name <- c("Speciale", "Funghi", "Margherita", "Speciale", "Funghi",
+          "Margherita")
+```
+
+Hier habe ich also einer Variablen mehrere Zeichenketten, auch Characters oder Strings (nicht was Du schon wieder denkst) genannt, zugewiesen. Diese müssen unbedingt in Anführungszeichen gesetzt werden. Warum? Weil R sonst denkt das wären auch Variablen, denn das folgende wäre ja prinzipiell auch möglich:
+
+```{r, echo = T}
+Speciale <- "ist gar nicht der Speciale-String, sondern die Variable"
+Funghi <- "und das ist auch nicht der Funghi-Character, sondern die Variable"
+name <- c(Speciale, Funghi, "Margherita", "Speciale", "Funghi",
+          "Margherita")
+name
+```
+
+Der einzige Unterschied zu vorher sind die Anführungszeichen bei Speciale und Funghi:
+
+```{r, echo = T}
+name <- c("Speciale", "Funghi", "Margherita", "Speciale", "Funghi",
+          "Margherita")
+name
+```
+
+Nun ist Deine Aufgabe einen Dataframe mit Namen, Preis, Durchmesser und Preis pro Kubikzentimeter zu erstellen und ihn anzuzeigen. Die ersten Befehle stehen schon da, Du musst also nur noch den Dataframe erzeugen und ihn ausgeben.
+
+```{r df, exercise = TRUE, exercise.lines = 10}
+pi <- 3.14
+preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
+durchmesser <- c(26, 26, 26, 32, 32, 32)
+preis_pro_kubikcm <- preis / (pi*(durchmesser/2)^2 * 1)
+name <- c("Speciale", "Funghi", "Margherita", "Speciale", "Funghi",
+          "Margherita")
+# erstelle nun auf den nächsten Zeilen den Dataframe und gib ihn aus!
+```
+
+```{r df-solution}
+pi <- 3.14
+preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
+durchmesser <- c(26, 26, 26, 32, 32, 32)
+preis_pro_kubikcm <- preis / (pi*(durchmesser/2)^2 * 1)
+name <- c("Speciale", "Funghi", "Margherita", "Speciale", "Funghi",
+          "Margherita")
+# nun erstellen wir den Dataframe:
+d <- data.frame(name, preis, durchmesser, preis_pro_kubikcm)
+d
+```
+
+```{r dfmpc, echo=FALSE}
+question(
+  "Welche Dimensionen hat der Dataframe? Zeilen x Spalten (ohne Kopfzeile)",
+  answer("6 x 4", correct = TRUE),
+  answer("7 x 4"),
+  answer("6 x 5"),
+  answer("5 x 4"),
+  answer("6 x 6"),
+  answer("5 x 5"),
+  random_answer_order = T
+)
+```
+
+```{r}
+# für die weitere ausgabe nötig
+d <- data.frame(name, preis, durchmesser, preis_pro_kubikcm)
+```
+
+Bemerkenswert am Dataframe ist, dass er verschiedene Datentypen enthalten kann. Dies ist ganz anders zu einer Matrix, die aus einem einzigen Datentyp besteht (z. B. nur Zahlen oder nur Zeichenketten).
+
+Es gibt noch andere Datentypen, die wir im Laufe des Kurses benutzen werden. Bei Datentypen kann man auch einfach an Skalenniveaus denken. Der Preis, Durchmesser und der Preis pro Kubikzentimeter sind alle verhältnisskaliert, der Name der Pizza ist hingegen nominalskaliert. Den Datentyp bekommt man durch den Befehl `str` (structure, also Struktur) heraus:
+
+```{r, echo = T}
+str(d)
+```
+
+Nominalskalierte Variablen in R sind entweder `characters` oder `factors`. Bei der Variable **name** steht die Abkürzung **chr**, also eine Character-Variable. Die anderen Variablen haben den Datentyp **num**, also eine numerische Variable.
+
+Die Datentypen zu kennen ist sehr wichtig, denn genau so wie bei Skalenniveaus, kann man mit bestimmten Datentypen nur ganz bestimmte Operationen durchführen. Einen Mittelwert über die Namen der Pizzen kann man beispielsweise nicht berechnen, sehr wohl aber über die anderen Variablen. Deshalb werden wir hin und wieder über solch trockene Themen sprechen müssen. Verhältnisskaliert und nominalskaliert haben wir schon, intervallskaliert ist ja ähnlich zu Verhältnis, dann fehlt nur noch ordinalskaliert:
+
+```{r, echo = T}
+geschmack <- factor(x = c("lecker", "sehr lecker", "lecker", "köstlich"), 
+                    levels = c("lecker", "sehr lecker", "köstlich"),
+                    ordered = TRUE)
+geschmack
+```
+
+Hier passiert sehr viel Neues, also aufpassen!
+
+-   Wir verwenden das Kommando `factor`, um eine ordinalskalierte Variable zu erstellen.
+
+-   Wir haben einen Vektor mit 4 Werten, den wir an `x` übergeben.
+
+-   Dies machen wir mit einem Gleichheitszeichen `=`.
+
+-   Beachte, dass *lecker* zweimal vorkommt.
+
+-   Die Variable **geschmack** kann hier nur 3 unterschiedliche Werte annehmen. Diese sind Ihrer Reihenfolge nach im `levels`-Argument beschrieben.
+
+-   Beachte den Parameter `ordered = TRUE`. Lassen wir ihn weg oder schreiben `ordered = FALSE`, so bekommen wir nur eine nominalskalierte Variable.
+
+Wenn Du noch nicht alles verstehst, kein Problem, gleich siehst Du es nochmal und kannst es selbst üben.
+
+Wir würden gerne zum Pizza-Dataframe noch die Variable **geschmack** hinzufügen. Speciale ist sehr lecker, Funghi ist köstlich und Margherita ist lecker.
+
+Um dies zu bewerkstelligen, müssen wir den Dataframe nicht neu erstellen, sondern können ihm einfach eine neue Spalte hinzufügen:
+
+```{r, echo = T}
+cbind(d, geschmack = factor(x = c("sehr lecker", "köstlich", "lecker", "sehr lecker",
+                                  "köstlich", "lecker"),
+                            levels = c("lecker", "sehr lecker", "köstlich"),
+                            ordered = TRUE))
+```
+
+Achte darauf, dass man an `factor` zwei Vektoren übergeben muss: An `x` den Vektor, wie er zu den Pizzen passt. Und an `levels` die richtige Reihenfolge für die Rangordnung. Sonst geht es schief!
+
+`cbind` steht hier für columnbind, also "füge eine neue Spalte an einen vorhandenen Dataframe". Weiterhin zu beachten ist, dass ich der Spalte einen Namen gebe (**geschmack**). Hier haben wir allerdings vergessen, diesen neuen Dataframe einer Variablen zuzuweisen. Das heißt, wir haben immer noch den alten Dataframe auf `d` gespeichert und die Variable **geschmack** ist nirgends aufzufinden:
+
+```{r, echo = T}
+d
+```
+
+Die Lösung: einfach nochmal auf die Variable **d** zuweisen:
+
+```{r, echo = T}
+d <- cbind(d, geschmack = factor(x = c("sehr lecker", "köstlich", "lecker", 
+                                       "sehr lecker", "köstlich", "lecker"),
+                                 levels = c("lecker", "sehr lecker", "köstlich"),
+                                 ordered = TRUE))
+d
+```
+
+In Deinem Freundeskreis gibt es ein paar Champignon-Allergiker. Praktischerweise listet die Pizzeria auf, ob Champignons eine Zutat in der jeweiligen Pizza ist. Auf der Funghi sind natürlich viele Champignons, auf der Speciale sind auch ein paar drauf, aber auf der Margherita keine. Erstelle zunächst den Vektor **champignon** als ordinale Variable mit 6 Elementen:
+
+-   etwas, viel, keine, etwas, viel, keine
+
+Dies entspricht der Reihenfolge der Pizzen: Speciale, Funghi, Margherita, Speciale, Funghi, Margherita. Gib den Vektor **champignon** aus.
+
+```{r champignon0, exercise = TRUE}
+
+```
+
+```{r champignon0-hint}
+# Schau Dir nochmal das Beispiel von oben zur Erstellung einer ordinalen 
+# Variable an (geschmack)
+```
+
+```{r champignon0-solution}
+champignon <- factor(x = c("etwas", "viel", "keine", "etwas", "viel", "keine"),
+                     levels = c("keine", "etwas", "viel"),
+                     ordered = TRUE)
+champignon
+```
+
+```{r champignon0mpc, echo=FALSE}
+question(
+  "Welche Levels gibt die R-Konsole für Deine erstellte Variable **champignon** aus?",
+  answer("keine < etwas < viel", correct = T),
+  answer("etwas < viel < keine"),
+  answer("viel > etwas > keine"),
+  answer("viel > keine > etwas"),
+  answer("keine > etwas > viel"),
+  answer("etwas > viel > keine"),
+  random_answer_order = T
+)
+```
+
+Füge dem Dataframe die Variable **champignon** hinzu und gib den neuen Dataframe aus.
+
+```{r champignon, exercise = TRUE, exercise.lines = 20}
+pi <- 3.14
+preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
+durchmesser <- c(26, 26, 26, 32, 32, 32)
+preis_pro_kubikcm <- preis / (pi*(durchmesser/2)^2 * 1)
+name <- c("Speciale", "Funghi", "Margherita", "Speciale", "Funghi",
+          "Margherita")
+d <- data.frame(name, preis, durchmesser, preis_pro_kubikcm)
+d <- cbind(d, geschmack =  factor(c("köstlich", "sehr lecker", "lecker",
+                                    "köstlich", "sehr lecker", "lecker"),
+                                  ordered = TRUE))
+champignon <- factor(x = c("etwas", "viel", "keine", "etwas", "viel", "keine"),
+                     levels = c("keine", "etwas", "viel"),
+                     ordered = TRUE)
+# füge nun dem Dataframe noch die Variable champignon hinzu, gib den Dataframe
+# aus und lass Dir die Struktur anzeigen
+```
+
+```{r champignon-solution}
+pi <- 3.14
+preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
+durchmesser <- c(26, 26, 26, 32, 32, 32)
+preis_pro_kubikcm <- preis / (pi*(durchmesser/2)^2 * 1)
+name <- c("Speciale", "Funghi", "Margherita", "Speciale", "Funghi",
+          "Margherita")
+d <- data.frame(name, preis, durchmesser, preis_pro_kubikcm)
+d <- cbind(d, geschmack =  factor(c("köstlich", "sehr lecker", "lecker",
+                                    "köstlich", "sehr lecker", "lecker"),
+                                  ordered = TRUE))
+# füge nun dem Dataframe noch die Variable champignon hinzu
+champignon <- factor(x = c("etwas", "viel", "keine", "etwas", "viel", "keine"),
+                     levels = c("keine", "etwas", "viel"),
+                     ordered = TRUE)
+d <- cbind(d, champignon)
+d
+# und Struktur anzeigen
+str(d)
+```
+
+```{r champignonmpc, echo=FALSE}
+question(
+  "Welchen Datentyp hat die Variable *champignon*?",
+  answer("Ord.factor", correct = T),
+  answer("num"),
+  answer("int"),
+  answer("chr"),
+  answer("fctr"),
+  answer("fct"),
+  random_answer_order = T
+)
+```
+
+Super, Du weißt jetzt was ein Dateframe ist und kannst selbst welche erstellen. Über Dataframes ist es viel leichter zu erkennen, welche Pizzen zu teuer für Deinen Freund sind und auf welchen Champignons drauf sind. Man kann mit Dataframes noch mehr tolle Sachen machen, wie Du in Tag 2 sehen wirst. Nun wäre es aber noch ganz praktisch unseren generierten Dataframe für später zu speichern. 
+
+## Speichern und Laden von Daten
+
+### Eigene Daten Speichern und Laden
+
+Das Abspeichern von Daten ist nicht weiter schwer, allerdings in diesem Tutorial eingeschränkt -- Schreibrechte gibt es nur für den Ordner *data* und die Daten werden bei Verlassen des Tutorials wieder gelöscht. Wenn Du lokal mit R arbeitest, kannst Du natürlich den Ordner frei wählen und die Daten werden permanent gespeichert.
+
+Eine einfache Möglichkeit Daten zu speichern ist folgendermaßen:
+
+```{r, echo = T}
+write.csv(d, file = "data/pizzen.csv")
+```
+
+Das schreibt unseren Dataframe unter dem Namen `pizzen.csv` ins Verzeichnis `data`. Bei einer csv-Datei sind die Werte (values) durch Kommas (comma) getrennt (separated): comma separated values. Dieses Format ist sehr beliebt, da es sowohl für Menschen als auch Maschinen leicht zu lesen ist. Um den Datensatz wieder zu laden schreibst Du einfach:
+
+```{r, echo = T}
+pizzen <- read.csv("data/pizzen.csv")
+pizzen
+```
+
+Du kannst natürlich auch eine andere Variable als `pizzen` für die Zuweisung benutzen.
+
+R gibt uns auch die Möglichkeit Objekte in seinem eigenen binären Dateiformat zu speichern:
+
+```{r, echo = T}
+saveRDS(d, file = "data/pizza2.rds")
+```
+
+Das Laden läuft dann so ab:
+
+```{r, echo = T}
+pizzen2 <- readRDS("data/pizza2.rds")
+pizzen2
+```
+
+Willst Du alle Variablen, die gerade in R verfügbar sind abspeichern, dann benutze:
+
+```{r, echo = T, eval = F}
+save.image("data/workspace.RData")
+```
+
+Zum Laden all dieser Variablen:
+
+```{r, echo = T, eval = F}
+load("data/workspace.RData")
+```
+
+Beim letzten Befehl darfst Du den `load`-Befehl keiner Variablen zuweisen; vorher haben wir immer `<-` benutzt. Das ist diesmal nicht nötig, denn es sind ja ganz viele Variablen, die wir laden wollen. R macht das automatisch für uns.
+
+### Aufgabe
+
+Erstelle einen Dataframe für Deine Familie zum täglichen Nutzungsverhalten (Nutzungszeit in h) von Social Media mit den Variablen: *name, social_media* und speichere diesen anschließend im csv- und rds-Format im Ordner *data*. Prüfe nach, ob Du diese Daten auch wieder laden kannst.
+
+```{r speichern, exercise = TRUE}
+
+```
+
+```{r speichern-solution}
+df <- data.frame(name = c("Peter", "Anja", "Josef"), 
+                 social_media = c(0.5, 1, 1.5))
+# csv
+write.csv(df, "data/socialmedia.csv")
+read.csv("data/socialmedia.csv")
+
+# rds
+saveRDS(df, "data/socialmedia.rds")
+readRDS("data/socialmedia.rds")
+```
+
+```{r questionSpeichern}
+question("Was ist der Unterschied zwischen dem Einlesen über read.csv und readRDS?",
+         answer("read.csv fügt standardmäßig die Zeilennummer hinzu, readRDS nicht", correct=T),
+         answer("read.csv lädt Dateien schneller als readRDS, da es für große Datenmengen optimiert ist"),
+         answer("readRDS kann nur Dataframes laden, read.csv auch andere R-Objekte"))
+```
+
+
+### Laden fremder Daten in verschiedenen Formaten
+
+Wie bereits geschildert, hast Du in diesem Tutorial Zugriff auf den Ordner *data*. Schauen wir uns mal an, was alles unter *data* gespeichert ist mit dem Befehl `dir` (für directory):
+
+```{r, echo = T}
+dir("data")
+```
+
+Das sind ein paar Datensätze, die wir später benutzen werden. Wie Du an den verschiedenen Dateiendungen siehst, gibt es in R viele verschiedene Möglichkeiten Daten zu speichern und zu laden. Insbesondere das Laden solltest Du drauf haben, denn verschiedene Software-Pakete, Forscher und Institutionen benutzen teilweise recht unterschiedliche Dateiformate. Daher üben wir jetzt ein paar gängige Datentypen einzulesen:
+
+**Aufgabe**
+
+Lies die Datei `monate.csv` aus dem Verzeichnis `data` ein und gib diesen anschließend über den Befehl `head` aus (hab ich Dir unten schon vorgegeben). `head` gibt die ersten paar Zeilen aus, was hier günstig ist da die Datensätze recht groß sind und sonst den Bildschirm zumüllen. Die Lücke ____ zeigt an, dass dort etwas fehlt.
+
+```{r monate, exercise = TRUE}
+monate <- ____
+head(monate)
+```
+
+```{r monate-solution}
+monate <- read.csv("data/monate.csv") # liest Daten ein
+head(monate) # gibt die ersten paar Zeilen aus
+```
+
+```{r monatenum}
+q_n(2, "Was ist der erste Wert für Januar?")
+```
+
+Manchmal sind Daten nicht durch ein Komma getrennt und es fehlt die Kopfzeile, z. B. beim Datensatz `pizzen2.txt` (wieder unter `data`), der so aussieht:
+
+```{r}
+d$preis_pro_kubikcm <- round(d$preis_pro_kubikcm, 2)
+write.table(d, "data/pizzen2.txt", row.names = F, col.names = F, sep = ":")
+```
+
+```{r comment=''}
+cat(readLines('data/pizzen2.txt'), sep = '\n')
+```
+
+Hier sind die Daten getrennt durch einen Doppelpunkt `:` -- dies dient nur der Illustration und wird bei realen Daten wohl kaum vorkommen. Und, wie erwähnt, es fehlt die Kopfzeile. Mit `read.csv` kommt man hier also nicht weiter, da R jede Zeile als eine Variable einliest:
+
+```{r echo = T}
+read.csv("data/pizzen2.txt")
+```
+
+**Aufgabe **
+
+Schau Dir die Hilfe zu `read.table` an (entweder über `?read.table` oder eine Websuche) und finde heraus wie man den Datensatz `pizzen2.txt` einlesen kann.
+
+```{r pizzen2, exercise = TRUE}
+pizzen2 <- read.table(____, ____, ____)
+head(pizzen2)
+```
+
+```{r pizzen2-solution}
+pizzen2 <- read.table("data/pizzen2.txt", header = F, sep = ":")
+head(pizzen2)
+```
+
+```{r pizzennum}
+question("Wie heißen die Variablen-Namen?",
+         answer("V1, V2, ...", correct = T),
+         answer("Var1, Var2, ..."),
+         answer("Variable1, Variable2, ..."),
+         answer("1, 2, ..."),
+         answer("name, preis, ..."))
+```
+
+**Aufgabe**
+
+Lies die Datei `ws19.rds` aus dem Verzeichnis `data` ein:
+
+```{r ws19, exercise = TRUE}
+ws19 <- ____
+head(ws19)
+```
+
+```{r ws19-solution}
+ws19 <- readRDS("data/ws19.rds")
+head(ws19)
+```
+
+```{r ws19mpc}
+q_n(160, "Was ist der erste Wert bei `groesse`?")
+```
+
+**Aufgabe**
+
+Zu guter letzt, SPSS-Daten mit dem Namen `mea.sav`, wieder unter `data`. Wir lesen sie über das Hilfspaket `foreign` ein (mehr zu Paketen an Tag 2). Der Befehl heißt `read.spss` und wir wollen am Ende einen Dataframe bekommen, weshalb ich schon mal `to.data.frame` auf `TRUE` gesetzt habe (Details zu `TRUE/FALSE` kommen noch im Laufe des Tutorials).
+
+```{r mea, exercise = T}
+mea <- ____(____, to.data.frame = TRUE)
+head(mea)
+```
+
+<div id="mea-hint">
+<pre>mea <- read.spss("data/mea.sav", to.data.frame = TRUE)
+head(mea)
+</pre>
+</div>
+
+```{r meanum}
+q_n(31, "Was ist der erste Wert des Alters?")
+```
+
+Wow, jetzt kannst Du sogar Deine alten SPSS-Daten in R einlesen und SPSS wegschmeißen. Gar nicht übel, wie sich Deine Skills entwickeln:
+
+- Daten einlesen, yep. 
+- Wissen, was ein Dataframe ist, kein Problem. 
+- Einfache Datentypen in R kennen, boring. 
+- Variablen Werte zuweisen und diese in `R` ausgeben, viel zu einfach.
+
+Du kennst die Befehle:
+
+- c
+- data.frame
+- cbind
+- factor
+- str
+- write.csv
+- read.csv
+- saveRDS
+- readRDS
+- dir
+- read.spss
+- head
+
+Im Grunde werden wir in den nächsten Schritten einfach nur viele weitere Befehle solcher Art lernen. Genauer gesagt sind es nicht einfach Befehle, sondern es sind **Funktionen**, unser letztes Thema für Tag 1.
+
+## Funktionen-Analogie und Hilfe
+
+Funktionen kennst Du schon aus der Mathematik. Das ist kein großer Unterschied zu R (oder anderen Programmiersprachen): Funktionen nehmen einen oder mehrere Parameter auf und geben einen Wert zurück, z. B.: $f(x_1, x_2) = y(x_1, x_2) = 0.5x_1+3x_2^2$. Die Funktion nimmt $x_1, x_2$ auf und gibt $y$ zurück. So ist es auch in R: `c(x_1, x_2, ..., x_n)` nimmt $n$ Werte auf und gibt einen Vektor bestehend aus diesen Werten zurück. `factor(x, levels, ordered)` nimmt drei Werte auf, einen Vektor `x`, einen Vektor `levels` und einen logischen Wert `ordered`, der entweder wahr (`TRUE`) oder falsch (`FALSE`) ist. Zurück gibt die Funktion eine nominale oder ordinale Version von `x`. In R weisen wir üblicherweise die Rückgabewerte dieser Funktionen einer Variablen zu und rechnen dann damit weiter.
+
+Was ich über die Anzahl der Parameter geschrieben habe, stimmt nicht ganz, denn die Funktionen `c()` und `factor()` nehmen eigentlich noch mehr Parameter auf; man kann mit ihnen also noch viel mehr machen. Da Du schon bald viele neue Funktionen benutzen wirst, ist es gut zu wissen, welche Parameter diese Funktionen haben und was sie zurückgeben. Genauso wie bei einer mathematischen Funktion, bei der Du ja auch wissen willst, was $x$ und $y$ überhaupt sind. Hierfür ist es essentiell, dass Du verstehst wie man die Hilfe in R benutzt. Sagen wir mal, ich behaupte, dass es in R eine Funktion `mean` gibt. Dann kannst Du herausfinden wie man diese Funktion benutzt, indem Du Dir die Hilfe dazu anschaust (führe den Befehl einfach aus):
+
+```{r hilfeintro, exercise=T}
+help(mean)
+```
+
+<hr>
+
+Die Sektion **Arguments** ist hierbei am interessantesten. Sie sagt uns, dass der erste Parameter `x` ein Vektor sein kann (aber auch andere Datentypen sind möglich). Die restlichen Parameter interessieren uns erst mal nicht. In der Sektion **Value** sehen wir, was die Funktion zurückgibt: Den Mittelwert aller Werte von `x` ("the arithmetic mean of the values in x is computed"). Probieren wir es:
+
+```{r, echo = TRUE}
+mean(preis)
+```
+
+Der Durchschnittspreis der Pizzen beträgt `r mean(preis)` €. Die Funktion `mean` ist natürlich einfach zu benutzen, aber es gibt auch kompliziertere Funktionen. Immer wenn Du nicht weiter weißt, gib in die R-Konsole ein Fragezeichen ein, gefolgt von der Funktion, über die Du mehr erfahren möchtest.
+
+Rufe die Hilfe zur Funktion `mad` auf und lies sie durch:
+
+```{r hilfe1, exercise = TRUE}
+
+```
+
+```{r hilfe1-solution}
+?mad
+```
+
+```{r hilfempc1, echo=FALSE}
+question(
+  "Was macht die Funktion *mad* in R?",
+  answer("Sie berechnet den mittleren absoluten Abstand.", correct = T),
+  answer("Sie berechnet den Skalenwert des Mother-Adult Daughter Questionnaires (MAD)."),
+  answer("Sie berechnet den Median."),
+  answer("Sie berechnet einen gewichteten Mittelwert."),
+  answer("Sie berechnet die Minimum Approach Distance."),
+  answer("Sie berechnet die Standardabweichung."),
+  random_answer_order = T
+)
+```
+
+```{r hilfempc2, echo=FALSE}
+q_n(6, "Wie viele Parameter hat die Funktion *mad*?")
+```
+
+```{r hilfempc3, echo=FALSE}
+question(
+  "Welche Funktionen sollte man sich laut Hilfe noch anschauen, die ähnlich zu der Funktion *mad* sind?",
+  answer("IQR, median, var", correct = T),
+  answer("mean, var, sd"),
+  answer("IQR, sd, var"),
+  answer("summary, mean, var"),
+  answer("sd, var, mad"),
+  answer("factor, summary, aov"),
+  random_answer_order = T
+)
+```
+
+Oft weiß man gar nicht, wie eine Funktion heißt. In diesem Fall bringt die Hilfe über `help` wenig. Man kann in R zwar eine Volltextsuche machen, aber diese liefert üblicherweise eine ganze Fülle an unübersichtlichen Ergebnissen.
+
+<!-- Aber man kann auch eine Volltext-Suche machen. Sagen wir mal wir wollen die Standardabweichung berechnen, dann suchen wir nach standard deviation: -->
+
+<!-- ```{r sd, echo = TRUE} -->
+
+<!-- ??"standard deviation" -->
+
+<!-- ``` -->
+
+<!-- In diesem Fall gibt es sehr viele Funktionen, aber wir finden recht weit unten die Funktion ``sd`` aus dem Paket ``stats`` (was genau ein Paket ist, lernen wir später). -->
+
+<!-- ```{r, echo = T} -->
+
+<!-- sd(preis) -->
+
+<!-- ``` -->
+
+Im Normalfall wird es hilfreicher sein, bei einer Suchmaschine Deiner Wahl das Stichwort kombiniert mit "r stats" zu suchen. Die Seiten <https://www.statmethods.net/> (quick-r) und <https://stackoverflow.com/> sind auch sehr hilfreich. Es gibt allgemein sehr viele Online-Materialien zu R. Wenn Du also denkst, dass es eine bestimmte Funktionalität in R geben müsste, findest Du diese am schnellsten durch einen Websuche. 
+
+Eine weitere Möglichkeit sind Cheatsheets, die häufig benutzte Befehle knapp und klar und visuell ansprechend darstellen. Eine Sammlung von solchen Cheatsheets als Print-Version gibt es zum Beispiel hier: https://amzn.eu/d/4XsE1v0
+
+```{r hilfempc4, echo=FALSE}
+question(
+  "Du willst gerne den Modus in einem großen Datensatz in R berechnen. Wie heißt die Modus-Funktion in R? Betreibe eine kurze Webrecherche.",
+  answer("Ohne Zusatzpakete, gibt es in R keine eingebaute Funktion für die Berechnung des Modus.", correct = T),
+  answer("mode"),
+  answer("Mode"),
+  answer("mod"),
+  answer("modus"),
+  answer("mean(x, mode = TRUE)"),
+  random_answer_order = T
+)
+```
+
+Wir werden später nochmal über Funktionen sprechen, denn man kann auch eigene Funktionen schreiben, um Dinge zu tun, die R von alleine nicht kann. Dazu ist zu sagen, dass interessanterweise in R alles eine Funktion ist. Auch die Arithmetik-Symbole `+ - * / ^` sind Funktionen und auch der Zuweisungsoperator `<-`. Die Syntax dieser Funktionen ist etwas anders, aber im Grunde könnte man z. B. auch das Addieren als Funktion bezeichnen. Sie nimmt zwei Parameter auf (die Summanden) und gibt einen Wert zurück (die Summe). Du glaubst mir nicht? Dann führe mal folgende Code-Zeile aus:
+
+```{r fourplusfour, exercise = T}
+`+`(4, 4)
+```
+
+Verrückt! Das schreibt aber natürlich keiner so. Es soll nur nochmal die Funktionen-Analogie deutlich machen. Da das `+` ein besonderes Symbol in R ist, müssen wir es in diese komischen Anführungszeichen setzen. Am besten vergisst Du das gleich wieder. Merke Dir nur, dass in R alles eine Funktion ist. Funktionen nehmen Parameter auf und geben einen Wert zurück und Funktionen haben natürlich einen Namen.
+
+R zu beherrschen ist nichts anderes als sich Wissen über Funktionen anzueignen. Somit ist das erlernen einer Programmiersprache nicht viel anders als das erlernen einer normalen Sprache: Man muss die Vokabeln kennen und auch die Grammatik. Heute hast Du gelernt jemanden zu begrüßen, Deinen Namen und Dein Alter zu sagen. Am zweiten Tag erweitern wir unseren Vokabelschatz und lernen die Grammatik des Selektierens. Für den heutigen Tag bleibt eine Abschlussaufgabe übrig, die einige der Themen nochmal wiederholt.
+
+## Abschlussaufgabe Tag 1
+
+Du interviewst mehrere Youtuber, um einen Bericht über deren Arbeitsbedingungen zu schreiben. 5 der Youtuber haben ein Monatseinkommen von rund 2500€, weitere 5 ein Monatseinkommen von rund: 2600€, 2700€, 2800€, 2900€ und 3000€. Der 11. Youtuber, den Du interviewst, ist ziemlich populär und hat ein Monatseinkommen von 100 000€. Welche Auswirkungen ergeben sich durch den Superstar auf den Modus, den Median und das arithmetische Mittel der Monatseinkommen aller interviewten Youtuber? Berechne zur Beantwortung der Frage die zentralen Lagemaße ohne und mit dem Youtube-Star.
+
+Erstelle zunächst zwei Vektoren **gehalt** und **gehalt_mit_star**. Um die Erstellung zu vereinfachen, nutze die Funktion `rep`. Berechne die entsprechenden Lagemaße. Nutze hierfür notfalls die Hilfe und das www, um die richtigen Funktionen zu finden. Hinweis: Es gibt keine Modus-Funktion in R, benutze stattdessen die Funktion `table`.
+
+```{r pt, exercise=TRUE}
+
+```
+
+```{r pt-hint-1}
+gehalt <- c(rep(2500, 5), 2600, 2700, 2800, 2900, 3000)
+gehalt_mit_star <- c(rep(2500, 5), 2600, 2700, 2800, 2900, 3000, 1e5)
+```
+
+```{r pt-hint-2}
+gehalt <- c(rep(2500, 5), 2600, 2700, 2800, 2900, 3000)
+gehalt_mit_star <- c(rep(2500, 5), 2600, 2700, 2800, 2900, 3000, 1e5)
+# jetzt finde die entsprechenden Funktionen für Mittelwert und Median,
+# für den Modus kannst Du die Funktion table benutzen
+```
+
+```{r pt-solution}
+gehalt <- c(rep(2500, 5), 2600, 2700, 2800, 2900, 3000)
+gehalt_mit_star <- c(rep(2500, 5), 2600, 2700, 2800, 2900, 3000, 1e5)
+# mittelwerte
+mean(gehalt)
+mean(gehalt_mit_star)
+# Differenz:
+mean(gehalt) - mean(gehalt_mit_star)
+
+# mediane
+median(gehalt)
+median(gehalt_mit_star)
+
+# modi
+table(gehalt)
+table(gehalt_mit_star)
+```
+
+```{r ptmpc1, echo = FALSE}
+quiz(q_n(8850, "Wie groß ist der Unterschied zwischen den Mittelwerten als Betrag?"), 
+     q_n(50, "Wie groß ist der Unterschied zwischen den Medianen als Betrag?"),
+     q_n(0, "Wie groß ist der Unterschied zwischen den Modi als Betrag?"))
+```
+
+Berechne das *Jahresgehalt* für jeden Youtuber (auch dem Star) und vergleiche die Standardabweichung (Funktion `sd`) des Monats- und Jahresgehaltes.
+
+```{r pt2, exercise = TRUE}
+gehalt_mit_star <- c(rep(2500, 5), 2600, 2700, 2800, 2900, 3000, 1e5)
+# und jetzt weiter:
+```
+
+```{r pt2-hint-1}
+# Für Teilaufgabe 1 musst Du die Gehälter nur mit 12 multiplizieren
+# Für Teilaufgabe 2 musst Du die Funktion sd anwenden
+```
+
+```{r pt2-solution}
+gehalt_mit_star <- c(rep(2500, 5), 2600, 2700, 2800, 2900, 3000, 1e5)
+jahreseinkommen <- gehalt_mit_star * 12
+sd(gehalt_mit_star)
+sd(jahreseinkommen)
+```
+
+```{r pt2mpc, echo = FALSE}
+quiz(q_n(29352.68, "Wie groß ist die Standardabweichung für das Monatsgehalt? (2 Dezimalstellen)"),
+      q_n(352232.2, "Wie groß ist die Standardabweichung für das Jahresgehalt? (2 Dezimalstellen)"))
+```
+
+Erstelle einen Dataframe aus dem Monats- und Jahresgehalt aller Youtuber, sowie dem Geschlecht (die Reihenfolge entspricht der Gehaltsreihenfolge von oben):
+
+- weiblich, weiblich, weiblich, weiblich, männlich, weiblich, weiblich, männlich, männlich, männlich, männlich
+
+Füge anschließend die ordinalskalierte Variable **yterfahrung** hinzu (die Reihenfolge entspricht der Gehaltsreihenfolge von oben):
+
+- wenig, wenig, wenig, mittel, wenig, mittel, mittel, wenig, mittel, mittel, hoch.
+
+Gib den Dataframe aus und zeige Dir die Datentypen der Variablen an.
+
+```{r pt4, exercise = TRUE}
+gehalt_mit_star <- c(rep(2500, 5), 2600, 2700, 2800, 2900, 3000, 1e5)
+jahreseinkommen <- gehalt_mit_star * 12
+# und jetzt weiter:
+```
+
+```{r pt4-solution}
+gehalt_mit_star <- c(rep(2500, 5), 2600, 2700, 2800, 2900, 3000, 1e5)
+jahreseinkommen <- gehalt_mit_star * 12
+geschlecht = c(rep("w", 4), "m", "w", "w", "m", "m", "m", "m")
+data <- data.frame(gehalt_mit_star, jahreseinkommen, geschlecht)
+
+# yterfahrung hinzufügen
+yterfahrung = factor(x = c("wenig", "wenig", "wenig",
+                           "mittel", "wenig", "mittel", "mittel",
+                           "wenig", "mittel", "mittel", "hoch"),
+                     levels = c("wenig", "mittel", "hoch"),
+                     ordered = TRUE)
+data <- cbind(data, yterfahrung)
+
+# ausgeben
+data
+str(data)
+```
+
+```{r pt4mpc, echo = FALSE}
+question(
+  "Welche Datentypen hat der Dataframe?",
+  answer("num, num chr, Ord.factor", correct = T),
+  answer("num, num, chr, fctr"),
+  answer("num, num, Ord.factor, Ord.factor"),
+  answer("num, num, chr, int"),
+  answer("num, num, num, num"),
+  answer("fctr, Ord.factor, num, num"),
+  random_answer_order = T
+)
+```
+
+Wie könntest Du den Dataframe abspeichern? Geh davon aus, dass der Dataframe `data` heißt; der Speicherort spielt keine Rolle solange es ein gültiger Pfad ist.
+
+```{r speichernquiz}
+question("Gültige Speicher-Befehle sind:",
+         answer('write.csv(data, file = "data.csv")', correct = T),
+         answer('write.csv("data.csv")'),
+         answer('save.image("workspace.RData")', correct = T),
+         answer('saveRDS(data, "data/mydata.rds")', correct = T),
+         answer('saveRDS("data/mydata.rds")'),
+         answer('write.csv(file = "data.csv", x = data)', correct = T),
+         answer('write.csv("data.csv", data)'))
+```
+
+Der Datensatz wurde tatsächlich unter `data/youtuber.csv` gespeichert. Das Trennzeichen war ein Semikolon, es gibt keine Kopfzeile. Lies den Dataframe ein und gib ihn aus:
+
+```{r laden, exercise = TRUE}
+
+```
+
+```{r laden-solution}
+read.table("data/youtuber.csv", header = F, sep = ";")
+# alternativ:
+read.csv2("data/youtuber.csv", header = F)
+```
+
+Glückwunsch zum Überleben des ersten Tages! Hast Du Fragen oder Anregungen, dann schreibe eine Mail an frage at rlernen.de

@@ -1,52 +1,110 @@
-This is the repo for the learnr-tutorial rlernen. It is mainly useful for myself or anyone who wants to modify or host the rlernen tutorial.
+rlernen
+================
+Johannes Titz
+2025-04-02
 
-Important note: It is not clear whether caching works with learnr. For tag2 and tag5 it is turned off as it leads to problems. tag2 does not render at all, it takes forever. For tag5 navigation breaks. 
+## Anleitung deutsch
 
-# v2.0 (September 2023)
+Dies ist das Repositorium für den R-Kurs *rlernen*. Es gibt zwei Wege
+den Kurs zu bearbeiten:
 
-All Tutorials were updated. There is now a new section on reading and writing data. A custom help-function was created. I tried to get rid of some dependencies which reduced the image size from 3.62 to 1.89 GB.
+1)  online über <https://rlernen.de> (benötigt keine Installation von R,
+    es kann sofort losgehen)
+2)  lokal mit einer eigenen R-Installation, geht auch offline und wird
+    häufiger aktualisiert
 
-# Procedure
+Wenn Du Weg 2 wählst, gehe folgende Schritte:
 
-## docker
+- installiere R
+- installiere RStudio (optional, macht die Sache aber etwas einfacher)
+- installiere das Paket rlernen
 
-After making changes to the .Rmd files, push to github, pull and rebuild the docker image:
+Für die Installation von R und RStudio folge diesem Tutorial:
+<https://jjallaire.shinyapps.io/learnr-tutorial-00-setup/>
 
+Nun kannst Du *rlernen* installieren, wofür Du allerdings vorab devtools
+brauchst:
+
+``` r
+install.packages("devtools")
+devtools::install_github("johannes-titz/rlernen")
 ```
-sudo docker build -t rlernen
+
+Updates erfolgen über:
+
+``` r
+devtools::install_github("johannes-titz/rlernen")
+```
+
+Um die Tutorials zu starten kannst Du in RStudio rechts in der Ecke auf
+“Tutorial” klicken und runterscrollen bis Du die rlernen-Tutorials
+siehst. Alternativ kannst Du in der Konsole einfach
+`learnr::run_tutorial("tag1", "rlernen")` ausführen, was auch direkt aus
+R heraus geht. Ändere “tag1” zum Tutorial, was Du bearbeiten möchtest.
+
+<details>
+<summary>
+<b>Notes for self-hosting this tutorial</b>
+</summary>
+
+This repository contains the learnr-based tutorial *rlernen*. It is
+primarily intended for personal use but may also be useful for others
+who wish to modify or host the *rlernen* tutorial.
+
+## Important Note
+
+There are unresolved caching issues with *learnr*. Caching is disabled
+for `tag2` and `tag5` due to the following problems: - `tag2` fails to
+render entirely, causing excessive loading times. - `tag5` disrupts
+navigation.
+
+## Version 2.0 (September 2023)
+
+- Updated all tutorials.
+- Added a new section on reading and writing data.
+- Created a custom help function.
+- Reduced dependencies, decreasing image size from 3.62 GB to 1.89 GB.
+
+## To-Do List
+
+- Optimize and test the Dockerfile (use `glue_sys_reqs` from *mimosa*).
+- Develop an R/RStudio installation tutorial similar to Posit’s, and
+  link it at the end of *Day 1* (suggested by Alexandra).
+
+## Procedure
+
+### Docker
+
+After modifying `.Rmd` files, push changes to GitHub, pull them on the
+server, and rebuild the Docker image:
+
+``` sh
+sudo docker build . -t rlernen
 ```
 
 Test the container (modify the file to see all tutorials):
 
-```
+``` sh
 docker run --rm -p 4000:3838 rlernen R -e "rmarkdown::run('tag2.Rmd')"
 ```
 
-- Why is the port 4k? because shinyproxy expects it to be 4k?
-- --rm stands for remove, so that you do not clutter your docker container list
-- R -e is running R execute
+- **Why is port 4000 used?** ShinyProxy expects this port for proper
+  communication.
+- **`--rm` flag:** Ensures the container is removed after execution to
+  prevent clutter in the Docker container list.
+- **`R -e` flag:** Executes an R command directly from the command line.
 
-## website 
+## Website Deployment
 
-programming/rkurs_website project
+**Project:** `programming/rkurs_website`
 
-run create_nav.R
+1.  Modify `index.html` as needed.
+2.  Run the script `create_nav.R` to update navigation.
+3.  Upload the updated site to the server using:
 
-upload to server:
+``` sh
+rsync -arvz --stats --progress --itemize-changes -e 'ssh -p 22' \
+  _site/ johannes@method.hsw.tu-chemnitz.de:/var/www/rlernen_v2.0.de
+```
 
-rsync -arvz --stats --progress --itemize-changes -e 'ssh -p 22' _site/ johannes@method.hsw.tu-chemnitz.de:/var/www/rlernen_v2.0.de
-
-## shinyproxy
-
-url for shinyproxy and for website has to be the same!
-
-test.rlernen.de -> redirects to website /var/www/rlernen.de/html
-test.rlernen.de/shinyproxy -> redirects to shinyproxy server
-
-both are on the same url
-
-for navbar the base url is test.rlernen.de/shinyproxy/app_direct
-
-test.rlernen.de/rlernen -> for parts of website that do not go through shinyproxy; e.g. mitwirkende.html; 
-
-rewrite ^/rlernen/(.*)$ /$1 break; takes care of removing the prefix and redirecting directly to the correct file, whereas all other things go through shinyproxy -> nope, i think this was just some temporary solution; all normal files go directly to the correct folder; it is the shiniproxy prefix in the url that redirects to shinyproxy 
+</details>
