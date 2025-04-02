@@ -1,6 +1,8 @@
 ---
 title: "4. t-Test, ANOVA, KA"
 runtime: shiny_prerendered
+description: >
+  Inferenzstatistik between und within: klassischer t-Test und klassische ANOVA, Kontrastanalyse als Alternative zur ANOVA
 tutorial:
   version: 2.0
 output:

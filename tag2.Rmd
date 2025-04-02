@@ -1,6 +1,8 @@
 ---
 title: "2. Daten-Gerangel"
 runtime: shiny_prerendered
+description: >
+  Selektieren, Filtern, Gruppieren und Aggreggieren von Daten
 tutorial:
   version: 2.0
 output:
