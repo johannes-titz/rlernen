@@ -1,8 +1,10 @@
 ---
-title: "1. Intro"
+title: "1. Einführung in R"
 runtime: shiny_prerendered
+description: >
+  Einführung: Arithmetik, Variablen, Dataframes, Speichern und Laden von Daten, Funktionen
 tutorial:
-  version: 2.0
+  version: 2.1
 output:
   learnr::tutorial:
     allow_skip: yes
@@ -505,15 +507,17 @@ Super, Du weißt jetzt was ein Dateframe ist und kannst selbst welche erstellen.
 
 ## Speichern und Laden von Daten
 
-### Speichern
+### Eigene Daten Speichern und Laden
 
-In diesem Tutorial kannst Du aus Sicherheitsgründen keine Daten abspeichern, denn dann hättest Du Schreib-Zugriff auf unseren Server. Das Abspeichern von Daten ist aber nicht weiter schwer, sodass ich Dir hier einfach nur den Befehle zeige:
+Das Abspeichern von Daten ist nicht weiter schwer, allerdings in diesem Tutorial eingeschränkt -- Schreibrechte gibt es nur für den Ordner *data* und die Daten werden bei Verlassen des Tutorials wieder gelöscht. Wenn Du lokal mit R arbeitest, kannst Du natürlich den Ordner frei wählen und die Daten werden permanent gespeichert.
+
+Eine einfache Möglichkeit Daten zu speichern ist folgendermaßen:
 
 ```{r, echo = T}
 write.csv(d, file = "data/pizzen.csv")
 ```
 
-Das speichert unseren Dataframe unter dem Namen `pizzen.csv` im Verzeichnis `data` ab. Bei einer csv-Datei sind die Werte (values) durch Kommas (comma) getrennt (separated): comma separated values. Dieses Format ist sehr beliebt, da es sowohl für Menschen als auch Maschinen leicht zu lesen ist. Um den Datensatz wieder zu laden schreibst Du einfach:
+Das schreibt unseren Dataframe unter dem Namen `pizzen.csv` ins Verzeichnis `data`. Bei einer csv-Datei sind die Werte (values) durch Kommas (comma) getrennt (separated): comma separated values. Dieses Format ist sehr beliebt, da es sowohl für Menschen als auch Maschinen leicht zu lesen ist. Um den Datensatz wieder zu laden schreibst Du einfach:
 
 ```{r, echo = T}
 pizzen <- read.csv("data/pizzen.csv")
@@ -522,13 +526,13 @@ pizzen
 
 Du kannst natürlich auch eine andere Variable als `pizzen` für die Zuweisung benutzen.
 
-R gibt uns auch die Möglichkeit Objekte in seinem eigenen Dateiformat zu speichern:
+R gibt uns auch die Möglichkeit Objekte in seinem eigenen binären Dateiformat zu speichern:
 
 ```{r, echo = T}
 saveRDS(d, file = "data/pizza2.rds")
 ```
 
-Das laden läuft dann so ab:
+Das Laden läuft dann so ab:
 
 ```{r, echo = T}
 pizzen2 <- readRDS("data/pizza2.rds")
@@ -549,13 +553,37 @@ load("data/workspace.RData")
 
 Beim letzten Befehl darfst Du den `load`-Befehl keiner Variablen zuweisen; vorher haben wir immer `<-` benutzt. Das ist diesmal nicht nötig, denn es sind ja ganz viele Variablen, die wir laden wollen. R macht das automatisch für uns.
 
-Wie gesagt, kannst Du leider das Speichern von Daten hier nicht üben. Jedoch ist das Speichern nicht ganz so wichtig, denn später wirst Du Skripte schreiben, die Rohdaten einlesen und verarbeiten. Daher ist es viel wichtiger Daten zu laden als zu speichern.
+### Aufgabe
 
-Wenn Du dennoch üben willst, machst Du das am besten auf Deiner lokalen R-Version. Installier Dir R (eine Anleitung findet sich hier: <https://jjallaire.shinyapps.io/learnr-tutorial-00-setup/>). Dann starte R, generiere Dir einen Dataframe oder einen Vektor und versuche ihn abzuspeichern. Wenn das klappt, kommst Du einfach wieder zu diesem Tutorial zurück.
+Erstelle einen Dataframe für Deine Familie zum täglichen Nutzungsverhalten (Nutzungszeit in h) von Social Media mit den Variablen: *name, social_media* und speichere diesen anschließend im csv- und rds-Format im Ordner *data*. Prüfe nach, ob Du diese Daten auch wieder laden kannst.
 
-### Laden
+```{r speichern, exercise = TRUE}
 
-Obwohl Du in diesem Tutorial keine Schreibrechte hast, hast Du Zugriff auf den Ordner *data*. Schauen wir uns mal an, was alles unter *data* gespeichert ist mit dem Befehl `dir` (für directory):
+```
+
+```{r speichern-solution}
+df <- data.frame(name = c("Peter", "Anja", "Josef"), 
+                 social_media = c(0.5, 1, 1.5))
+# csv
+write.csv(df, "data/socialmedia.csv")
+read.csv("data/socialmedia.csv")
+
+# rds
+saveRDS(df, "data/socialmedia.rds")
+readRDS("data/socialmedia.rds")
+```
+
+```{r questionSpeichern}
+question("Was ist der Unterschied zwischen dem Einlesen über read.csv und readRDS?",
+         answer("read.csv fügt standardmäßig die Zeilennummer hinzu, readRDS nicht", correct=T),
+         answer("read.csv lädt Dateien schneller als readRDS, da es für große Datenmengen optimiert ist"),
+         answer("readRDS kann nur Dataframes laden, read.csv auch andere R-Objekte"))
+```
+
+
+### Laden fremder Daten in verschiedenen Formaten
+
+Wie bereits geschildert, hast Du in diesem Tutorial Zugriff auf den Ordner *data*. Schauen wir uns mal an, was alles unter *data* gespeichert ist mit dem Befehl `dir` (für directory):
 
 ```{r, echo = T}
 dir("data")
@@ -600,7 +628,7 @@ read.csv("data/pizzen2.txt")
 
 **Aufgabe **
 
-Schau Dir die Hilfe zu `read.table` aus (entweder über `?read.table` oder eine Websuche) und finde heraus wie man den Datensatz `pizzen2.txt` einlesen kann.
+Schau Dir die Hilfe zu `read.table` an (entweder über `?read.table` oder eine Websuche) und finde heraus wie man den Datensatz `pizzen2.txt` einlesen kann.
 
 ```{r pizzen2, exercise = TRUE}
 pizzen2 <- read.table(____, ____, ____)
@@ -676,6 +704,7 @@ Du kennst die Befehle:
 - read.csv
 - saveRDS
 - readRDS
+- dir
 - read.spss
 - head
 
