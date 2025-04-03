@@ -27,4 +27,5 @@ Imports:
     sjPlot,
     WebPower,
     librarian,
-    meme
+    meme,
+    remotes

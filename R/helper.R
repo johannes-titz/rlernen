@@ -61,51 +61,28 @@ homework <- function(number) {
 
 }
 
-check_devtools <- function() {
-  if (!requireNamespace("devtools", quietly = TRUE)) {
-    install <- readline("The 'devtools' package is not installed. Would you like to install it? (yes/no): ")
-    if (tolower(install) == "yes") {
-      install.packages("devtools")
-    } else {
-      stop("Update aborted: 'devtools' is required to install packages from GitHub.")
-    }
-  }
-}
-
 #' Update rlernen package from GitHub
 #' @export
 update_rlernen <- function() {
-  check_devtools()
-  devtools::install_github("your_github_user/rlernen")
+  remotes::install_github("johannes-titz/rlernen")
 }
 
 #' Check if a new commit of rlernen is available on GitHub
 #' @return message whether update is available
 #' @export
+#' @importFrom remotes github_remote
 check_rlernen_update <- function() {
-  check_devtools()
+  # Get the installed package commit hash
+  installed_commit <- remotes:::local_sha("rlernen")
 
-  installed_info <- tryCatch(
-    devtools::package_info("rlernen"),
-    error = function(e) {
-      warning("Could not retrieve installed package info.")
-      return(NULL)
-    }
-  )
+  # Get the latest commit hash from GitHub
+  repo <- "johannes-titz/rlernen"
+  remote <- remotes:::github_remote(repo, ref = "HEAD", subdir=NULL,
+                                    auth_token = remotes:::github_pat(quiet),
+                                    host = "api.github.com")
+  latest_commit <- remotes:::remote_sha(remote)
 
-  remote_info <- tryCatch(
-    devtools::remote_package_info("your_github_user/rlernen"),
-    error = function(e) {
-      warning("Could not retrieve remote package info from GitHub.")
-      return(NULL)
-    }
-  )
-
-  if (is.null(installed_info) || is.null(remote_info)) {
-    return()
-  }
-
-  if (installed_info$RemoteSha != remote_info$RemoteSha) {
+  if (installed_commit != latest_commit) {
     message("A new commit of rlernen is available. Consider running update_rlernen().")
   } else {
     message("rlernen is up to date.")
