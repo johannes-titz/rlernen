@@ -1,6 +1,0 @@
-"Speciale":9:26:0.02:"sehr lecker"
-"Funghi":8:26:0.02:"köstlich"
-"Margherita":6:26:0.01:"lecker"
-"Speciale":12.5:32:0.02:"sehr lecker"
-"Funghi":11.5:32:0.01:"köstlich"
-"Margherita":9.5:32:0.01:"lecker"
