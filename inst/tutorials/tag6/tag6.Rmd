@@ -2,7 +2,7 @@
 title: "6. Regression"
 runtime: shiny_prerendered
 description: >
-  Multiple lineare Regression: Berechnung verschiedner Modelle mit lm, ALM (Äquivalenz zu t-Test und ANOVA), Linearität, Stanardisierung
+  Multiple lineare Regression: Berechnung verschiedener Modelle mit lm; ALM (Äquivalenz zu t-Test und ANOVA), Linearität, Stanardisierung
 tutorial:
   version: 2.0
 output:
