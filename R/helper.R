@@ -77,6 +77,7 @@ update_rlernen <- function() {
 check_rlernen_update <- function() {
   # Get the installed package commit hash
   installed_commit <- remotes:::local_sha("rlernen")
+  if (is.na(installed_commit)) return("rlernen is not installed locally")
 
   # Get the latest commit hash from GitHub
   repo <- "johannes-titz/rlernen"
@@ -86,7 +87,7 @@ check_rlernen_update <- function() {
   latest_commit <- remotes:::remote_sha(remote)
 
   if (installed_commit != latest_commit) {
-    message("A new commit of rlernen is available. Consider running update_rlernen().")
+    message("A new update of rlernen is available. Consider running update_rlernen().")
   } else {
     message("rlernen is up to date.")
   }
