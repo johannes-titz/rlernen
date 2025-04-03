@@ -29,5 +29,6 @@ Imports:
     librarian,
     meme,
     remotes,
-    ids
+    ids,
+    rstudioapi
 Depends: R (>= 3.5.0)
