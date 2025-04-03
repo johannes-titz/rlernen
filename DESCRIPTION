@@ -28,4 +28,6 @@ Imports:
     WebPower,
     librarian,
     meme,
-    remotes
+    remotes,
+    ids
+Depends: R (>= 3.5.0)
