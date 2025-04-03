@@ -353,7 +353,7 @@ question("Wie steigt/fällt die Power in Abhängigkeit der Stichprobengröße?",
 
 Nicht schlecht! Spürst Du jetzt die Power der Power-Analyse?
 
-![](images/4efdcce94e36395094e95115a7bf3b5be4e4049e7abe78e33a75366f50eec83f.jpg){width=400}
+![](images/memeSampleSize.jpg){width=400}
 
 Für heute bleiben uns noch zwei kleine Themen, die irgendwie nirgends richtig dazugehören: die Lowess-Kurve und die Partialkorrelation.
 
