@@ -6,7 +6,7 @@ calendar <- function() {
   kurs_kalender <- "
 Datum,Thema
 07.04.2025,Organisatorisches
-14.04.2025,Einführung
+14.04.2025,Einf\u00fchrung
 21.04.2025,Kein Kurs - OSTERMONTAG
 28.04.2025,Daten-Gerangel
 05.05.2025,Deskriptive Statistik
@@ -19,13 +19,14 @@ Datum,Thema
 23.06.2025,Cluster-Analyse
 30.06.2025,Meta-Analyse
 07.07.2025,Freies Thema / Vertiefung
-14.07.2025,Prüfung
+14.07.2025,Pr\u00fung
 "
 
   df <- read.csv(textConnection(kurs_kalender), stringsAsFactors = FALSE)
   df
 }
 
+#' @importFrom ids adjective_animal
 calendar_ical <- function() {
   df <- calendar()
   names(df) <- c("Start Date", "Subject")
@@ -41,6 +42,8 @@ calendar_ical <- function() {
 #'
 #' @param number numeric value of homework assignment
 #' @return side effect: opens homework file in Rstudio or R
+#' @importFrom utils file.edit read.csv
+#' @importFrom rstudioapi isAvailable navigateToFile
 #' @export
 homework <- function(number) {
   # Define the file path inside the installed rlernen package
@@ -78,7 +81,7 @@ check_rlernen_update <- function() {
   # Get the latest commit hash from GitHub
   repo <- "johannes-titz/rlernen"
   remote <- remotes:::github_remote(repo, ref = "HEAD", subdir=NULL,
-                                    auth_token = remotes:::github_pat(quiet),
+                                    auth_token = NULL,
                                     host = "api.github.com")
   latest_commit <- remotes:::remote_sha(remote)
 
