@@ -3,7 +3,7 @@ rlernen
 Johannes Titz
 2025-04-02
 
-## Anleitung deutsch
+## Einführung
 
 Dies ist das Repositorium für den R-Kurs *rlernen*. Es gibt zwei Wege
 den Kurs zu bearbeiten:
@@ -22,18 +22,18 @@ Wenn Du Weg 2 wählst, gehe folgende Schritte:
 Für die Installation von R und RStudio folge diesem Tutorial:
 <https://jjallaire.shinyapps.io/learnr-tutorial-00-setup/>
 
-Nun kannst Du *rlernen* installieren, wofür Du allerdings vorab devtools
+Nun kannst Du *rlernen* installieren, wofür Du allerdings vorab remotes
 brauchst:
 
 ``` r
-install.packages("devtools")
-devtools::install_github("johannes-titz/rlernen")
+install.packages("remotes")
+remotes::install_github("johannes-titz/rlernen")
 ```
 
 Updates erfolgen über:
 
 ``` r
-devtools::install_github("johannes-titz/rlernen")
+remotes::install_github("johannes-titz/rlernen")
 ```
 
 Um die Tutorials zu starten kannst Du in RStudio rechts in der Ecke auf
@@ -41,6 +41,21 @@ Um die Tutorials zu starten kannst Du in RStudio rechts in der Ecke auf
 siehst. Alternativ kannst Du in der Konsole einfach
 `learnr::run_tutorial("tag1", "rlernen")` ausführen, was auch direkt aus
 R heraus geht. Ändere “tag1” zum Tutorial, was Du bearbeiten möchtest.
+
+## Hausaufgaben
+
+Wenn Du diesen Kurs im Rahmen des Studiums an der TU Chemnitz machst,
+kannst Du Hausaufgaben zu jedem Thema abgeben und Feedback erhalten. Um
+die Datei zur jeweiligen Sitzung zu öffnen, führe folgenden Code aus:
+
+``` r
+library(rlernen) # laden des Pakets
+homework(1) # 1: erste Sitzung, ändere die Zahl entsprechend
+```
+
+Die Abgabe der Hausaufgaben erfolgt über OPAL:
+
+<https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/8420720649/CourseNode/91305593842947>
 
 <details>
 <summary>
