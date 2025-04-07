@@ -45,9 +45,9 @@ calendar_ical <- function() {
 #' @importFrom utils file.edit read.csv
 #' @importFrom rstudioapi isAvailable navigateToFile
 #' @export
-homework <- function(number) {
+homework <- function(number, overwrite = F) {
   # Define the file path inside the installed rlernen package
-  file_path <- system.file(paste0("tutorials/tag", number, "/homework.R"),
+  file_path <- system.file(paste0("tutorials/tag", number, "/homework", number, ".R"),
                                  package = "rlernen")
 
   # Check if the file exists
@@ -55,11 +55,12 @@ homework <- function(number) {
     stop("The file could not be found. Ensure the rlernen package is installed and contains the expected file.")
   }
 
+  file.copy(file_path, ".", overwrite = overwrite)
   # Open in RStudio if available, otherwise use file.edit
   if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
-    rstudioapi::navigateToFile(file_path)
+    rstudioapi::navigateToFile(paste0("homework", number, ".R"))
   } else {
-    file.edit(file_path)  # Open in default R editor
+    file.edit(paste0("homework", number, ".R"))  # Open in default R editor
   }
 
 }
