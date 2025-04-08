@@ -31,8 +31,8 @@ calendar_ical <- function() {
   df <- calendar()
   names(df) <- c("Start Date", "Subject")
   df$`End Date` <- df$`Start Date`
-  df$`Start Time` <- "5:15pm"
-  df$`End Time` <- "6:45pm"
+  df$`Start Time` <- "5:30pm"
+  df$`End Time` <- "7:00pm"
   df$Location <- "4/046"
   df$UID <- ids::adjective_animal(nrow(df))
   df
