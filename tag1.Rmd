@@ -790,7 +790,7 @@ Oft weiß man gar nicht, wie eine Funktion heißt. In diesem Fall bringt die Hil
 
 Im Normalfall wird es hilfreicher sein, bei einer Suchmaschine Deiner Wahl das Stichwort kombiniert mit "r stats" zu suchen. Die Seiten <https://www.statmethods.net/> (quick-r) und <https://stackoverflow.com/> sind auch sehr hilfreich. Es gibt allgemein sehr viele Online-Materialien zu R. Wenn Du also denkst, dass es eine bestimmte Funktionalität in R geben müsste, findest Du diese am schnellsten durch einen Websuche. 
 
-Eine weitere Möglichkeit sind Cheatsheets, die häufig benutzte Befehle knapp und klar und visuell ansprechend darstellen. Eine Sammlung von solchen Cheatsheets als Print-Version gibt es zum Beispiel hier: https://amzn.eu/d/4XsE1v0
+Eine weitere Möglichkeit sind Cheatsheets, die häufig benutzte Befehle knapp und klar und visuell ansprechend darstellen. Eine Sammlung von solchen Cheatsheets als Print-Version gibt es zum Beispiel hier: https://johannestitz.com/post/2023-10-03-rcheatsheets2/ Digitale Versionen sind bei POSIT verfügbar: https://posit.co/resources/cheatsheets/
 
 ```{r hilfempc4, echo=FALSE}
 question(
