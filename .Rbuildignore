@@ -16,6 +16,5 @@ deps.txt
 faq.Rmd
 faq.html
 figure
-images
 makeRpkg.sh
 shinyproxy.sql
