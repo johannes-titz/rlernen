@@ -4,7 +4,7 @@
 \alias{homework}
 \title{Open homework assignment}
 \usage{
-homework(number)
+homework(number, overwrite = F)
 }
 \arguments{
 \item{number}{numeric value of homework assignment}

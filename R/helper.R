@@ -41,6 +41,8 @@ calendar_ical <- function() {
 #' Open homework assignment
 #'
 #' @param number numeric value of homework assignment
+#' @param overwrite boolean should existing homework file in current folder be
+#'   overwritten?
 #' @return side effect: opens homework file in Rstudio or R
 #' @importFrom utils file.edit read.csv
 #' @importFrom rstudioapi isAvailable navigateToFile
