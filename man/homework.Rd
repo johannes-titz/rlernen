@@ -8,6 +8,9 @@ homework(number, overwrite = F)
 }
 \arguments{
 \item{number}{numeric value of homework assignment}
+
+\item{overwrite}{boolean should existing homework file in current folder be
+overwritten?}
 }
 \value{
 side effect: opens homework file in Rstudio or R
