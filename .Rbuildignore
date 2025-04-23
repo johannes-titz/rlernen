@@ -18,3 +18,4 @@ faq.html
 figure
 makeRpkg.sh
 shinyproxy.sql
+^data-raw$
