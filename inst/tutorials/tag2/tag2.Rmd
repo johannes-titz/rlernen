@@ -561,7 +561,15 @@ describeBy(imdb_auswahl, imdb_auswahl$color)
 
 In der ersten Zeile verkleinere ich den Dataframe auf 4 Variablen, ansonsten wird die ganze Geschichte unübersichtlich. In der zweiten Zeile benutze ich die Funktion ``describeBy`` und übergebe als erstes Argument den Dataframe und als zweites Argument die Gruppierungsvariable (Farbfilm oder nicht, `imdb_auswahl$color`). Zurück bekomme ich Statistiken für die drei Kategorien von **color**: Black and White, Color und den Rest, der nicht klassifiziert war (steht hier ganz oben). Was können wir erkennen? Es gibt wenige Schwarz-Weiß-Filme ($n=209$), diese liegen aber in der Bewertung über den Farb-Filmen (Mittelwert von 7.23 versus 6.41 in Spalte `mean`). Liegt vielleicht daran, dass es früher wenig Low-Budget-Filme gab. Entweder hat man einen passablen Film gemacht oder gar keinen.
 
-Nun Du! Selektiere zunächst aus dem Dataframe **imdb** die Variablen **imdb_score**, **movie_title** und **title_year**. Wähle anschließend alle Filme aus, die ab 2010 produziert wurden. Vergleiche schließlich den Datensatz über ``DescribeBy`` gruppiert nach dem Jahr (**title_year**). *Achtung: diese Aufgabe ist sehr anspruchsvoll, da sie mehrere Schritte erfordert. Nimm Dir dafür also etwas mehr Zeit und versuche Schritt für Schritt voranzukommen. Wenn Du es nicht schaffst, nicht schlimm, schau Dir einfach die Musterlösung an und versuch es in einer Woche nochmal.*
+Es gibt noch viele andere Wege zur Gruppierung und Aggregation von Variablen. Ein sehr eleganter ist über die Funktion `aggregate`:
+
+```{r echo=T}
+aggregate(imdb_score ~ color, FUN = mean, data = imdb_auswahl)
+```
+
+Die Schreibweise `imdb_score ~ color` bedeutet, dass die AV `imdb_score` ist und die UV `color`, es wird also nach `color` gruppiert. `FUN` steht für die Aggregations-Funktion (in diesem Fall Mittelwert) und `data` für den Datensatz. Das Ergebnis ist das gleiche, nur, dass bei `aggregate` eine Statistik berechnet wurde und nicht mehrere. Auch gibt es nur eine AV, wobei auch prinzipiell mehrere gehen würden (siehe `?aggregate`).
+
+Nun Du! Selektiere zunächst aus dem Dataframe **imdb** die Variablen **imdb_score**, **movie_title** und **title_year**. Wähle anschließend alle Filme aus, die ab 2010 produziert wurden. Vergleiche schließlich den Datensatz über ``describeBy`` oder ``aggregate`` gruppiert nach dem Jahr (**title_year**). *Achtung: diese Aufgabe ist sehr anspruchsvoll, da sie mehrere Schritte erfordert. Nimm Dir dafür also etwas mehr Zeit und versuche Schritt für Schritt voranzukommen. Wenn Du es nicht schaffst, nicht schlimm, schau Dir einfach die Musterlösung an und versuch es in einer Woche nochmal.*
 
 ```{r aggregieren3, exercise = TRUE}
 
@@ -584,17 +592,23 @@ imdb_auswahl <- imdb[, c("imdb_score", "movie_title", "title_year")]
 imdb_gefiltert <- imdb_auswahl[imdb_auswahl$title_year >= 2010, ]
 # dritter Schritt
 describeBy(imdb_gefiltert, "title_year")
+# oder über aggregate:
+aggregate(imdb_score ~ title_year, sd, data = imdb_gefiltert)
 ```
 
 ```{r imdb7-mpc, echo=FALSE}
 q_n(2015, "In welchem Jahr war die Standardabweichung des IMDB-Scores am größten?")
 ```
 
-Nicht schlecht! Wie versprochen, war dies nur ein kurzes Kapitel. Der Grund dafür ist, dass es noch andere Pakete gibt um Daten zu gruppieren und zu aggregieren, die Du Dir später sicher selbst anschauen wirst. Früher oder später wirst Du vermutlich nur noch solche Spezial-Pakete benutzen. Am Anfang ist es aber günstig die Befehle zu benutzen die `R` von Haus aus anbietet, denn die meisten `R`-Programmierer benutzen sie und Du willst ja nicht in der Out-Group sein. Nein, Quatsch. Der eigentliche Grund ist, dass Du mit diesen Menschen kommunizieren willst und sie auch mit Dir. Dafür brauchst Du die Basics. Aber sobald Du diese beherrschst, kannst Du Dein Vokabular um ein paar geschmeidigere Ausdrücke erweitern. `describeBy` aus dem `psych`-Paket ist ein Beispiel dafür, aber es gibt noch Hundert andere. Schritt für Schritt wirst Du eine Präferenz für bestimmte Pakete entwickeln und so Deinen eigenen R-Stil entwickeln. Z. B. gibt es R-Folks, die lieber `tidyverse` benutzen, aber andere lieben `data.table`:
+Nicht schlecht! Wie versprochen war dies nur ein kurzes Kapitel. Der Grund dafür ist, dass es noch viele weitere Funktionen und Pakete gibt, mit denen man Daten gruppieren und aggregieren kann -- und die wirst Du Dir früher oder später sicher selbst anschauen. Mit der Zeit wirst Du vermutlich nur noch solche spezialisierten Pakete verwenden.
+
+Gerade zu Beginn ist es aber sinnvoll, die Befehle zu nutzen, die R bereits von Haus aus mitbringt. Viele R-Programmierer arbeiten damit, und Du möchtest ja nicht zur Out-Group gehören. Nein, Quatsch -- der eigentliche Grund ist: Du willst Dich mit diesen Menschen austauschen können, und sie wollen auch mit Dir kommunizieren. Dafür brauchst Du die Grundlagen.
+
+Sobald Du diese beherrschst, kannst Du Dein Vokabular nach und nach um ein paar geschmeidigere Ausdrücke erweitern. `describeBy` aus dem `psych`-Paket ist nur ein Beispiel -- es gibt Hunderte weiterer nützlicher Funktionen. Mit der Zeit wirst Du eine Vorliebe für bestimmte Pakete entwickeln und so Deinen ganz eigenen R-Stil finden. Manche R-Leute schwören auf `tidyverse`-Pakete, andere wiederum lieben `data.table`.
 
 ![](images/Dtr7sjCVYAAfbeJ.jpg){width=450}
 
-Was Dir besser gefällt, wirst Du erst später merken. Lass Dir von niemandem einreden, welcher Ansatz besser ist, probier verschiedene Pakete einfach aus und entscheide selbst.
+Was Dir besser gefällt, wirst Du erst später merken. Probier verschiedene Pakete einfach aus und entscheide dann selbst.
 
 Nach dem heutigen Tag solltest Du langsam ein Gespür für die Syntax von `R` entwickeln. Vermutlich hast Du aber auch noch viele Fragen, die Du mir gerne schicken kannst: frage at rlernen.de
 
