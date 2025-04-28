@@ -57,6 +57,10 @@ homework <- function(number, overwrite = F) {
     stop("The file could not be found. Ensure the rlernen package is installed and contains the expected file.")
   }
 
+  if (file.exists(paste0("homework", number, ".R")) & overwrite == FALSE) {
+    warning("File homework", number, ".R exists in working directory and will be used. To overwrite, please use homework(..., overwrite = TRUE)")
+  }
+
   file.copy(file_path, ".", overwrite = overwrite)
   # Open in RStudio if available, otherwise use file.edit
   if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
