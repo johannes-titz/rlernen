@@ -74,7 +74,9 @@ homework <- function(number, overwrite = F) {
 #' Update rlernen package from GitHub
 #' @export
 update_rlernen <- function() {
+  detach("package:rlernen", unload = TRUE)
   remotes::install_github("johannes-titz/rlernen")
+  library(rlernen)
 }
 
 #' Check if a new commit of rlernen is available on GitHub
