@@ -200,7 +200,7 @@ Welche Maße sind sonst noch relevant in der Methodenlehre? Berechne mir vom Alt
 ```{r lage1-solution}
 var(data$alter)
 range(data$alter)
-mad(data$alter)
+mad(data$alter, center = mean(data$alter)) # aufpassen!
 quantile(data$alter, c(0.3, 0.6))
 IQR(data$alter)
 ```
@@ -438,12 +438,12 @@ Viele behaupten ja, dass man entweder gut in Deutsch oder Mathe ist. Dies ist of
 
 Unschön bei der Abbildung ist das Problem des Overplottings. Man sieht nicht, wenn mehrere Punkte aufeinanderliegen. Das lässt sich mit einem Sonnenblumendiagramm beheben:
 
-```{r sun, exercise=T}
+```{r sun, echo=T}
 sunflowerplot(data$mathe, data$deutsch)
 ```
 
 Oder mit Transparenz:
-```{r transp, echo = TRUE}
+```{r transp, exercise=T, exercise.eval=T}
 plot(data$mathe, data$deutsch, pch = 20, col = rgb(red = 0, green = 0, blue = 1,
                                                    alpha = 0.15))
 ```
