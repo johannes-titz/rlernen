@@ -73,10 +73,13 @@ homework <- function(number, overwrite = F) {
 
 #' Update rlernen package from GitHub
 #' @export
+#' @importFrom rstudioapi restartSession
 update_rlernen <- function() {
   detach("package:rlernen", unload = TRUE)
   remotes::install_github("johannes-titz/rlernen")
-  library(rlernen)
+  if (as.numeric(Sys.getenv("RSTUDIO"))) {
+    rstudioapi::restartSession(command = "library(rlernen)", clean = TRUE)
+  }
 }
 
 #' Check if a new commit of rlernen is available on GitHub
