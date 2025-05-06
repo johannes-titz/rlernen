@@ -360,7 +360,7 @@ question("Welcher Code erzeugt die Funktion ``mw``, die den Mittelwert eines Vek
   answer("mw <- function(x) {mean(y)}"),
   answer("mw <- mean(x)"),
   answer("mw <- mean", correct = TRUE),
-  answer("mw <- function(x) {sum(x) / length(x))}", correct = TRUE),
+  answer("mw <- function(x) {sum(x) / length(x)}", correct = TRUE),
   random_answer_order = T
 )
 ```
