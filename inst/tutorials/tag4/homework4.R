@@ -105,13 +105,14 @@ file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 # Philosophische Fakultät      1560            28
 # HSW                          1394            18
 
-# Der folgende Befehl zeigt ein Balkendiagramm der vorliegenden Daten:
+# Der folgende Befehl zeigt ein Balkendiagramm der vorliegenden Daten im
+# Web-Browser:
 
-plot.new()
-grid::grid.raster(png::readPNG(system.file("tu22.png", package = "rlernen")))
+browseURL(system.file("tu22.png", package = "rlernen"))
 
 # Versuchen Sie dieses Balkendiagramm so gut wie möglich nachzubauen. Die
 # Corporate-Farben der TUC finden Sie hier:
-# https://www.tu-chemnitz.de/tu/pressestelle/cd/vorlagen.html#farben Die
-# korrekte Reihenfolge der Farben entspricht der Reihenfolge der relativen
+# https://www.tu-chemnitz.de/tu/pressestelle/cd/vorlagen.html#farben
+#
+# Die korrekte Reihenfolge der Farben entspricht der Reihenfolge der relativen
 # Häufigkeiten.
