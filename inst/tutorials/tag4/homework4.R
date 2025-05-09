@@ -86,3 +86,32 @@ file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 # Welche fünf Automarken (Marke) werden am häufigsten zum Verkauf angeboten? →
 # Ermittle die fünf häufigsten Marken und stelle deren Häufigkeiten in einem
 # Balkendiagramm dar.
+
+# Teil 3
+
+# Gegeben ist eine Tabelle mit Zahlen der TU Chemnitz (Stand: 2022). Erstellen
+# Sie einen Datensatz tu22 in R, der die tabellierten Daten abbildet. Erstellen
+# Sie eine neue Variable bs (für Betreuungsschlüssel). bs gibt an, wie viele
+# Studierende durchschnittlich durch einen Professor der jeweiligen Fakultät
+# betreut werden. Auch bs soll in Ihrem Datensatz TU22 integriert sein.
+
+# Fakultät                  Studierende   Professuren
+# Naturwissenschaft             669            23
+# Mathematik                    206            16
+# Maschinenbau                 1161            29
+# Elektrotechnik                963            17
+# Informatik                   1462            12
+# Wirtschaftswissenschaften    1605            17
+# Philosophische Fakultät      1560            28
+# HSW                          1394            18
+
+# Der folgende Befehl zeigt ein Balkendiagramm der vorliegenden Daten:
+
+plot.new()
+grid::grid.raster(png::readPNG(system.file("tu22.png", package = "rlernen")))
+
+# Versuchen Sie dieses Balkendiagramm so gut wie möglich nachzubauen. Die
+# Corporate-Farben der TUC finden Sie hier:
+# https://www.tu-chemnitz.de/tu/pressestelle/cd/vorlagen.html#farben Die
+# korrekte Reihenfolge der Farben entspricht der Reihenfolge der relativen
+# Häufigkeiten.
