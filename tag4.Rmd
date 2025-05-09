@@ -152,7 +152,7 @@ question("Wie ist in diesem Fall das Verhältnis zwischen dem $p$-Wert für den 
   answer("Der p-Wert für unabhängige Stichproben ist ungefähr doppelt so groß wie der p-Wert für abhängige Stichproben.", correct = TRUE),
   answer("Der p-Wert für unabhängige Stichproben ist ungefähr halb so groß wie der p-Wert für abhängige Stichproben."),
   answer("Der p-Wert für unabhängige Stichproben ist ungefähr gleich groß wie der p-Wert für abhängige Stichproben."),
-  answer("Der p-Wert für unabhängige Stichproben ist ungefähr dreimal groß wie der p-Wert für abhängige Stichproben."),
+  answer("Der p-Wert für unabhängige Stichproben ist ungefähr dreimal so groß wie der p-Wert für abhängige Stichproben."),
   random_answer_order = T
 )
 ```
@@ -507,7 +507,7 @@ stress <- data.frame(av = c(3, 2, 4, 1, 5, 6, 5, 2, 6, 6, 7, 5),
 calc_contrast(dv = av, 
               within = group,
               lambda_within = c("t1" = -2.6, "t2" = -2, "t3" = 4.6),
-              ID = participant,
+              id = participant,
               data = stress)
 ```
 
@@ -538,7 +538,7 @@ calc_contrast(dv = reading_test, within = music,
                                 "white noise" = 0.25,
                                 "classic" = -0.75,
                                 "jazz" = -0.75),
-              ID = participant, data = musik)
+              id = participant, data = musik)
 ```
 
 
@@ -609,7 +609,7 @@ Rechne die Kontrastanalyse aus der Vorlesung auf Folie 21 mit `cofad` nach:
 <img src="images/ka_vorlesung_f21.png" width="600">
 <hr>
 
-**Hinweis**: `cofad` erwartet, dass die ID-Variable und Gruppen-Variable ein `factor` ist. Benutze also `as.factor` bei der Erstellung dieser Variablen.
+**Hinweis**: `cofad` erwartet, dass die id-Variable und Gruppen-Variable ein `factor` ist. Benutze also `as.factor` bei der Erstellung dieser Variablen.
 
 ```{r kauebung, exercise=TRUE}
 
@@ -622,7 +622,7 @@ therapie <- data.frame(av = c(0, 1, 3, 4, 7, 7, 8, 8, 3, 4, 5, 6),
                        group = as.factor(rep(c("A", "B", "C"), each = 4)))
 calc_contrast(dv = av, within = group,
               lambda_within = c("A" = -1, "B" = 1, "C" = 0),
-              ID = participant, data = therapie)
+              id = participant, data = therapie)
 ```
 
 ```{r kauebung-mpc, echo=FALSE}
