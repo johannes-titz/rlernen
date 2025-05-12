@@ -9,7 +9,7 @@ file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 
 # In einer älteren Vorlesungsbefragung wurde die Einstellung zu verschiedenen
 # Monaten erfragt. Das Datenblatt zur Vorlesung findest du als csv-Datei im data
-# Ordner: Jahreszeit.csv. Lies diesen Datensatz in R ein.
+# Ordner: Jahreszeiten.csv. Lies diesen Datensatz in R ein.
 
 
 # Untersuche in welchen Variablen es fehlende Werte gibt. Lies Dir hierzu die
@@ -93,7 +93,7 @@ file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 # Sie einen Datensatz tu22 in R, der die tabellierten Daten abbildet. Erstellen
 # Sie eine neue Variable bs (für Betreuungsschlüssel). bs gibt an, wie viele
 # Studierende durchschnittlich durch einen Professor der jeweiligen Fakultät
-# betreut werden. Auch bs soll in Ihrem Datensatz TU22 integriert sein.
+# betreut werden. Auch bs soll in Ihrem Datensatz tu22 integriert sein.
 
 # Fakultät                  Studierende   Professuren
 # Naturwissenschaft             669            23
