@@ -48,8 +48,10 @@ calendar_ical <- function() {
 #' @importFrom rstudioapi isAvailable navigateToFile
 #' @export
 homework <- function(number, overwrite = F) {
+  short <- number
+  number <- substr(number, 1, 1)
   # Define the file path inside the installed rlernen package
-  file_path <- system.file(paste0("tutorials/tag", number, "/homework", number, ".R"),
+  file_path <- system.file(paste0("tutorials/tag", number, "/homework", short, ".R"),
                                  package = "rlernen")
 
   # Check if the file exists
@@ -57,16 +59,16 @@ homework <- function(number, overwrite = F) {
     stop("The file could not be found. Ensure the rlernen package is installed and contains the expected file.")
   }
 
-  if (file.exists(paste0("homework", number, ".R")) & overwrite == FALSE) {
-    warning("File homework", number, ".R exists in working directory and will be used. To overwrite, please use homework(..., overwrite = TRUE)")
+  if (file.exists(paste0("homework", short, ".R")) & overwrite == FALSE) {
+    warning("File homework", short, ".R exists in working directory and will be used. To overwrite, please use homework(..., overwrite = TRUE)")
   }
 
   file.copy(file_path, ".", overwrite = overwrite)
   # Open in RStudio if available, otherwise use file.edit
   if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
-    rstudioapi::navigateToFile(paste0("homework", number, ".R"))
+    rstudioapi::navigateToFile(paste0("homework", short, ".R"))
   } else {
-    file.edit(paste0("homework", number, ".R"))  # Open in default R editor
+    file.edit(paste0("homework", short, ".R"))  # Open in default R editor
   }
 
 }
