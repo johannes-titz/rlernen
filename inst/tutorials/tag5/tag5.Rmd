@@ -375,7 +375,7 @@ lines(lowess(x = data$mathe, y = data$deutsch, f = 0.2), col = "green")
 lines(lowess(x = data$mathe, y = data$deutsch, f = 0.1), col = "blue")
 ```
 
-Erstelle nun Du einen Plot für den Zusammenhang zwischen dem Mögen von Hunden ($x$-Achse) und dem Mögen von Katzen ($y$-Achse) mit einer Lowess-Kurve ($f=2/3$). Die Variablen heißen `hunde_m` u. `katzen_m`.
+Erstelle nun einen Plot für den Zusammenhang zwischen dem Mögen von Hunden ($x$-Achse) und dem Mögen von Katzen ($y$-Achse) mit einer Lowess-Kurve ($f=2/3$). Die Variablen heißen `hunde_m` u. `katzen_m`.
 
 ```{r lowess, exercise=TRUE}
 
