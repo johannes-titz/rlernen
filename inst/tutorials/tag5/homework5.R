@@ -44,9 +44,9 @@ titanic_woman <- apply(Titanic, c(2, 4), sum)
 file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 
 --------------------------------------------------------------------------------
-# Im Datensatz father_son.csv (in OPAL) ist die Körpergröße von Vätern und ihren
-# Söhnen dargestellt. Dieser Datensatz wurde ca. 1903 von Karl Pearson genutzt,
-# um die Regression empirisch zu untersuchen. Der Datensatz enthält die
+# Im Datensatz father_son.csv (im Ordner data) ist die Körpergröße von Vätern
+# und ihren Söhnen dargestellt. Dieser Datensatz wurde ca. 1903 von Karl Pearson
+# genutzt, um die Regression empirisch zu untersuchen. Der Datensatz enthält die
 # Variablen fheight (Größe des Vaters) und sheight (Größe des ausgewachsenen
 # Sohnes) in Inch (Zoll).
 
