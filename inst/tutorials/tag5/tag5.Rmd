@@ -418,7 +418,7 @@ iq <- c(98, 98, 103, 101, 100, 106, 111, 125, 120, 115)
 pcor.test(verb_test, num_test, iq) 
 ```
 
-Herauspartialisiert wird der IQ aus dem Zusammenhang zwischen einen verbalen und numerischem Test.
+Herauspartialisiert wird der IQ aus dem Zusammenhang zwischen einem verbalen und numerischem Test.
 
 Probier Du es nun. Berechne die Partialkorrelation zwischen Deutsch- und Mathepunkten ohne den Einfluss der Abiturnote:
 

@@ -126,7 +126,7 @@ tab_model(model2)
 ```
 Der Effekt der Serie lässt sich hier einfach als Mittelwertsunterschied lesen. Wenn `film == 0`, dann ist es eine Serie und wir sind bei einer Schätzung von 5.33 (wenn budget, duration und age 0 wären). Ist es ein Film, dann müssen wir 1.02 abziehen. Heißt also einfach nur, dass Serien generell besser bewertet werden -- überraschend, denn spontan hätte ich das Gegenteil erwartet. Aber vielleicht ist der Grund für die bessere Bewertung von Serien ein Selektionsprozess: Personen, denen die Serie gefällt (Fans also) machen sich die Mühe eine Bewertung abzugeben, wohingegen jemand der die Serie nicht mag, sie einfach nicht schaut und keine Bewertung abgibt. Bei Filmen könnte dieser Prozess anders ablaufen.
 
-Trotz des riesigen Effekts von Film/Serie bleibt der Einfluss der Dauer erhalten (immer noch 0.02). Da unsere theoretischen Überlegungen hierzu eher primitiver Natur sind, wollen wir erst mal nicht tiefer graben. Stattdessen überlegst Dir nun, dass das Genre sicher auch eine Rolle spielt. Action-Filme werden Deiner Ansicht nach besser bewertet als andere Filme.
+Trotz des riesigen Effekts von Film/Serie bleibt der Einfluss der Dauer erhalten (immer noch 0.02). Da unsere theoretischen Überlegungen hierzu eher primitiver Natur sind, wollen wir erst mal nicht tiefer graben. Stattdessen überlegst Du Dir nun, dass das Genre sicher auch eine Rolle spielt. Action-Filme werden Deiner Ansicht nach besser bewertet als andere Filme.
 
 Wir erstellen uns also eine Variable für Action-Film/kein Action-Film. Das stellt uns schon vor eine Herausforderung, denn üblicherweise wird ein Film in mehrere Kategorien sortiert (z. B. Action und Komödie). Wir nutzen hier reguläre Ausdrücke über `grepl` um die Variable zu erstellen. Reguläre Ausdrücke sind ein Thema über welches man einen separaten Kurs halten könnte. Hier sollst Du nur lernen, dass es so etwas gibt und wie man es im einfachsten Fall verwendet.
 
@@ -143,7 +143,7 @@ tab_model(model2)
 
 Okay, Action-Filme werden tatsächlich eher schlechter bewertet, vielleicht weil sie nicht gerade deep sind.
 
-Du bist schon recht zufrieden mit dem Modell und empfiehlst der Schauspielerin in Serien zu spielen, die wenig Action enthalten und bald ausgestrahlt werden, denn alte Produktionen werden tendenziell schlechter bewertet. Aber Deine Auftraggeberin ist noch nicht vollends zufrieden. Sie schlägt vor ins Modell Regisseure und Schauspieler einzubeziehen. Mache zunächst Dummy-Variablen für die Regisseure Christopher Nolan, Stanley Kubrick und Guy Ritchie (Variable `director_name`) sowie den Schauspieler Christian Bale in der Hauptrolle (Variable `actor_1_name`), rechne anschließend die Regression (die bisherigen Variablen sollen drin bleiben).
+Du bist schon recht zufrieden mit dem Modell und empfiehlst der Schauspielerin in Serien zu spielen, die wenig Action enthalten. Aber Deine Auftraggeberin ist noch nicht vollends zufrieden. Sie schlägt vor ins Modell Regisseure und Schauspieler einzubeziehen. Mache zunächst Dummy-Variablen für die Regisseure Christopher Nolan, Stanley Kubrick und Guy Ritchie (Variable `director_name`) sowie den Schauspieler Christian Bale in der Hauptrolle (Variable `actor_1_name`), rechne anschließend die Regression (die bisherigen Variablen sollen drin bleiben).
 
 ```{r chisq, exercise=TRUE}
 
