@@ -75,7 +75,32 @@ file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 # dazu die Variablen: age, waistcirc und hipcirc. Wie gut ist die Vorhersage?
 
 
+# Berechne die standardisierten Regressionskoeffizienten. Welcher
+# Koeffizient beeinflusst am stärksten DEXfat?
+
+
 # Prüfe nun den Residualplot. Welche Schlussfolgerungen können aus dem
 # Residualplot gezogen werden, wenn es um Vorhersagen für hohe Körperfettanteile
 # geht?
 
+--------------------------------------------------------------------------------
+# Der folgende Code erzeugt eine verrauschte Sinus-Kurve. Führe ihn aus um die
+# nächste Aufgabe zu bearbeiten. Hinweis: set.seed setzt den Zufallsgenerator
+# auf einen festen Wert, sodass das Ergebnis reproduzierbar wird.
+
+set.seed(620)
+x <- seq(0, 4*pi, 0.01)
+y <- sin(x) + rnorm(length(x), 0, 0.1)
+
+# Mach einen Plot mit lowess-Kurve für die Daten. Passe f so an, dass die Kurve
+# gut abgebildet wird.
+
+
+# Rechne nun eine Regression, die den nicht-linearen Zusammenhang
+# berücksichtigt.
+
+
+# Erstelle eine Abbildung der geschätzten y-Werte in Abhängigkeit der x-Werte.
+# Diese sollte ähnlich zur Lowess-Kurve sein. Warum ist es vorteilhaft ein
+# Regressionsmodell zu fitten, obwohl wir auch mit der lowess-Kurve den
+# Zusammenhang gut darstellen können?
