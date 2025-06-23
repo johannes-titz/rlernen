@@ -43,7 +43,7 @@ titanic_woman <- apply(Titanic, c(2, 4), sum)
 # bearbeiten
 file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 
---------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Im Datensatz father_son.csv (im Ordner data) ist die Körpergröße von Vätern
 # und ihren Söhnen dargestellt. Dieser Datensatz wurde ca. 1903 von Karl Pearson
 # genutzt, um die Regression empirisch zu untersuchen. Der Datensatz enthält die
@@ -68,7 +68,7 @@ file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 # erreichen wollen (Alpha = 5%, gerichtet).
 
 
---------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Der Datensatz wellbeing.csv enthält verschiedenste Variablen zum Wohlbefinden
 # in europäischen Staaten. Die Daten sind auf Länderebene aggregiert. Lies den
 # Datensatz zunächst ein.
