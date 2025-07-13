@@ -763,7 +763,7 @@ question("Welche von den ausgewählten Personen ist am kleinsten?",
 )
 ```
 
-Wie ist die Durchschnittsgröße von Männern und Frauen im Datensatz? Für die zusammenfassende Statistik sollte der Datensatz nach Geschlecht gruppiert werden. Benutze hierfür die Funktion `describeBy` aus dem Paket `psych`.
+Wie ist die Durchschnittsgröße von Männern und Frauen im Datensatz? Für die zusammenfassende Statistik sollte der Datensatz nach Geschlecht (`gender`) gruppiert werden. Benutze hierfür die Funktion `describeBy` aus dem Paket `psych`.
 
 ```{r exercise7b, exercise=TRUE, exercise.eval=FALSE, warning=FALSE}
 
