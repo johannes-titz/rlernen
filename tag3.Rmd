@@ -524,8 +524,6 @@ question("Was ist der kleinste Wert?",
 )
 ```
 
-Da hat sich wohl jemand einen Spaß erlaubt.
-
 Jetzt noch ein Histogramm für Körpergröße:
 
 ```{r plot4, exercise=TRUE}
