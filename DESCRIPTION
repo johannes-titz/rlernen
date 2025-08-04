@@ -30,5 +30,6 @@ Imports:
     meme,
     remotes,
     ids,
-    rstudioapi
+    rstudioapi,
+    car
 Depends: R (>= 3.5.0)
