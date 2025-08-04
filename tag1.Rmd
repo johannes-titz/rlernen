@@ -4,7 +4,7 @@ runtime: shiny_prerendered
 description: >
   Einführung: Arithmetik, Variablen, Dataframes, Speichern und Laden von Daten, Funktionen
 tutorial:
-  version: 2.1
+  version: 2.1.1
 output:
   learnr::tutorial:
     allow_skip: yes

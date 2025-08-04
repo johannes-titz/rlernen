@@ -4,7 +4,7 @@ runtime: shiny_prerendered
 description: >
   Chi-Quadrat-Test, U-Test, Wilcoxon-Test; Exkurse: Power-Analyse, Lowess-Kurve, Partialkorrelation
 tutorial:
-  version: 2.0
+  version: 3.0
 output:
   learnr::tutorial:
     allow_skip: yes

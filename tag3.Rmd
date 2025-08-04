@@ -4,7 +4,7 @@ runtime: shiny_prerendered
 description: >
   Tabellen, Lage- und Streuungsmaße, einfache Abbildungen mit base R, Exkurs: eigene Funktionen schreiben
 tutorial:
-  version: 2.0
+  version: 3.0
 output:
   learnr::tutorial:
     allow_skip: yes

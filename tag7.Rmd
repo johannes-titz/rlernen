@@ -4,7 +4,7 @@ runtime: shiny_prerendered
 description: >
   Faktorenanalyse (Big-Five): Parallelanalyse, Interpretation; Clusteranalyse: hierarchisches Clustern mit hclust, Dendrogramm
 tutorial:
-  version: 2.0
+  version: 3.0
 output:
   learnr::tutorial:
     allow_skip: yes
