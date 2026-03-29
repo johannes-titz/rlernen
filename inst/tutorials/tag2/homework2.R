@@ -5,45 +5,104 @@
 # bearbeiten
 file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 
-# Lade nun die Daten simpsons.csv aus dem Ordner data und bestimme mit R-Code,
-# welche Simpsons vor dem Jahr 1960 geboren wurden.
-
-
-# Lade nun die Daten pokemon.csv aus dem Ordner data und bearbeite die nächsten
-# Aufgaben. (Achtung: es wurde beim Speichern ein anderes Trennzeichen als das
-# Komma verwendet!)
-
-# Welche Pokémon gehören zum Wesen "Raupe"?
-
-# Ein Rechtschreibfehler ist im `typ`-Vektor aufgetreten: "Normmal" statt
-# "Normal". Prüfe mithilfe einer logischen Abfrage, ob sich der Fehler bei
-# "Rattikarl" befindet. Korrigiere abschließend den Fehler.
-
-# Erstelle mit data.frame() den folgenden Datensatz:
-
-##   vornamen alter geschlecht
-## 1     Anna    19          w
-## 2      Bea    22          w
-## 3    Chris    20          m
-## 4     Dana    31          w
-## 5     Emil    24          m
-
-# Ändere den Namen Dana in Diana direkt im Datensatz.
-
-# Gib nur die Zeilen von weiblichen Befragten aus.
-
-# Die Funktion rep() wiederholt Elemente eines Vektors. Versuche folgende
-# Variablen mit rep zu erstellen:
+# Lade nun die Daten bfi.csv aus dem Ordner data.
 #
-# a: 1, 2, 3, 1, 2, 3
-# b: 1, 1, 2, 2, 3, 3
+# Hinweis:
+# Falls Du nicht mehr weißt, wie man csv-Dateien lädt, schau in Tag 1 nach.
+# Falls beim Einlesen etwas nicht klappt, hilft Dir vielleicht auch:
+# help("read.table")
+
+# Gib den Datensatz anschließend aus.
+
+# Optional:
+# Einen ersten Überblick über die Variablen kannst Du auch mit describe()
+# bekommen. Dazu musst Du vorher das Paket psych laden.
+# Falls Du nicht mehr weißt, wie das geht:
+# help("library")
+# help("describe")
+
+
+# Wähle aus dem Datensatz bfi nur die Variablen A1, A2, gender, age und
+# education aus und speichere das Ergebnis unter dem Namen bfi_klein.
+
+
+# Wähle aus bfi_klein nur die Zeilen 10, 25, 40, 55 und 70 aus und davon nur
+# die Spalten gender, age und education.
+
+
+# Wähle aus bfi_klein alle Zeilen aus, außer den Zeilen 1 bis 30.
+
+
+# Gib alle Personen aus bfi_klein aus, die mindestens 30 Jahre alt sind.
+# Zeige dabei nur die Variablen age, gender und education.
+
+
+# Gib alle Personen aus bfi_klein aus, die mindestens 30 Jahre alt und weiblich
+# sind.
 #
-# Nutze für (a) das Argument times und für (b) das Argument each
+# Hinweis:
+# Schau Dir zur Not zuerst an, wie gender im Datensatz codiert ist (?bfi).
 
-# Installiere das Paket lubridate und lade es anschließend
 
-# der folgende Code erzeugt das Datum für die Klausur, führe in aus:
-klausur <- ymd(20250714)
+# Gib alle Personen aus bfi_klein aus, die jünger als 20 Jahre oder älter als
+# 60 Jahre sind.
+# Zeige nur age, gender und education.
 
-# erstelle nun das Datum für heute (?today) und berechne die Anzahl der Tage bis
-# zur Klausur
+
+# Gib alle Personen aus bfi_klein aus, die nicht männlich sind.
+# Benutze diesmal ausdrücklich das logische NICHT: !
+
+
+# Erstelle einen Datensatz bfi_alter, der nur die Variablen age, gender und
+# education enthält.
+#
+# Sortiere diesen Datensatz anschließend aufsteigend nach age.
+#
+# Hinweis:
+# Zum Sortieren brauchst Du die Funktion order().
+# Falls Du nicht mehr weiterweißt:
+# help("order")
+
+
+# Welchen education-Wert hat die älteste Person im sortierten Datensatz bfi_alter?
+
+
+# Berechne den Mittelwert des Alters getrennt nach Geschlecht.
+# Benutze dafür die Funktion aggregate() und mean().
+#
+# Hinweis:
+# Falls Du aggregate() nicht mehr genau erinnerst:
+# help("aggregate")
+
+
+# Berechne die Standardabweichung des Alters getrennt nach Geschlecht.
+# Benutze dafür aggregate() und sd().
+
+
+# Wähle die Variablen age, education und gender aus und beschreibe den
+# Datensatz getrennt nach Geschlecht mit describeBy().
+#
+# Hinweis:
+# describeBy() kam im Tutorial vor. Falls Du die genaue Syntax vergessen hast:
+# help("describeBy")
+
+# Installiere das Paket lubridate und lade es anschließend.
+#
+# Hinweis:
+# Falls Du nicht mehr weißt, wie man Pakete installiert:
+# help("install.packages")
+# help("library")
+
+
+# Der folgende Code erzeugt das Datum für die Klausur, führe ihn aus:
+klausur <- lubridate::ymd(20250714)
+
+# Erstelle nun das Datum für heute und berechne die Anzahl der Tage bis zur
+# Klausur.
+#
+# Hinweis:
+# Die Funktion today() gehört ebenfalls zu lubridate.
+# Falls Du sie noch nicht kennst:
+# help("today")
+#
+# Du kannst Datumsobjekte in R auch direkt voneinander abziehen.
