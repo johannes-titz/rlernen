@@ -33,3 +33,4 @@ Imports:
     rstudioapi,
     car
 Depends: R (>= 3.5.0)
+LazyData: true
