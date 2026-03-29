@@ -217,9 +217,99 @@ question("Welcher von den Streuungswerten ist am kleinsten?",
 )
 ```
 
-Uns fehlt nur noch der Modus. Wie Du schon aus Tag 1 weißt, gibt es keine Funktion in `R` für den Modus (zumindest ohne Zusatzpakete). Wir werden uns jetzt eine eigene Funktion dafür schreiben. Das ist ein relativ fortgeschrittenes Thema, aber wir sind ja auch schon bei Tag 3. Konzentrier Dich gut, dann hast Du bald die Möglichkeit `R`  so zu erweitern, wie Du willst.
+Nun haben wir die wichtigsten Lage- u. Streuungsmaße behandelt. Bevor wir weitermachen, gibt es noch einen kleinen Exkurs zu Hilfsfunktionen, die bei der Berechnung von deskriptiven Statistiken hilfreich sind.
+
+## Hilfsfunktionen
+
+Wenn Du den Mittelwert nicht nur für **eine** Spalte, sondern gleich für **mehrere Spalten** berechnen willst, hilft Dir die Funktion `colMeans`:
+
+```{r lage2, echo = TRUE}
+colMeans(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
+```
+
+Hier wird also für jede ausgewählte Variable der Mittelwert berechnet.
+
+Es geht aber auch andersherum. Mit `rowMeans` kannst Du für **jede Person** den Mittelwert über mehrere Variablen berechnen:
+
+```{r lage3, echo = TRUE}
+rowMeans(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
+```
+
+Hier wird für jede Zeile ein Mittelwert gebildet.
+
+Probier es nun selbst. Berechne mit `colMeans` die Mittelwerte der Variablen **alter**, **mathe**, **deutsch**, **abi** und **lebenszufriedenheit**.
+
+```{r lage5, exercise=TRUE}
+
+```
+
+```{r lage5-solution}
+colMeans(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
+```
+
+Und nun mit `rowMeans`: Berechne für jede Person den Mittelwert über genau diese fünf Variablen.
+
+```{r lage6, exercise=TRUE}
+
+```
+
+```{r lage6-solution}
+rowMeans(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
+```
+
+Das ganze geht auch für **Summen** über `rowSums` und `colSums`. Aber was machen wir, wenn wir z. B. die **Standardabweichung** (`sd`) oder die **Varianz** (`var`) über mehrere Variablen berechnen wollen? Dafür gibt es keine speziellen Funktionen wie `rowSd` oder `colSd`.
+
+In solchen Fällen kann man die Funktion `apply` benutzen.
+
+```{r echo=TRUE}
+apply(data[, c("alter", "mathe", "deutsch")], 2, sd)
+```
+
+Das sieht erst einmal etwas kryptisch aus. Die Funktion `apply` hat aber eine einfache Logik:
+
+- Das **erste Argument** ist der Datensatz oder die Matrix, auf die wir die Funktion anwenden wollen.
+- Das **zweite Argument** bestimmt, ob wir über **Zeilen** oder **Spalten** gehen.
+- Das **dritte Argument** ist die Funktion, die angewendet werden soll.
+
+Die Zahl **2** bedeutet hier: *wende die Funktion auf die Spalten an*. In diesem Beispiel wird also für jede Variable (`alter`, `mathe`, `deutsch`) die Standardabweichung berechnet.
+
+Für **Zeilen** funktioniert das genauso:
+
+```{r, echo = T}
+apply(data[, c("alter", "mathe", "deutsch")], 1, sd)
+```
+
+Hier bedeutet die **1**, dass die Funktion auf **Zeilen** angewendet wird. Es wird also für jede Person die Standardabweichung über die drei Variablen berechnet.
+
+Du kannst `sd` natürlich auch durch eine andere Funktion ersetzen, zum Beispiel `mean`, `var` oder `sum`.
+
+Probier Du es jetzt mal selbst.
+
+Berechne mit `apply` die **Varianz der Variablen** `alter`, `mathe` und `deutsch`.
+
+```{r apply1, exercise=TRUE}
+
+```
+
+```{r apply1-solution}
+apply(data[, c("alter", "mathe", "deutsch")], 2, var)
+```
+
+Berechne nun mit `apply` den **Median über die Variablen** `alter`, `mathe` und `deutsch` für **jede Person**.
+
+```{r apply2, exercise=TRUE}
+
+```
+
+```{r apply2-solution}
+apply(data[, c("alter", "mathe", "deutsch")], 1, median)
+```
+
+## Fehlende Werte (TODO)
 
 ## Exkurs: Eigene Funktionen schreiben
+
+Tatsächlich fehlt uns noch ein Lagemaß, nämlich der Modus. Wie Du schon aus Tag 1 weißt, gibt es keine Funktion in `R` für den Modus (zumindest ohne Zusatzpakete). Wir werden uns jetzt eine eigene Funktion dafür schreiben. Das ist ein relativ fortgeschrittenes Thema, aber wir sind ja auch schon bei Tag 3. Konzentrier Dich gut, dann hast Du bald die Möglichkeit `R`  so zu erweitern, wie Du willst.
 
 Wir überlegen uns zunächst was die Funktion Modus leisten soll, welche Eingaben sie braucht und welche Ausgabe sie produziert.
 
