@@ -19,9 +19,7 @@ Imports:
     knitr,
     learnr,
     ppcor,
-    printr,
     psych,
-    qgraph,
     rmarkdown,
     shiny,
     sjPlot,
@@ -31,6 +29,6 @@ Imports:
     remotes,
     ids,
     rstudioapi,
-    car
+    gradethis
 Depends: R (>= 3.5.0)
 LazyData: true

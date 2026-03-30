@@ -16,11 +16,11 @@ output:
 ```{r setup, include=FALSE}
 librarian::shelf(rlernen)
 tutorial_setup()
-librarian::shelf(learnr, qgraph, psych)
+librarian::shelf(learnr, psych)
 knitr::opts_chunk$set(echo = TRUE)
 
 monate <- read.csv("data/monate.csv")
-data(big5)
+big5 <- read.csv("data/big5.csv")
 mtcars_stand <- scale(mtcars)
 distance <- dist(mtcars_stand)
 
@@ -45,18 +45,11 @@ Als zweites Thema und auch letztes Thema der Vorlesung Methodenlehre II, schauen
 
 Hattest Du schon mal einen Alptraum? Einen lexikalischen Alptraum? Thurstone und Allport hatten davon sicher einige als sie mit Hilfe des lexikalischen Ansatzes einen Grundpfeiler der Psychologie entwickelten: das Persönlichkeitsmodell Big Five. Die Grundidee des lexikalischen Ansatzes ist, dass Persönlichkeitsmerkmale sich in der Sprache niederschlagen sollten. Schaut man sich also die Sprache an, sollte man daraus ein Persönlichkeitsmodell entwickeln können. Konkret hat man mit Tausenden von Adjektiven angefangen, diese gruppiert und reduziert. Die, die übrig geblieben sind, hat man in Fragebögen benutzt und mit diesen Daten eine Faktorenanalyse gerechnet. Heraus kamen fünf stabile Faktoren, die schon seit fast 100 Jahren Bestandteil der Psychologie sind. Eine solche Faktorenanalyse wollen wir jetzt auch rechnen.
 
-Im Paket `qgraph` finden wir die Daten `big5`:
+Die Daten befinden sich unter data:
 
 ```{r eval=FALSE}
-install.packages("qgraph")
-library(qgraph)
-```
-
-Die Daten laden:
-
-```{r}
-data(big5) # wichtig!
-as.data.frame(big5) # schönerer output als bei Matrix
+big5 <- read.csv("data/big5.csv")
+big5
 ```
 
 Wir sehen hier 500 Personen (Zeilen) und deren Selbst-Bewertung auf 240 Items (Spalten), die bereits einem der 5 Faktoren zugeordnet sind. Merk-Hilfe für die Faktoren: OCEAN (Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism).
