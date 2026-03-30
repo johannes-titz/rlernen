@@ -6,7 +6,7 @@ calendar <- function() {
   kurs_kalender <- "
 Datum,Thema
 08.04.2026,Organisatorisches
-15.04.2026,Einführung
+15.04.2026,Einfuehrung
 22.04.2026,Daten-Gerangel
 29.04.2026,Deskriptive Statistik
 06.05.2026,t-Test und ANOVA
@@ -18,8 +18,8 @@ Datum,Thema
 17.06.2026,Kein Kurs - Campus- und Sportfest
 24.06.2026,Meta-Analyse
 01.07.2026,Freies Thema / Vertiefung
-08.07.2026,Zusatztermin / Übung
-15.07.2026,Prüfung
+08.07.2026,Zusatztermin / Uebung
+15.07.2026,Pruefung
 "
 
   df <- read.csv(textConnection(kurs_kalender), stringsAsFactors = FALSE)
@@ -85,34 +85,58 @@ update_rlernen <- function() {
   }
 }
 
+get_local_git_sha <- function(path = ".") {
+  old <- getwd()
+  on.exit(setwd(old), add = TRUE)
+  setwd(path)
+
+  out <- tryCatch(
+    system2("git", c("rev-parse", "--short", "HEAD"), stdout = TRUE, stderr = FALSE),
+    error = function(e) character()
+  )
+
+  if (length(out) == 0) NA_character_ else out[1]
+}
+
 #' Check if a new commit of rlernen is available on GitHub
 #' @return message whether update is available
 #' @export
 #' @importFrom remotes github_remote
 check_rlernen_update <- function() {
-  # Get the installed package commit hash
-  installed_commit <- remotes:::local_sha("rlernen")
-  if (is.na(installed_commit)) return("rlernen is not installed locally")
+  last_check <- getOption("rlernen.last_update_check", NULL)
 
-  # Get the latest commit hash from GitHub
-  repo <- "johannes-titz/rlernen"
-  remote <- remotes:::github_remote(repo, ref = "HEAD", subdir=NULL,
-                                    auth_token = NULL,
-                                    host = "api.github.com")
-  latest_commit <- remotes:::remote_sha(remote)
-
-  if (installed_commit != latest_commit) {
-    message("A new update of rlernen is available. Consider running update_rlernen().")
-  } else {
-    message("rlernen is up to date.")
+  if (!is.null(last_check) &&
+      difftime(Sys.time(), last_check, units = "days") < 1) {
+    return(NULL)
   }
+
+  options(rlernen.last_update_check = Sys.time())
+
+  installed_commit <- remotes:::local_sha("rlernen")
+  if (is.na(installed_commit)) return(NULL)
+
+  repo <- "johannes-titz/rlernen"
+  remote <- remotes::github_remote(repo, ref = "HEAD")
+
+  latest_commit <- tryCatch(
+    remotes::remote_sha(remote),
+    error = function(e) return(NULL)
+  )
+
+  if (is.null(latest_commit)) return(NULL)
+
+  if (!identical(installed_commit, latest_commit)) {
+    return("A new update of rlernen is available. Consider running update_rlernen().")
+  }
+
+  NULL
 }
 
 #' Common setup for learnr tutorials
 #'
 #' @export
 tutorial_setup <- function() {
-  librarian::shelf(learnr)
+  requireNamespace("learnr")
 
   knitr::opts_chunk$set(
     echo = FALSE,
@@ -135,9 +159,9 @@ tutorial_setup <- function() {
 #' @param text question text
 #' @export
 q_n <- function(answer, text = "Was kommt heraus?") {
-  question_numeric(
+  learnr::question_numeric(
     text,
-    answer(answer, correct = T),
+    learnr::answer(answer, correct = T),
     allow_retry = T
   )
 }
