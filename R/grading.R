@@ -1,3 +1,8 @@
+# ---------- helpers ----------
+
+`%||%` <- function(x, y) if (is.null(x)) y else x
+
+# ---------- solution evaluation ----------
 
 get_solution_env <- function(solution_code, envir_prep) {
   env <- new.env(parent = envir_prep)
@@ -7,68 +12,109 @@ get_solution_env <- function(solution_code, envir_prep) {
 
 # ---------- object extraction ----------
 
-extract_scalars <- function(env, include = NULL) {
+# Extract all objects from an environment. Optionally include the returned result
+# as an additional pseudo-object named ".result".
+extract_objects <- function(env, include = NULL) {
   objs <- ls(env)
+  out <- stats::setNames(lapply(objs, function(x) get(x, envir = env)), objs)
 
-  vals <- unlist(lapply(objs, function(x) {
-    v <- get(x, envir = env)
-    if (is.numeric(v) && length(v) == 1) v else NULL
-  }))
-
-  if (!is.null(include) && is.numeric(include) && length(include) == 1) {
-    vals <- c(vals, include)
-  }
-
-  vals
-}
-
-extract_tables <- function(env, include = NULL) {
-  objs <- ls(env)
-
-  out <- lapply(objs, function(x) {
-    v <- get(x, envir = env)
-    if (inherits(v, "table")) v else NULL
-  })
-
-  out <- Filter(Negate(is.null), out)
-
-  if (!is.null(include) && inherits(include, "table")) {
-    out <- c(out, list(include))
+  if (!is.null(include)) {
+    out <- c(out, list(.result = include))
   }
 
   out
 }
 
-# ---------- matching ----------
+# ---------- type detection ----------
 
-has_scalar <- function(values, target, tol = 1e-8) {
-  any(abs(values - target) < tol, na.rm = TRUE)
+detect_target_type <- function(value) {
+  if (is.numeric(value) && length(value) == 1) {
+    "scalar"
+  } else if (inherits(value, "table")) {
+    "table"
+  } else if (inherits(value, "htest")) {
+    "htest"
+  } else if (inherits(value, "anova") || inherits(value, "anova.lm")) {
+    "anova"
+  } else {
+    "object"
+  }
 }
 
-has_table <- function(tables, target) {
-  any(vapply(tables, function(x) isTRUE(all.equal(x, target)), logical(1)))
+# ---------- comparators ----------
+
+compare_htest <- function(x, y, tol = 1e-8) {
+  inherits(x, "htest") &&
+    inherits(y, "htest") &&
+    isTRUE(all.equal(unname(x$statistic), unname(y$statistic), tolerance = tol)) &&
+    isTRUE(all.equal(unname(x$parameter), unname(y$parameter), tolerance = tol)) &&
+    isTRUE(all.equal(x$p.value, y$p.value, tolerance = tol)) &&
+    isTRUE(all.equal(unname(x$estimate), unname(y$estimate), tolerance = tol))
+}
+
+compare_anova <- function(x, y, tol = 1e-8) {
+  if (!(inherits(x, "anova") || inherits(x, "anova.lm"))) return(FALSE)
+  if (!(inherits(y, "anova") || inherits(y, "anova.lm"))) return(FALSE)
+
+  dx <- as.data.frame(x)
+  dy <- as.data.frame(y)
+
+  isTRUE(all.equal(dx, dy, tolerance = tol, check.attributes = FALSE))
+}
+
+comparators <- list(
+  scalar = function(x, y, tol = 1e-8) {
+    is.numeric(x) &&
+      length(x) == 1 &&
+      isTRUE(all.equal(x, y, tolerance = tol))
+  },
+  table = function(x, y, tol = 1e-8) {
+    inherits(x, "table") &&
+      isTRUE(all.equal(x, y))
+  },
+  htest = function(x, y, tol = 1e-8) {
+    compare_htest(x, y, tol = tol)
+  },
+  anova = function(x, y, tol = 1e-8) {
+    compare_anova(x, y, tol = tol)
+  },
+  object = function(x, y, tol = 1e-8) {
+    isTRUE(all.equal(x, y, tolerance = tol, check.attributes = FALSE))
+  }
+)
+
+object_matches <- function(x, target, type, tol = 1e-8) {
+  cmp <- comparators[[type]]
+  if (is.null(cmp)) return(FALSE)
+  cmp(x, target, tol = tol)
+}
+
+has_target_object <- function(objects, target, type, tol = 1e-8) {
+  any(vapply(objects, function(x) object_matches(x, target, type, tol = tol), logical(1)))
 }
 
 # ---------- target extraction ----------
 # If the solution created objects, use them.
 # Otherwise fall back to .solution as one target named ".result".
+
 extract_targets_from_solution <- function(solution_env, solution_code, solution_result = NULL) {
   expr <- parse(text = solution_code, keep.source = FALSE)
-  objs <- vapply(Filter(function(e) is.call(e) && identical(as.character(e[[1]]), "<-"), as.list(expr)), function(e) as.character(e[[2]]), character(1))
+
+  objs <- vapply(
+    Filter(
+      function(e) is.call(e) && identical(as.character(e[[1]]), "<-"),
+      as.list(expr)
+    ),
+    function(e) as.character(e[[2]]),
+    character(1)
+  )
 
   if (length(objs) == 0 && !is.null(solution_result)) {
     value <- solution_result
-    type <- if (is.numeric(value) && length(value) == 1) {
-      "scalar"
-    } else if (inherits(value, "table")) {
-      "table"
-    } else {
-      "other"
-    }
 
     return(list(list(
       name = ".result",
-      type = type,
+      type = detect_target_type(value),
       value = value
     )))
   }
@@ -76,17 +122,9 @@ extract_targets_from_solution <- function(solution_env, solution_code, solution_
   lapply(objs, function(obj_name) {
     value <- get(obj_name, envir = solution_env)
 
-    type <- if (is.numeric(value) && length(value) == 1) {
-      "scalar"
-    } else if (inherits(value, "table")) {
-      "table"
-    } else {
-      "other"
-    }
-
     list(
       name = obj_name,
-      type = type,
+      type = detect_target_type(value),
       value = value
     )
   })
@@ -95,15 +133,14 @@ extract_targets_from_solution <- function(solution_env, solution_code, solution_
 # ---------- checking targets ----------
 
 check_targets <- function(targets, user_env, user_result = NULL, tol = 1e-8) {
-  user_scalars <- extract_scalars(user_env, include = user_result)
-  user_tables  <- extract_tables(user_env, include = user_result)
+  user_objects <- extract_objects(user_env, include = user_result)
 
   lapply(targets, function(trg) {
-    found <- switch(
-      trg$type,
-      scalar = has_scalar(user_scalars, trg$value, tol = tol),
-      table  = has_table(user_tables, trg$value),
-      FALSE
+    found <- has_target_object(
+      objects = user_objects,
+      target = trg$value,
+      type = trg$type,
+      tol = tol
     )
 
     list(
@@ -251,9 +288,9 @@ suggest_code_features_for_missing_targets <- function(checks, user_code, user_en
         return(
           paste0(
             "Noch nicht ganz richtig (`", target_name, "`). ",
-            "Ich hätte hier vielleicht die Funktionen ",
+            "Ich h\u00e4tte hier vielleicht die Funktionen ",
             paste(sprintf("`%s()`", missing_funs), collapse = ", "),
-            " erwartet, obwohl auch andere korrekte Lösungen möglich sein können."
+            " erwartet, obwohl auch andere korrekte L\u00F6sungen m\u00F6glich sein k\u00F6nnen."
           )
         )
       }
@@ -273,10 +310,9 @@ suggest_code_features_for_missing_targets <- function(checks, user_code, user_en
           return(
             paste0(
               "Noch nicht ganz richtig (`", target_name, "`). ",
-              "Ich hätte bei `", fun, "()` wahrscheinlich das Argument ",
+              "Ich h\u00e4tte bei `", fun, "()` wahrscheinlich das Argument ",
               "`", arg_nm, "` erwartet",
-              #if (!is.null(pos)) paste0(" (bzw. die entsprechende Position ", pos, ")") else "",
-              ", obwohl auch andere Lösungen möglich sind."
+              ", obwohl auch andere L\u00F6sungen m\u00F6glich sind."
             )
           )
         }
@@ -310,10 +346,21 @@ suggest_code_features_for_missing_targets <- function(checks, user_code, user_en
   NULL
 }
 
-`%||%` <- function(x, y) if (is.null(x)) y else x
-
 # ---------- main grader ----------
 
+#' Grade targets with soft hints based on the solution code.
+#' This function checks if the user's solution contains the expected target objects (e.g., variables, results) as defined in the solution code. If not, it provides soft hints based on the functions and arguments used in the user's code compared to the solution.
+#'
+#' @param user_env The environment containing the user's solution objects.
+#' @param user_result The result of the user's code execution (if applicable).
+#' @param user_code The user's code as a character string.
+#' @param solution_code The solution code as a character string.
+#' @param solution_result The expected result of the solution code execution (if applicable).
+#' @param envir_prep The environment used for preparing the solution environment.
+#' @param suggestion_map A list defining which functions and arguments to check for generating hints.
+#' @param tol Numeric tolerance for comparing numeric results (default: 1e-8).
+#' @param success_message Message to display when the user's solution is correct.
+#' @param generic_fail_message Message to display when the user's solution is incorrect, without specific
 #' @export
 grade_targets_with_soft_hints <- function(
     user_env,
@@ -328,12 +375,16 @@ grade_targets_with_soft_hints <- function(
     generic_fail_message = "Noch nicht ganz richtig."
 ) {
   sol_env  <- get_solution_env(solution_code, envir_prep)
-  targets  <- extract_targets_from_solution(sol_env, solution_code = solution_code, solution_result = solution_result)
+  targets  <- extract_targets_from_solution(
+    sol_env,
+    solution_code = solution_code,
+    solution_result = solution_result
+  )
   checks   <- check_targets(targets, user_env, user_result = user_result, tol = tol)
 
   all_found <- all(vapply(checks, function(x) x$found, logical(1)))
   if (all_found) {
-    pass(success_message)
+    gradethis::pass(success_message)
   }
 
   soft_hint <- suggest_code_features_for_missing_targets(
@@ -344,32 +395,28 @@ grade_targets_with_soft_hints <- function(
   )
 
   if (!is.null(soft_hint)) {
-    fail(soft_hint, hint = TRUE)
+    gradethis::fail(soft_hint, hint = TRUE)
   }
 
-  fail(
+  gradethis::fail(
     paste0(
       generic_fail_message,
       " Probleme bei: ",
-      paste(vapply(checks[!vapply(checks, function(x) x$found, logical(1))],
-                   function(x) x$name, character(1)),
-            collapse = ", "),
+      paste(
+        vapply(
+          checks[!vapply(checks, function(x) x$found, logical(1))],
+          function(x) x$name,
+          character(1)
+        ),
+        collapse = ", "
+      ),
       "."
     ),
     hint = TRUE
   )
 }
 
-`%||%` <- function(x, y) if (is.null(x)) y else x
-
-call_name <- function(cl) {
-  head <- cl[[1]]
-  if (is.symbol(head)) {
-    as.character(head)
-  } else {
-    paste(deparse(head), collapse = "")
-  }
-}
+# ---------- call extraction for auto suggestion map ----------
 
 collect_calls_recursive <- function(expr) {
   calls <- list()
@@ -388,6 +435,7 @@ collect_calls_recursive <- function(expr) {
   walk(expr)
   calls
 }
+
 extract_call_args <- function(cl, keep_values = TRUE, eval_env = baseenv()) {
   nms <- names(cl) %||% rep("", length(cl))
   out <- list()
@@ -409,7 +457,6 @@ extract_call_args <- function(cl, keep_values = TRUE, eval_env = baseenv()) {
     }
 
     pos <- if (!identical(nm, "") && nm %in% formal_names) match(nm, formal_names) else supplied_pos
-    arg_expr <- cl[[i]]
 
     # if unnamed, try to recover the formal argument name from the function
     if (identical(nm, "") && length(formal_names) >= pos) {
@@ -433,7 +480,14 @@ extract_call_args <- function(cl, keep_values = TRUE, eval_env = baseenv()) {
   out
 }
 
-#'@export
+#' Infer a suggestion map from the solution code.
+#'
+#' This function parses the solution code to identify which functions and arguments are used in the solution. It constructs a suggestion map that can be used to provide targeted hints to the user based on their code.
+#'
+#' @param solution_code The solution code as a character string.
+#' @param keep_values Whether to keep the evaluated argument values in the suggestion map (default)
+#' @param eval_env The environment in which to evaluate argument expressions for value extraction (default: baseenv())
+#' @export
 infer_suggestion_map_from_solution <- function(solution_code, keep_values = TRUE, eval_env = baseenv()) {
   expr <- parse(text = solution_code, keep.source = FALSE)
 
@@ -444,7 +498,7 @@ infer_suggestion_map_from_solution <- function(solution_code, keep_values = TRUE
     args <- list()
     for (cl in calls) {
       fn <- call_name(cl)
-      args[[fn]] <- modifyList(args[[fn]] %||% list(), extract_call_args(cl, keep_values, eval_env = eval_env))
+      args[[fn]] <- utils::modifyList(args[[fn]] %||% list(), extract_call_args(cl, keep_values, eval_env = eval_env))
     }
 
     list(
@@ -470,6 +524,14 @@ infer_suggestion_map_from_solution <- function(solution_code, keep_values = TRUE
   out
 }
 
+#' rlernen's autograder
+#'
+#' Grades the user's solution with automatic hint generation based on the solution code.
+#' @param success_message Message to display when the user's solution is correct.
+#' @param generic_fail_message Message to display when the user's solution is incorrect, without specific hints.
+#' @param tol Numeric tolerance for comparing numeric results (default: 1e-8).
+#' @param env The environment containing the necessary objects for grading (default: parent.frame())
+#'
 #' @export
 grade_auto <- function(
     success_message = "Richtig!",
