@@ -4,7 +4,7 @@ runtime: shiny_prerendered
 description: >
   Einführung: Arithmetik, Variablen, Dataframes, Speichern und Laden von Daten, Funktionen
 tutorial:
-  version: 2.1
+  version: 2.1.1
 output:
   learnr::tutorial:
     allow_skip: yes
@@ -15,8 +15,10 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(cache = T)
+gradethis::gradethis_setup()
 librarian::shelf(foreign)
-source("setup.R")
+librarian::shelf(rlernen)
+tutorial_setup()
 ```
 
 ## Hinweise
@@ -25,7 +27,7 @@ Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, bewertete dieses Tu
 
 ## Arithmetik mit der kleinen Nervensäge
 
-Dein R-Kurs beginnt gerade, aber Deine kleine Schwester nervt schon seit Stunden, dass Du ihre Mathe-Hausaufgaben überprüfen sollst bevor sie diese an den Lehrer schickt. "Wenn R so toll ist, dann kannst Du das doch bestimmt damit machen", sagt sie. Das stimmt, denn R ist eine Turing-Maschine.
+Dein R-Kurs beginnt gerade, aber Deine kleine Schwester nervt schon seit Stunden, dass Du ihre Mathe-Hausaufgaben überprüfen sollst bevor sie diese an den Lehrer schickt. "Wenn R so toll ist, dann kannst Du das doch bestimmt damit machen", sagt sie. Das stimmt, denn R ist turing-vollständig.
 
 Du schaust Dir die Aufgaben an:
 
@@ -42,7 +44,7 @@ f)  $\sqrt[4]{256}$
 5462+124
 ```
 
-Das klappt. Also löst Du auch die restlichen Aufgaben. ACHTUNG: copy-pasten klappt nicht, Du musst die Zahlen eintippen!
+Das klappt. Also löst Du auch die restlichen Aufgaben. ACHTUNG: Kopieren und einfügen funktioniert hier nicht, Du musst die Zahlen eintippen!
 
 **Aufgabe b**
 
@@ -56,8 +58,8 @@ $8733-9000$
 8733-9000
 ```
 
-```{r a2mpc, echo=FALSE}
-q_n(-267)
+```{r a2-code-check}
+grade_code()
 ```
 
 **Aufgabe c**
@@ -72,8 +74,8 @@ $12 \cdot 24$
 12*24
 ```
 
-```{r a3mpc, echo=FALSE}
-q_n(288)
+```{r a3-code-check}
+grade_code()
 ```
 
 **Aufgabe d**
@@ -88,8 +90,9 @@ $16^4$
 16^4
 ```
 
-```{r a4mpc, echo=FALSE}
-q_n(65536)
+
+```{r a4-code-check}
+grade_code()
 ```
 
 ```{r a4-hint}
@@ -108,8 +111,8 @@ $\frac{801}{3}$
 801/3
 ```
 
-```{r a5mpc, echo=FALSE}
-q_n(267)
+```{r a5-code-check}
+grade_code()
 ```
 
 **Aufgabe f**
@@ -126,12 +129,12 @@ $\sqrt[4]{256}$
 256^(1/4)
 ```
 
-```{r a6-hint}
-# Wie lässt sich die vierte Wurzel aus 256 anders schreiben?
+```{r a6-code-check}
+grade_code()
 ```
 
-```{r a6mpc, echo=FALSE}
-q_n(4)
+```{r a6-hint}
+# Wie lässt sich die vierte Wurzel aus 256 anders schreiben?
 ```
 
 Du zeigst Deiner Schwester die Ergebnisse und sie sagt nur cool und lakonisch zwei Worte: "R fetzt!". Du selbst lässt Dich nicht so leicht beeindrucken, denn das Rechnen mit Zahlen ist was für Kinder. Du suchst die ultimative Herausforderung und willst mit Variablen rechnen!
@@ -141,7 +144,6 @@ Du zeigst Deiner Schwester die Ergebnisse und sie sagt nur cool und lakonisch zw
 Die einfachste Form von Variablen sind Skalare, Variablen mit nur einem Wert:
 
 ```{r pizza0, echo = T}
-pi <- 3.14
 z <- 14
 a <- 1
 ```
@@ -153,6 +155,8 @@ Das Rechnen mit Variablen ist dann genauso einfach wie das Rechnen mit Zahlen:
 ```{r pizza0b, echo = T}
 pi*z*z*a
 ```
+
+Achtung: Hier benutzen wir `pi`, obwohl wir es nicht gesetzt haben; pi ist bereits von Haus in R vorhanden.
 
 **Kleine Zwischenfrage:**
 
@@ -176,17 +180,45 @@ question(
 ```
 
 ```{r pizza2-solution}
-pi <- 3.14
 z <- 16
 a <- 1.5
 pi*z*z*a
 ```
 
-```{r pizza2mpc}
-pi <- 3.14
-z <- 16
-a <- 1.5
-q_n(pi*z*z*a)
+```{r pizza2-check}
+grade_this({
+
+  env <- .envir_result
+  
+  # all objects created by student
+  objs <- ls(env)
+  
+  # extract scalar numeric values
+  values <- unlist(
+    lapply(objs, function(x) {
+      v <- get(x, envir = env)
+      if (is.numeric(v) && length(v) == 1) v else NULL
+    })
+  )
+  
+  if (!(16 %in% values)) {
+    fail("Es fehlt der Radius 16 cm.")
+  }
+  
+  if (!(1.5 %in% values)) {
+    fail("Es fehlt die Höhe 1.5 cm.")
+  }
+
+  target <- pi * 16^2 * 1.5
+  
+  pass_if(
+    .result == target,
+    "Richtig! Das Volumen wurde korrekt berechnet."
+  )
+
+  fail("Die Volumenberechnung stimmt noch nicht.")
+
+})
 ```
 
 Möchte man mehrere Werte einer Variablen zuweisen, so benötigt man den *combine*-Operator `c`:
@@ -202,7 +234,7 @@ Im Grunde könnte man sagen, immer wenn ein `c()` zu sehen ist, kann man auch ei
 pi*z*z*a
 ```
 
-Multiplizieren wir also Vektoren mit Skalaren, weiß R, dass er die Skalare auf die Länge der Vektoren bringen muss. Das ist ziemlich clever und geht in vielen anderen Programmiersprachen nicht!
+R rechnet bei Vektoren elementweise. Ein Skalar wird dabei auf alle Elemente angewendet. Das ist ziemlich clever und geht in vielen anderen Programmiersprachen nicht!
 
 **Aufgabe**
 
@@ -271,7 +303,6 @@ Zwar war die Lösung des Pizza-Problems in R zielführend, aber die Ausgabe des 
 Aus den bisherigen Vektoren lässt sich ein solcher Dataframe leicht konstruieren:
 
 ```{r, echo = T}
-pi <- 3.14
 preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
 durchmesser <- c(26, 26, 26, 32, 32, 32)
 preis_pro_kubikcm <- preis / (pi * (durchmesser / 2)^2 * 1)
@@ -311,7 +342,6 @@ name
 Nun ist Deine Aufgabe einen Dataframe mit Namen, Preis, Durchmesser und Preis pro Kubikzentimeter zu erstellen und ihn anzuzeigen. Die ersten Befehle stehen schon da, Du musst also nur noch den Dataframe erzeugen und ihn ausgeben.
 
 ```{r df, exercise = TRUE, exercise.lines = 10}
-pi <- 3.14
 preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
 durchmesser <- c(26, 26, 26, 32, 32, 32)
 preis_pro_kubikcm <- preis / (pi*(durchmesser/2)^2 * 1)
@@ -321,7 +351,6 @@ name <- c("Speciale", "Funghi", "Margherita", "Speciale", "Funghi",
 ```
 
 ```{r df-solution}
-pi <- 3.14
 preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
 durchmesser <- c(26, 26, 26, 32, 32, 32)
 preis_pro_kubikcm <- preis / (pi*(durchmesser/2)^2 * 1)
@@ -352,7 +381,7 @@ d <- data.frame(name, preis, durchmesser, preis_pro_kubikcm)
 
 Bemerkenswert am Dataframe ist, dass er verschiedene Datentypen enthalten kann. Dies ist ganz anders zu einer Matrix, die aus einem einzigen Datentyp besteht (z. B. nur Zahlen oder nur Zeichenketten).
 
-Es gibt noch andere Datentypen, die wir im Laufe des Kurses benutzen werden. Bei Datentypen kann man auch einfach an Skalenniveaus denken. Der Preis, Durchmesser und der Preis pro Kubikzentimeter sind alle verhältnisskaliert, der Name der Pizza ist hingegen nominalskaliert. Den Datentyp bekommt man durch den Befehl `str` (structure, also Struktur) heraus:
+Es gibt noch andere Datentypen, die wir im Laufe des Kurses benutzen werden. Datentypen in R und Skalenniveaus aus der Methodik sind nicht dasselbe, haengen aber oft zusammen. Numerische Variablen sind zum Beispiel haeufig intervall- oder verhaeltnisskaliert, kategoriale Variablen oft nominal oder ordinal. Der Preis, Durchmesser und der Preis pro Kubikzentimeter sind alle verhältnisskaliert, der Name der Pizza ist hingegen nominalskaliert. Den Datentyp bekommt man durch den Befehl `str` (structure, also Struktur) heraus:
 
 ```{r, echo = T}
 str(d)
@@ -452,16 +481,16 @@ question(
 Füge dem Dataframe die Variable **champignon** hinzu und gib den neuen Dataframe aus.
 
 ```{r champignon, exercise = TRUE, exercise.lines = 20}
-pi <- 3.14
 preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
 durchmesser <- c(26, 26, 26, 32, 32, 32)
 preis_pro_kubikcm <- preis / (pi*(durchmesser/2)^2 * 1)
 name <- c("Speciale", "Funghi", "Margherita", "Speciale", "Funghi",
           "Margherita")
 d <- data.frame(name, preis, durchmesser, preis_pro_kubikcm)
-d <- cbind(d, geschmack =  factor(c("köstlich", "sehr lecker", "lecker",
-                                    "köstlich", "sehr lecker", "lecker"),
-                                  ordered = TRUE))
+d <- cbind(d, geschmack = factor(x = c("sehr lecker", "köstlich", "lecker",
+                                       "sehr lecker", "köstlich", "lecker"),
+                                 levels = c("lecker", "sehr lecker", "köstlich"),
+                                 ordered = TRUE))
 champignon <- factor(x = c("etwas", "viel", "keine", "etwas", "viel", "keine"),
                      levels = c("keine", "etwas", "viel"),
                      ordered = TRUE)
@@ -470,16 +499,16 @@ champignon <- factor(x = c("etwas", "viel", "keine", "etwas", "viel", "keine"),
 ```
 
 ```{r champignon-solution}
-pi <- 3.14
 preis <- c(9, 8, 6, 12.5, 11.5, 9.5)
 durchmesser <- c(26, 26, 26, 32, 32, 32)
 preis_pro_kubikcm <- preis / (pi*(durchmesser/2)^2 * 1)
 name <- c("Speciale", "Funghi", "Margherita", "Speciale", "Funghi",
           "Margherita")
 d <- data.frame(name, preis, durchmesser, preis_pro_kubikcm)
-d <- cbind(d, geschmack =  factor(c("köstlich", "sehr lecker", "lecker",
-                                    "köstlich", "sehr lecker", "lecker"),
-                                  ordered = TRUE))
+d <- cbind(d, geschmack = factor(x = c("sehr lecker", "köstlich", "lecker",
+                                       "sehr lecker", "köstlich", "lecker"),
+                                 levels = c("lecker", "sehr lecker", "köstlich"),
+                                 ordered = TRUE))
 # füge nun dem Dataframe noch die Variable champignon hinzu
 champignon <- factor(x = c("etwas", "viel", "keine", "etwas", "viel", "keine"),
                      levels = c("keine", "etwas", "viel"),
@@ -524,7 +553,28 @@ pizzen <- read.csv("data/pizzen.csv")
 pizzen
 ```
 
-Du kannst natürlich auch eine andere Variable als `pizzen` für die Zuweisung benutzen.
+Du kannst natürlich auch eine andere Variable als `pizzen` für die Zuweisung
+benutzen. Eine Sache, die Dir hier auffallen sollte, ist, dass eine neue
+Variable `X` entstanden ist. Diese enthält die Zeilennummern des ursprünglichen
+Dataframes.
+
+Der Grund ist, dass `write.csv()` standardmäßig die Zeilennamen speichert.
+Beim Einlesen mit `read.csv()` werden diese dann als normale Variable
+interpretiert.
+
+Wenn wir das vermeiden möchten, können wir das Schreiben der Zeilennamen
+bereits beim Speichern ausschalten:
+
+```{r, echo = TRUE}
+write.csv(d, file = "data/pizzen.csv", row.names = FALSE)
+```
+
+Dann entsteht beim Einlesen keine zusätzliche Variable:
+
+```{r, echo = TRUE}
+pizzen <- read.csv("data/pizzen.csv")
+pizzen
+```
 
 R gibt uns auch die Möglichkeit Objekte in seinem eigenen binären Dateiformat zu speichern:
 
@@ -686,7 +736,32 @@ head(mea)
 q_n(31, "Was ist der erste Wert des Alters?")
 ```
 
-Wow, jetzt kannst Du sogar Deine alten SPSS-Daten in R einlesen und SPSS wegschmeißen. Gar nicht übel, wie sich Deine Skills entwickeln:
+Wow, jetzt kannst Du sogar alte SPSS-Daten in R einlesen und SPSS wegschmeißen. Hier nochmal eine kleine Übersicht über das Einlesen und Schreiben von Daten:
+
+| Funktion        | Format                    | Wichtige Parameter                |
+| --------------- | ------------------------- | --------------------------------- |
+| `write.csv()`   | CSV (Komma getrennt)      | `file`, `row.names`               |
+| `read.csv()`    | CSV (Komma getrennt)      | `file`, `header`                  |
+| `write.csv2()`  | CSV2 (Semikolon getrennt) | `file`, `row.names`               |
+| `read.csv2()`   | CSV2 (Semikolon getrennt) | `file`, `header`                  |
+| `write.table()` | Text / Tabelle            | `file`, `sep`, `dec`, `row.names` |
+| `read.table()`  | Text / Tabelle            | `file`, `header`, `sep`, `dec`    |
+| `saveRDS()`     | RDS (R-Format)            | `file`                            |
+| `readRDS()`     | RDS (R-Format)            | `file`                            |
+| `read.spss()`   | SPSS (.sav)               | `file`, `to.data.frame`           |
+
+Und die Parameter:
+
+| Parameter       | Bedeutung                                                                |
+| --------------- | ------------------------------------------------------------------------ |
+| `file`          | Dateiname oder Pfad zur Datei                                            |
+| `header`        | Gibt an, ob die erste Zeile Variablennamen enthält (`TRUE` oder `FALSE`) |
+| `sep`           | Trennzeichen zwischen den Spalten (z. B. `","`, `";"`, `":"`)            |
+| `dec`           | Dezimaltrennzeichen (`"."` oder `","`)                                   |
+| `row.names`     | Gibt an, ob Zeilennummern gespeichert werden                             |
+| `to.data.frame` | SPSS-Daten als Dataframe einlesen                                        |
+
+Gar nicht übel, wie sich Deine Skills entwickeln:
 
 - Daten einlesen, yep. 
 - Wissen, was ein Dataframe ist, kein Problem. 
