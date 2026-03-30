@@ -30,7 +30,7 @@ rolle<-factor(x=c("Eltern","Eltern","Kind","Kind","Kind"),
 # wieder laden kannst. Speichere zum Abschluss den ganzen Workspace (alle
 # Variablen) mit einer R-Funktion ab.
 d<-data.frame(simpsons,alter,geb_jahr,rolle)
-write.csv(d,file="data/simpsons.csv", row.names = F)
+write.csv(d,file="inst/extdata/simpsons.csv", row.names = F)
 
 name <- c(
   "Bisasam", "Bisaknosp", "Bisaflor", "Glumanda", "Glutexo", "Glurak",
@@ -51,7 +51,7 @@ typ <- c(
 )
 
 pokemon <- data.frame(name, wesen, typ)
-write.csv2(pokemon, "data/pokemon.csv", row.names = F)
+write.csv2(pokemon, "inst/extdata/pokemon.csv", row.names = F)
 
 #
 # usethis::use_data(DATASET, overwrite = TRUE)
@@ -60,4 +60,4 @@ usethis::use_data(mtcars)
 
 library(psych)
 data(bfi)
-write.csv2(bfi, "data/bfi.csv", row.names = F)
+write.csv2(bfi, "inst/extdata/bfi.csv", row.names = F)
