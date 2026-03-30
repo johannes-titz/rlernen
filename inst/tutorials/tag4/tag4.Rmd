@@ -17,7 +17,7 @@ output:
 librarian::shelf(rlernen)
 tutorial_setup()
 librarian::shelf(ez, cofad)
-
+gradethis::gradethis_setup()
 #  data sets -------
 
 data <- readRDS("data/students.rds")
@@ -66,11 +66,11 @@ Der einfachste $t$-Test ist der gegen eine Konstante. Sagen wir mal die Körperg
 t.test(data$groesse[data$geschlecht == "weiblich" & data$studium == "Psychologie"], mu = 168)
 ```
 
-Wir übergeben den Vektor, den wir testen wollen (vorher filtern und selektieren!) und geben die Konstante über den Parameter `mu` an. Wir sehen, dass in unserer Stichprobe die Körpergröße bei 168.7cm liegt, gleichzeitig ist dieses Ergebnis nicht signifikant verschieden von 168cm. Die Wahrscheinlichkeit dieses Ergebnisses, sofern die 168cm in der Population korrekt ist, liegt bei 0.3977. Also durchaus wahrscheinlich.
+Wir übergeben den Vektor, den wir testen wollen (vorher filtern und selektieren!) und geben die Konstante über den Parameter `mu` an. Wir sehen, dass in unserer Stichprobe die Körpergröße bei 168.7cm liegt, gleichzeitig ist dieses Ergebnis nicht signifikant verschieden von 168cm. Die Wahrscheinlichkeit dieses Ergebnisses oder eines extremen, sofern die 168cm in der Population korrekt ist, liegt bei 0.3977. Also durchaus wahrscheinlich.
 
 Prüfe nun nach ob das gleiche für SeKo-Studentinnen gilt.
 
-```{r konstante, exercise=TRUE}
+```{r konstante, exercise=TRUE, exercise.reveal_solution = FALSE}
 
 ```
 
@@ -78,8 +78,10 @@ Prüfe nun nach ob das gleiche für SeKo-Studentinnen gilt.
 t.test(data$groesse[data$geschlecht == "weiblich" & data$studium == "Seko"], mu = 168)
 ```
 
-```{r konstante-mpc, echo=FALSE}
-q_n(1.3882, "Wie groß ist der t-Wert?")
+```{r konstante-check}
+grade_this({
+  grade_auto()
+})
 ```
 
 ### Unabhängige Stichproben
@@ -113,8 +115,10 @@ t.test(data$groesse[data$geschlecht == "männlich"],
        var.equal = TRUE, alternative = "greater")
 ```
 
-```{r unabhaengig-mpc, echo=FALSE}
-q_n(7.336e-16, "Wie groß ist der p-Wert?")
+```{r unabhaengig-check}
+grade_this({
+  grade_auto()
+})
 ```
 
 ```{r unabhaengig-mpc2, echo=FALSE}
@@ -122,7 +126,7 @@ question("Wie groß wäre der p-Wert, wenn die Hypothese ungerichtet wäre?",
   answer("Doppelt so groß im Vergleich zur gerichteten Hypothese.", correct = TRUE),
   answer("Halb so groß im Vergleich zur gerichteten Hypothese."),
   answer("Lässt sich aus der vorherigen Aufgabe nicht ableiten."),
-  random_answer_order = T
+  random_answer_order = TRUE
 )
 ```
 
@@ -153,7 +157,7 @@ question("Wie ist in diesem Fall das Verhältnis zwischen dem $p$-Wert für den 
   answer("Der p-Wert für unabhängige Stichproben ist ungefähr halb so groß wie der p-Wert für abhängige Stichproben."),
   answer("Der p-Wert für unabhängige Stichproben ist ungefähr gleich groß wie der p-Wert für abhängige Stichproben."),
   answer("Der p-Wert für unabhängige Stichproben ist ungefähr dreimal so groß wie der p-Wert für abhängige Stichproben."),
-  random_answer_order = T
+  random_answer_order = TRUE
 )
 ```
 

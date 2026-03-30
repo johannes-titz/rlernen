@@ -1,141 +1,258 @@
-# Hausaufgabe 4
-
-# Teil 1
+# Hausaufgaben Tag 4: t-Test, ANOVA, Kontrastanalyse
 #
-# Der folgende Befehl kopiert den Ordner data aus dem rlernen-Paket direkt in
-# das aktuelle Verzeichnis. Führe den Befehl aus um die nächsten Aufgaben zu
-# bearbeiten
-file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
-
-# In einer älteren Vorlesungsbefragung wurde die Einstellung zu verschiedenen
-# Monaten erfragt. Das Datenblatt zur Vorlesung findest du als csv-Datei im data
-# Ordner: Jahreszeiten.csv. Lies diesen Datensatz in R ein.
-d <- read.csv("data/Jahreszeiten.csv")
-
-# Untersuche in welchen Variablen es fehlende Werte gibt. Lies Dir hierzu die
-# Hilfe zu NA durch. Eine Möglichkeit für jede Spalte zu prüfen, ob es NA-Werte
-# gibt ist die Hilfsfunktion apply auf jede Spalte anzuwenden.
-apply(d, 2, anyNA)
-
-# Prüfe nun nach welche Personen fehlende Werte angegeben haben und entferne
-# diese Personen anschließend aus dem Datensatz. Du kannst hierfür wieder apply
-# verwenden, diesmal jedoch angewandt auf die Zeilen.
-d2 <- d[!(apply(d, 1, anyNA)), ]
-
-# Nun zur Datenanalyse. Gib zuerst Mittelwert und Standardabweichung für die
-# demografischen Variablen Alter sowie den Anteil der Geschlechter an. Beachte
-# die Kodierung 0 = weiblich und 1 = männlich.
-
-
-# Erstelle zwei neue Variablen. `winter` ist der Mittelwert der Präferenz von
-# den Monaten Dezember, Januar und Februar pro Person. `sommer` ist der
-# Mittelwert der Präferenz von den Monaten Juni, Juli und August pro Person.
-# Beispiel:
-
-#   ID	Dezember	Januar	Februar	 winter (neu)
-#   1	    9	         1	      2	     4
-#   2	    2	         1	      2	    1.66
-#   3	    …	         …	      …	     …
-
-d2$winter <- rowMeans(d2[, c("Dezember", "Januar", "Februar")])
-d2$sommer <- rowMeans(d2[, c("Juni", "Juli", "August")])
-
-# Stelle die Verteilung der Variable winter in einem Balkendiagramm dar.
-# Beschrifte die Achsen und den Titel und gestalte die Grafik nach deinem
-# Geschmack.
-hist(d2$winter)
-
-# Untersuche ob es einen linearen Zusammenhang zwischen den Variablen
-# winter und sommer gibt.
-cor(d2$sommer, d2$winter)
-
-# Teil 2
+# ============================================================
+# AUFGABE 1: t-Test für unabhängige Stichproben
+# ============================================================
 #
-# Vielleicht steht bei jemandem demnächst der Kauf oder Verkauf eines
-# Gebrauchtwagens an. Daher haben wir exemplarisch Daten von
-# Gebrauchtwagen-Angeboten auf eBay Kleinanzeigen zusammengestellt. Der
-# Datensatz wurde auf 10.000 Einträge begrenzt – tatsächlich sind dort in
-# Deutschland etwa 200.000 Inserate verfügbar.
-
-# Lies den Datensatz 'gebrauchtwagen.csv' (im Ordner 'data') in R ein.
-gw <- read.csv2("data/gebrauchtwagen.csv")
-
-# Verschaffe dir mit der Funktion summary() einen ersten Überblick über die
-# Daten. Betrachte insbesondere die Variable 'kilometer' (Laufleistung). Hier
-# scheinen fehlerhafte Einträge vorzuliegen: Laufleistungen über 500.000 km sind
-# sehr wahrscheinlich Eingabefehler. Und selbst wenn solche Werte ausnahmsweise
-# korrekt sind – ein derart abgenutztes Fahrzeug möchten wir vermutlich nicht
-# kaufen. → Entferne alle Fahrzeuge mit einer Laufleistung über 500.000 km.
-gw <- gw[gw$kilometer < 5e5,]
-
-# Untersuche, inwieweit der Preis eines Fahrzeugs mit folgenden Merkmalen
-# zusammenhängt:
-# - Alter ('alter')
-# - Laufleistung ('kilometer')
-# - Motorleistung ('PS')
-# → Berechne jeweils den Korrelationskoeffizienten r. (Eine Prüfung auf
-# Linearität wäre grundsätzlich notwendig, wird hier aber weggelassen.)
-cor(gw[, c("Preis", "alter", "kilometer", "PS")])
-
-# Wir möchten einen Renault Twingo kaufen (brandModel == "renault_twingo"), der
-# nicht älter als 8 Jahre ist (8 Jahre sind noch akzeptabel). → Ermittle den
-# durchschnittlichen Preis und die Standardabweichung für solche Fahrzeuge.
-
-sd(gw[gw$brandModel == "renault_twingo" & gw$alter <= 8, "Preis"])
-
-# Vergleiche die durchschnittliche Laufleistung (kilometer) von Dieselfahrzeugen
-# mit der von Benzinfahrzeugen für Autos die 10 Jahre alt sind.
-
-aggregate(kilometer ~ Kraftstoff, data = gw, subset = gw$alter == 10,
-          FUN = "mean")
-
-# Welche fünf Automarken (Marke) werden am häufigsten zum Verkauf angeboten? →
-# Ermittle die fünf häufigsten Marken und stelle deren Häufigkeiten in einem
-# Balkendiagramm dar.
-
-barplot(sort(table(gw$brandModel), decreasing = T)[1:5])
-
-# Teil 3
-
-# Gegeben ist eine Tabelle mit Zahlen der TU Chemnitz (Stand: 2022). Erstellen
-# Sie einen Datensatz tu22 in R, der die tabellierten Daten abbildet. Erstellen
-# Sie eine neue Variable bs (für Betreuungsschlüssel). bs gibt an, wie viele
-# Studierende durchschnittlich durch einen Professor der jeweiligen Fakultät
-# betreut werden. Auch bs soll in Ihrem Datensatz tu22 integriert sein.
-
-# Fakultät                  Studierende   Professuren
-# Naturwissenschaft             669            23
-# Mathematik                    206            16
-# Maschinenbau                 1161            29
-# Elektrotechnik                963            17
-# Informatik                   1462            12
-# Wirtschaftswissenschaften    1605            17
-# Philosophische Fakultät      1560            28
-# HSW                          1394            18
-
-# Der folgende Befehl zeigt ein Balkendiagramm der vorliegenden Daten im
-# Web-Browser:
-
-browseURL(system.file("tu22.png", package = "rlernen"))
-
-# Versuchen Sie dieses Balkendiagramm so gut wie möglich nachzubauen. Die
-# Corporate-Farben der TUC finden Sie hier:
-# https://www.tu-chemnitz.de/tu/pressestelle/cd/vorlagen.html#farben
+# In Methodenlehre I haben wir einen t-Test für folgende Tabelle gerechnet:
 #
-# Die korrekte Reihenfolge der Farben entspricht der Reihenfolge der relativen
-# Häufigkeiten.
+# EG   | KG
+# -0.09| -0.26
+# 0.01 | -0.26
+# 0.03 | -0.21
+# -0.31| -0.08
+# 0.34 |
+#
+# Die Experimentalgruppe bekam ein Medikament, die Kontrollgruppe ein Placebo.
+# Die AV ist die Flugleistung in einem Simulator. Die Probanden waren
+# erfahrene Piloten.
+#
+# Rechnen Sie den Test in R nach. Gehen Sie von Varianzhomogenität aus.
+#
+# Ergänzend:
+# Berechnen Sie zusätzlich ein 95%-Konfidenzintervall für den
+# Mittelwertsunterschied zwischen EG und KG.
 
-fak = factor(
-  c("Nawi", "Mathe", "masch", "elektro", "info", "wirtschaft", "phil", "hsw")
+eg <- c(-0.09, 0.01, 0.03, -0.31, 0.34)
+kg <- c(-0.26, -0.26, -0.21, -0.08)
+
+
+# ============================================================
+# AUFGABE 2: Eigene Funktion für den t-Test
+# ============================================================
+#
+# Schreiben Sie eine eigene Funktion, die für zwei Vektoren x und y
+# den t-Wert für unabhängige Stichproben unter Varianzhomogenität berechnet.
+#
+# Die Funktion soll:
+# - zwei Vektoren als Eingabe haben
+# - den t-Wert zurückgeben
+#
+# Verwenden Sie dafür bei Bedarf:
+# - mean()
+# - var()
+# - sqrt()
+# - length()
+#
+# Überprüfen Sie Ihre Funktion anschließend an den Daten aus Aufgabe 1.
+
+
+# ============================================================
+# AUFGABE 3: Aufgabe 1.2 aus Übungsmaterialien ML II Titz 2026
+# ANOVA, einfaktoriell, Between-Design
+# ============================================================
+#
+# Sie wollen überprüfen, ob sich vier verschiedene Unterrichtsmethoden
+# (Gruppenunterricht, Selbststudium, Einzelunterricht, E-Learning)
+# hinsichtlich ihrer Effizienz unterscheiden. Dazu bearbeiten Schüler,
+# die jeweils mit einer der Methoden unterrichtet wurden, einen Test,
+# bei dem sie 0 bis 10 Punkte erreichen können.
+#
+# Die Gesamtstichprobe besteht aus N = 20 Schülern, je 5 Schüler pro Gruppe.
+#
+# Erstellen Sie zunächst einen Dataframe, der für eine Analyse mit
+# ezANOVA geeignet ist. Achten Sie auf das korrekte long-Format.
+# Vergessen Sie nicht, dass ezANOVA zwingend eine id für jede Person benötigt,
+# selbst im Between-Design.
+#
+# Sie gehen davon aus, dass die AV intervallskaliert und in der Population
+# aller Schüler normalverteilt ist. Berechnen Sie eine einfaktorielle
+# Varianzanalyse.
+#
+# Hinweis: Der F-Wert in der Übung war 8.12. Prüfen Sie, ob Sie das gleiche
+# Ergebnis bekommen. Ist das Ergebnis signifikant (α = 0.001)?
+#
+# Geben Sie zusätzlich einen Boxplot pro Gruppe aus.
+
+gruppe <- c(2, 1, 3, 3, 1)
+selbst <- c(3, 4, 3, 5, 0)
+einzel <- c(6, 8, 7, 4, 10)
+elearn <- c(5, 5, 5, 3, 2)
+
+
+# ============================================================
+# AUFGABE 4: Aufgabe 2.2 aus Übungsmaterialien ML II Titz 2026
+# Zweifaktorielle ANOVA + Effektgrößen + Kontrastanalyse
+# ============================================================
+#
+# Sie wollen überprüfen, wie sich verschiedene
+# Studienfinanzierungsmöglichkeiten auf die Studiendauer auswirken.
+# Dazu haben Sie die Gesamtstudiendauer (in Semestern) von ehemaligen
+# Studierenden der TU Berlin (N = 40) erfasst, die ihre Einnahmen
+# aus vier unterschiedlichen Quellen bezogen haben.
+#
+# Die Stichprobe setzt sich zu gleichen Teilen aus weiblichen und
+# männlichen Studierenden zusammen.
+#
+# Teil a)
+# Berechnen Sie die zweifaktorielle Varianzanalyse (α = 0.05).
+#
+# Teil b)
+# Berechnen Sie für die Wirkung von Einnahmequelle und Geschlecht
+# jeweils das partielle Eta-Quadrat und das Eta-Quadrat als Effektgröße
+# und interpretieren Sie die Ergebnisse.
+#
+# Beachten Sie:
+# ezANOVA gibt als Effektgröße das generalisierte Eta-Quadrat aus.
+# Sie müssen die gewünschten Effektgrößen also aus den Quadratsummen
+# selbst berechnen.
+#
+# Teil c)
+# Berechnen Sie nun zum Vergleich eine Kontrastanalyse.
+# Beachten Sie, dass bei der Kontrastanalyse nur einfaktoriell gerechnet wird.
+# Das heißt: Bei mehr als einem Faktor müssen die Faktoren zu einem
+# einzigen Faktor zusammengefasst werden:
+#
+# d$between <- paste0(d$geschlecht, d$finanzierung)
+#
+# Erstellen Sie nun einen geeigneten Kontrast für die Hypothesen:
+# - Frauen studieren schneller als Männer.
+# - Eltern und Bafög führen zur kürzesten Studiendauer.
+# - Ganztagsjob dauert am längsten.
+# - Teilzeitjob liegt dazwischen.
+#
+# Hinweis:
+# cofad standardisiert die Kontraste automatisch. Sie können sich also
+# sinnvolle Mittelwerte (in Semestern) überlegen, ohne dass diese
+# in der Summe 0 ergeben müssen.
+#
+# Teil d)
+# Rechnen Sie die Kontrastanalyse und vergleichen Sie das Ergebnis
+# mit der ANOVA. Ist der p-Wert kleiner oder größer als bei der ANOVA
+# (z. B. für den F-Wert von Finanzierung)?
+
+semester <- c(9, 13, 16, 15, 12, 8, 9, 9, 11, 8,
+              15, 18, 15, 13, 19, 15, 11, 14, 15, 15,
+              14, 12, 11, 8, 10, 11, 13, 8, 12, 11,
+              17, 11, 14, 17, 21, 20, 17, 22, 25, 26)
+geschlecht <- rep(c("weiblich", "männlich"), each = 20)
+finanzierung <- rep(c("Eltern", "Bafög", "Teilzeitjob", "Ganztagsjob"), each = 5)
+d <- data.frame(geschlecht, finanzierung, semester, id = 1:40)
+
+
+# ============================================================
+# AUFGABE 5: Aufgabe 3.2 aus Übungsmaterialien ML II Titz 2026
+# t-Test für abhängige Stichproben
+# ============================================================
+#
+# Ein Basketball-Sportverein hat sich entschlossen, ein spezielles
+# Training für Korbwürfe mit den Mitgliedern seiner A-Mannschaft
+# durchführen zu lassen.
+#
+# Mit diesem Training sollen die Spieler nach nur einer Woche
+# deutlich mehr Punkte erzielen können.
+#
+# Die folgenden Daten zeigen die Punktzahlen der einzelnen Spieler,
+# die sie vor bzw. nach dem Trainingsprogramm mit 20 Würfen erzielen konnten.
+#
+# Prüfen Sie mit einem geeigneten Signifikanztest, ob das Training
+# tatsächlich zu einer bedeutsamen Verbesserung der Spielleistung führt
+# (α = 0.05).
+#
+# Geben Sie zusätzlich an:
+# - ob die Hypothese gerichtet oder ungerichtet formuliert ist
+# - welcher Parameter in t.test() dafür relevant ist
+
+vorher <- c(35, 35, 33, 32, 30, 27)
+nachher <- c(32, 31, 30, 29, 25, 24)
+
+
+# ============================================================
+# AUFGABE 6: Aufgabe 3.3 aus Übungsmaterialien ML II Titz 2025
+# Within-ANOVA + Eta-Quadrat + Kontrastanalyse
+# ============================================================
+#
+# In einer Untersuchung soll geprüft werden, wie sich die Dauer des
+# Lordoseverhaltens von Hamster-Weibchen verändert, wenn sie an drei
+# aufeinanderfolgenden Tagen mit dem gleichen Männchen Kontakt haben.
+#
+# Die Tabelle zeigt die Dauer der Lordosehaltung (in Minuten) für
+# 4 Hamster-Weibchen jeweils beim Kontakt mit einem Hamster-Männchen.
+#
+# Teil a)
+# Erstellen Sie einen geeigneten Dataframe für die Analyse und rechnen Sie
+# anschließend eine ANOVA (α = 5%).
+#
+# Berechnen Sie Eta-Quadrat für den Zeitpunkt.
+#
+# Achten Sie beim Erstellen des Dataframes auf die korrekte Struktur
+# und auf die nötigen Variablen:
+# - dv
+# - within (iv)
+# - wid
+#
+# Teil b)
+# Rechnen Sie nun zum Vergleich eine Kontrastanalyse für folgende Hypothese:
+# Die Lordose-Haltung nimmt über die Zeit linear ab.
+
+t1 <- c(30, 28, 27, 34)
+t2 <- c(14, 16, 16, 18)
+t3 <- c(4, 6, 5, 9)
+wid <- 1:4
+
+
+# ============================================================
+# AUFGABE 7: Kontrastanalyse für unabhängige Stichproben
+# ============================================================
+#
+# In einer Studie wird die Wirkung eines Medikaments in Abhängigkeit
+# von Geschlecht und Dosis untersucht.
+#
+# Die Gruppen sind:
+# mp = Männer Placebo
+# fp = Frauen Placebo
+# m1 = Männer einfache Dosis
+# f1 = Frauen einfache Dosis
+# m2 = Männer doppelte Dosis
+# f2 = Frauen doppelte Dosis
+#
+# Rechnen Sie eine Kontrastanalyse mit folgenden Kontrasten:
+# mp = 0, fp = -1, m1 = -1, f1 = 1, m2 = 1, f2 = 0
+#
+# Geben Sie zusätzlich die Effektgröße aus.
+
+vl <- data.frame(
+  av = c(18, 18, 20, 13, 15, 9, 17, 9, 16, 15, 17, 22, 25, 24, 16, 17, 12, 18),
+  group = factor(rep(c("mp", "fp", "m1", "f1", "m2", "f2"), each = 3))
 )
 
-d <- data.frame(fakultät = fak,
-                stud = c(669, 206, 1161, 963, 1462, 1605, 1560, 1394),
-                profs = c(23, 16, 29, 17, 12, 17, 28, 18),
-                col <- c("#6F7070", "#A10B70", "#123375", "#E4032D", "#4A8246",
-                         "#9D0736", "#C65306", "#0075BF"))
-d2 <- d[order(d$stud),]
 
-barplot(d2$stud / sum(d2$stud) * 100, horiz = T, names.arg = d2$fakultät,
-        main = "Studiernde der TUC",
-        xlab = "Anteil in Prozent", ylab = "Fakultät", col = d2$col)
+# ============================================================
+# AUFGABE 8: Kontrastanalyse für abhängige Stichproben
+# ============================================================
+#
+# Die Lesefähigkeit wurde von 8 Probanden unter vier Bedingungen erfasst:
+# - without music
+# - white noise
+# - classic
+# - jazz
+#
+# Die Hypothese ist:
+# Man liest ohne Musik am besten, mit weißem Rauschen etwas schlechter,
+# und mit Musik noch schlechter.
+#
+# Rechnen Sie hierfür eine Kontrastanalyse für abhängige Stichproben.
+#
+# Die Lambdas sind:
+# 1.25, 0.25, -0.75, -0.75
+#
+# Geben Sie zusätzlich die Effektgröße aus.
+
+musik <- data.frame(
+  reading_test = c(27, 25, 30, 29, 30, 33, 31, 35,
+                   25, 26, 32, 29, 28, 30, 32, 34,
+                   21, 25, 23, 26, 27, 26, 29, 31,
+                   23, 24, 24, 28, 24, 26, 27, 32),
+  participant = as.factor(rep(1:8, 4)),
+  music = as.factor(rep(c("without music", "white noise", "classic", "jazz"), each = 8))
+)
