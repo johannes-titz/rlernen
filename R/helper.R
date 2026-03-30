@@ -107,3 +107,44 @@ check_rlernen_update <- function() {
     message("rlernen is up to date.")
   }
 }
+
+#' Common setup for learnr tutorials
+#'
+#' @export
+tutorial_setup <- function() {
+  librarian::shelf(learnr)
+
+  knitr::opts_chunk$set(
+    echo = FALSE,
+    cache = FALSE,
+    fig.width = 7,
+    fig.height = 4.9
+  )
+
+  learnr::tutorial_options(exercise.startover = TRUE)
+
+  Sys.setenv(
+    TUTORIAL_DATA_DIR = system.file("extdata", "data", package = "rlernen")
+  )
+
+  invisible(TRUE)
+}
+
+#' Create a numeric question with retry allowed
+#' @param answer numeric answer to the question
+#' @param text question text
+#' @export
+q_n <- function(answer, text = "Was kommt heraus?") {
+  question_numeric(
+    text,
+    answer(answer, correct = T),
+    allow_retry = T
+  )
+}
+
+#' Create a question with retry allowed
+#' @param ... question components (e.g., answer(...))
+#' @export
+question <- function(...) {
+  learnr::question(..., allow_retry = T)
+}
