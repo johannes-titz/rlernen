@@ -61,3 +61,21 @@ usethis::use_data(mtcars)
 library(psych)
 data(bfi)
 write.csv2(bfi, "inst/extdata/bfi.csv", row.names = F)
+
+
+data <- read.csv("data-raw/ws19.csv", stringsAsFactors = TRUE)
+data <- janitor::clean_names(data)
+g <- as.character(data$geschlecht)
+data$geschlecht <- ifelse(g ==  "sonstiges", "divers", g)
+
+
+data$abi <- as.numeric(paste(substr(data$abi, 1,1), ".", substr(data$abi, 3,3), sep = ""))
+data$geschlecht <- as.factor(data$geschlecht)
+saveRDS(data, "inst/extdata/ws19.rds") # change to students.rds?
+write.csv(data, "inst/extdata/students.csv", row.names = FALSE)
+
+# system("scp ~/programming/rkurs/WS19b.csv titz@login.tu-chemnitz.de:public_html/data.csv")
+# vllt. auf rki umsteigen: https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0
+
+
+# saveRDS(data, "data/students.rds")
