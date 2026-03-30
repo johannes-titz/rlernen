@@ -2,7 +2,7 @@
 title: "4. t-Test, ANOVA, KA"
 runtime: shiny_prerendered
 description: >
-  Inferenzstatistik between und within: klassischer t-Test und klassische ANOVA, Kontrastanalyse als Alternative zur ANOVA
+  Inferenzstatistik between und within: klassischer t-Test und klassische ANOVA, Kontrast-Analyse als Alternative zur ANOVA
 tutorial:
   version: 2.0
 output:
@@ -46,7 +46,7 @@ Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, bewertete dieses Tu
 
 Nachdem wir die deskriptive Statistik so weit erst mal abgehandelt haben, machen wir heute Inferenzstatistik. Ich warne Dich schon mal vor: das wird etwas trocken und recht anstrengend, aber am Ende kannst Du dann schon ungefähr die Hälfte der Tests aus der Methodenlehre in `R` nachrechnen. Das ist wirklich praktisch, denn so kannst Du auch Übungsaufgaben aus der Methodenlehre nachprüfen. Bald bist Du vollkommen autonom was die Statistik angeht!
 
-Wir fangen mit $t$-Tests an, behandeln anschließend die ANOVA und am Ende die Kontrastanalyse. Wir nutzen wieder die Vorlesungsdaten:
+Wir fangen mit $t$-Tests an, behandeln anschließend die ANOVA und am Ende die Kontrast-Analyse. Wir nutzen wieder die Vorlesungsdaten:
 
 ```{r, eval=FALSE}
 data <- readRDS("data/students.rds")
@@ -131,19 +131,19 @@ question("Wie groß wäre der p-Wert, wenn die Hypothese ungerichtet wäre?",
 Für abhängige Stichproben können wir uns den Unterschied zwischen dem Mögen von Hunden und Katzen anschauen:
 
 ```{r echo = TRUE}
-t.test(data$hunde_m, data$katzen_m, var.equal = TRUE, paired = TRUE)
+t.test(data$hunde_m, data$katzen_m, paired = TRUE)
 ```
 
 Wir setzen also nur den Parameter `paired` auf `TRUE` und schon haben wir den Test von unabhängig auf abhängig geändert. Hier zeigt sich kein Unterschied in den AVs.
 
-Rechne nun einen Test für den Unterschied zwischen den Deutsch- und Mathepunkten (diese sind natürlich abhängig). Vergleiche diesen anschließend mit der Version für unabhängige Stichproben. Gehe stets von gleichen Varianzen aus.
+Rechne nun einen Test für den Unterschied zwischen den Deutsch- und Mathepunkten (diese sind natürlich abhängig). Vergleiche diesen anschließend mit der Version für unabhängige Stichproben (gleiche Varianzen).
 
 ```{r abhaengig, exercise=TRUE}
 
 ```
 
 ```{r abhaengig-solution}
-t.test(data$deutsch, data$mathe, paired = TRUE, var.equal = TRUE)
+t.test(data$deutsch, data$mathe, var.equal = TRUE)
 t.test(data$deutsch, data$mathe, paired = FALSE, var.equal = TRUE)
 ```
 
@@ -260,7 +260,7 @@ Warum ist `R` so kompliziert? Weil Flexibilität ihren Preis hat!
 
 <!-- Der Output passt gut zur Grafik. Wir sehen einen Effekt des Geschlechts und eine Interaktion, jedoch keinen Effekt der Ernährungsform. -->
 
-Die Aufmerksamen unter Euch fragen Sich nun vielleicht noch warum beim ANOVA-Output **ges** der Effekt ist (letzte Spalte im Output). ges  ist das generalized Eta-Squared. Wenn Du altbekannte Effektgrößen berechnen willst, dann stell noch `detailed=TRUE` ein: 
+Die Aufmerksamen unter Euch fragen sich nun vielleicht noch warum beim ANOVA-Output **ges** der Effekt ist (letzte Spalte im Output). ges  ist das generalized Eta-Squared. Wenn Du altbekannte Effektgrößen berechnen willst, dann stell noch `detailed=TRUE` ein: 
 
 ```{r, echo = T}
 ezANOVA(data = data, wid = id, between = c(vegetarier, geschlecht), dv = abi,
@@ -376,7 +376,7 @@ question("Wie genau äußert sich der Effekt des Zeitpunkts?",
 
 Übrigens: Mit `ezANOVA` ist es auch kein Problem gemischte Designs (between und within kombiniert) zu rechnen, Du musst nur `within` und `between` gemeinsam spezifizieren.
 
-## Kontrastanalyse
+## Kontrast-Analyse
 
 Bleibt nur noch die Kontrast-Analyse. Wir schauen uns zunächst ein Beispiel aus der Übung zu unabhängigen Stichproben an. 
 
@@ -414,9 +414,9 @@ Das `rep` mit `each=5` brauchen wir, da wir für jede Person ein Lambda benötig
 cor(av, lambda)
 ```
 
-Hier sieht man ganz konkret, dass $r_\mathrm{effect size}$ die Korrelation zwischen Lambdas und der abhängigen Variable ist (auf Individumebene).
+Hier sieht man ganz konkret, dass $r_\mathrm{effect size}$ die Korrelation zwischen Lambdas und der abhängigen Variable ist (auf Individuum-Ebene).
 
-Um die Kontrastanalyse normal zu berechnen können wir das Paket ``cofad`` benutzen:
+Um die Kontrast-Analyse normal zu berechnen können wir das Paket ``cofad`` benutzen:
 
 ```{r, eval=FALSE, echo = T}
 install.packages("cofad")
@@ -526,7 +526,7 @@ musik <- data.frame(reading_test = c(27, 25, 30, 29, 30, 33, 31, 35,
 musik
 ```
 
-Die Lesefähigkeit wurde von 8 Probanden unter verschiedenen Bedingungen erfasst. Die Hypothese ist, dass man ohne Musik am besten lesen kann, mit weißem Rauschen etwas schlechter und mit Musik noch schlechter. Rechne hierfür eine Kontrastanalyse für abhängige Stichproben. Die Lambdas sind 1.25, 0.25, -0.75, -0.75.
+Die Lesefähigkeit wurde von 8 Probanden unter verschiedenen Bedingungen erfasst. Die Hypothese ist, dass man ohne Musik am besten lesen kann, mit weißem Rauschen etwas schlechter und mit Musik noch schlechter. Rechne hierfür eine Kontrast-Analyse für abhängige Stichproben. Die Lambdas sind 1.25, 0.25, -0.75, -0.75.
 
 ```{r kontrwithin, exercise=TRUE}
 
@@ -601,9 +601,9 @@ mein_t_test <- function(x, y){
 mein_t_test(c(-.09, .01, .03, -.31, .34), c(-.26, -.26, -.21, -.08))
 ```
 
-### Kontrastanalyse
+### Kontrast-Analyse
 
-Rechne die Kontrastanalyse aus der Vorlesung auf Folie 21 mit `cofad` nach:
+Rechne die Kontrast-Analyse aus der Vorlesung auf Folie 21 mit `cofad` nach:
 
 <hr>
 <img src="images/ka_vorlesung_f21.png" width="600">
