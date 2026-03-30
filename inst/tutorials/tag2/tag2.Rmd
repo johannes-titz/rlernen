@@ -2,7 +2,7 @@
 title: "2. Daten-Gerangel"
 runtime: shiny_prerendered
 description: >
-  Selektieren, Filtern, Gruppieren und Aggreggieren von Daten
+  Selektieren, Filtern, Gruppieren und Aggregieren von Daten
 tutorial:
   version: 3.0
 output:
@@ -14,7 +14,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-source("setup.R")
+librarian::shelf(rlernen)
+tutorial_setup()
 # slows down substantially 
 #knitr::opts_chunk$set(cache = TRUE)
 
@@ -184,7 +185,7 @@ Da es bei Vektoren eben nur eine Spalte gibt, muss man das Komma zwischen den ec
 data$preis[c(2, 4, 6, 8, 10), ]
 ```
 
-Kryptisch, oder? Eine hilfreiche Fehlermeldung wäre: "Dude, Du hast einen Vektor, tust aber so als hättest Du eine Matrix!". Dies würde allerdings andere Probleme nach sich ziehen, denn dann müsste man `R` viele Spezialfälle beibringen, jeder mit einem eigenen Fehler. Außerdem sieht der Computer nicht das offensichtliche, die Semantik, die der Mensch hineininterpretiert. Tatsächlich ist `R`s Fehlermeldung auf den Punkt technisch korrekt und man kann wenig an ihr aussetzen.
+Kryptisch, oder? Eine hilfreiche Fehlermeldung wäre: "Du hast einen Vektor, tust aber so als hättest Du eine Matrix!". Dies würde allerdings andere Probleme nach sich ziehen, denn dann müsste man `R` viele Spezialfälle beibringen, jeder mit einem eigenen Fehler. Außerdem sieht der Computer nicht das offensichtliche, die Semantik, die der Mensch hineininterpretiert. Tatsächlich ist `R`s Fehlermeldung auf den Punkt technisch korrekt und man kann wenig an ihr aussetzen.
 
 Üben wir nun mal die Selektion bei einem Vektor ohne Fehlermeldungen zu produzieren. Wähle die Spalte **durchmesser** aus und selektiere Zeilen 17 bis 23. Es gibt hier einige Varianten (siehe auch die nächste MPC-Aufgabe), probier also verschiedene Vorgehensweisen aus und entscheide, welche Dir am besten gefällt.
 
@@ -495,7 +496,7 @@ imdb_top[____,]
 imdb_top[order(imdb_top$imdb_score, decreasing = TRUE), ]
 ```
 
-Schöne Liste. Dann musst du jetzt nur noch genug Zeit finden um Deine Kulturlücken zu füllen und Dir die am besten bewerteten Filme (laut IMDB) anzuschauen. Hinweis: die hier verwendeten Daten sind natürlich nicht ganz aktuell (von 2016) und es kann auch in den Top10 auf IDMB Schwankungen geben. Diese Filme hier werden aber wohl auf absehbare Zeit zumindest in den Top20 bleiben.
+Schöne Liste. Dann musst du jetzt nur noch genug Zeit finden um Deine Kulturlücken zu füllen und Dir die am besten bewerteten Filme (laut IMDB) anzuschauen. Hinweis: die hier verwendeten Daten sind natürlich nicht ganz aktuell (von 2016) und es kann auch in den Top10 auf IMDB Schwankungen geben. Diese Filme hier werden aber wohl auf absehbare Zeit zumindest in den Top20 bleiben.
 
 Einer Deiner Freunde meint jedoch, dass die Auswahl nicht überzeugt. Er empfiehlt stattdessen alle Filme bei denen der Regisseur (**director_name**) Christopher Nolan oder Guy Ritchie ist. Hierfür brauchst Du das logische ODER (`|`). Probier es mal aus. Als Variablen habe ich Dir schon  **movie_title**, **imdb_score** und **director_name** vorbereitet, es fehlt nur noch der richtige Filter.
 
