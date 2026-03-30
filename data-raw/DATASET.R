@@ -56,7 +56,7 @@ write.csv2(pokemon, "inst/extdata/pokemon.csv", row.names = F)
 #
 # usethis::use_data(DATASET, overwrite = TRUE)
 
-usethis::use_data(mtcars)
+#usethis::use_data(mtcars)
 
 library(psych)
 data(bfi)
@@ -79,3 +79,7 @@ write.csv(data, "inst/extdata/students.csv", row.names = FALSE)
 
 
 # saveRDS(data, "data/students.rds")
+
+library(qgraph)
+data(big5)
+write.csv(big5, "inst/extdata/big5.csv", row.names = FALSE)
