@@ -2,9 +2,9 @@
 title: "3. Deskriptive Statistik"
 runtime: shiny_prerendered
 description: >
-  Tabellen, Lage- und Streuungsmaße, einfache Abbildungen mit base R, Exkurs: eigene Funktionen schreiben
+  Tabellen, Lage- und Streuungsmaße, einfache Abbildungen mit base R, fehlende Werte, eigene Funktionen schreiben
 tutorial:
-  version: 2.0
+  version: 3.0
 output:
   learnr::tutorial:
     allow_skip: yes
@@ -14,41 +14,17 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-source("setup.R")
-librarian::shelf(psych, meme)
-knitr::opts_chunk$set(cache = FALSE)
-
-knitr::opts_chunk$set(fig.width=7, fig.height=4.9)
-
+librarian::shelf(psych, meme, rlernen)
+tutorial_setup()
+gradethis::gradethis_setup()
 modus <- function(x) {
   tab <- table(x)
-  max_frequency <- max(table(x))
-  modus <- as.numeric(names(tab[tab == max_frequency]))
+  max_frequency <- max(tab)
+  modus <- names(tab[tab == max_frequency])
   return(modus)
 }
 
-# todo: Daten randomisieren, so weit es geht:
-# was geht nicht: mathe, geschlecht, abi, deutsch, 
-# Lebenszufriedenheit, Vegetarier+Meditation
-# abi - lebenszufriedenheit
-# studium geschlecht
-# sport, lebenszufriedenheit
-
-# data <- read.csv("WS19.csv")
-# data$abi <- as.numeric(paste(substr(data$abi, 1,1), ".", substr(data$abi, 3,3), sep = ""))
-# data$geschlecht <- as.factor(data$geschlecht)
-# data <- data[,-1]
-# data$vegetarier <- data$vegetarier.
-# data$vegetarier. <- NULL
-# saveRDS(data, "data/ws19.rds")
-# write.csv(data, "data.csv", row.names = FALSE)
-# system("scp ~/programming/rkurs/WS19b.csv titz@login.tu-chemnitz.de:public_html/data.csv")
-# vllt. auf rki umsteigen: https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0
 data <- readRDS("data/students.rds")
-# g <- as.character(data$geschlecht)
-# data$geschlecht <- ifelse(g ==  "sonstiges", "divers", g)
-# # data <- janitor::clean_names(data)
-# saveRDS(data, "data/students.rds")
 ```
 
 ## Hinweise
@@ -57,7 +33,7 @@ Eine R-Nutzerin, die bereits vorher einen R-Kurs belegt hat, bewertete dieses Tu
 
 ## Einführung
 
-Wie am Ende des zweiten Tages versprochen geht es nun mit richtiger Methodenlehre los. Wir werden heute und in den restlichen Sitzungen, Schritt für Schritt, alle statistischen Themen der Vorlesungen Methodenlehre I und II abhandeln. Los geht es mit deskriptiver Statistik. Als Datensatz benutzen wir eine Vorlesungsbefragung aus Methodenlehre I. Schauen wir uns die Daten mal grob an:
+Wie am Ende des zweiten Tages versprochen geht es nun mit der eigentlichen Methodenlehre los. Wir werden heute und in den restlichen Sitzungen, Schritt für Schritt, alle statistischen Themen der Vorlesungen Methodenlehre I und II abhandeln. Los geht es mit deskriptiver Statistik. Als Datensatz benutzen wir eine Vorlesungsbefragung aus Methodenlehre I. Schauen wir uns die Daten mal grob an:
 
 ```{r echo = TRUE}
 data <- readRDS("data/students.rds")
@@ -83,16 +59,16 @@ table(data$mathe, data$geschlecht)
 Relative Häufigkeiten gerundet:
 
 ```{r tab3, echo = TRUE}
-round(proportions(table(data$mathe, data$geschlecht), 2), 2)
+round(proportions(table(data$mathe, data$geschlecht)), 2)
 ```
 
-Ein kleiner Check: Beträgt die Summe dieser Tabelle 100%?
+Ein kleiner Check: Beträgt die Summe dieser Tabelle 1 (entspricht 100%)?
 
 ```{r tab3b, echo = TRUE}
 sum(proportions(table(data$mathe, data$geschlecht)))
 ```
 
-`proportions` selbst nimmt als Argument eine normale Tabelle, die wir vorher über `table` erzeugen. Das mag für Rohdaten etwas umständlich erscheinen, ist aber ganz praktisch, wenn wir von irgendwoher eine fertige Tabelle bekommen und dort die relativen Anteile wissen wollen:
+`proportions` selbst nimmt als Argument eine normale Tabelle, die wir vorher über `table` erzeugen. Das wirkt bei Rohdaten zunächst etwas umständlich, ist aber ganz praktisch, wenn wir von irgendwoher eine fertige Tabelle bekommen und dort die relativen Anteile wissen wollen:
 
 ```{r tab4, echo = TRUE}
 irgendeine_tabelle <- matrix(c(10, 30, 14, 28), nrow = 2)
@@ -109,7 +85,7 @@ Relative Häufigkeiten nach Spalten (gerundet):
 round(proportions(table(data$mathe, data$geschlecht), margin = 2), 2)
 ```
 
-`margin` bedeutet Rand, es kommt also an den Rand noch eine Zeile/Spalte hinzu, die die Daten zusammenfasst (in diesem Fall Randsummen oder Randanteile). Bei einer ANOVA-Tabelle machen wir so etwas ähnliches, benutzen jedoch Mittelwerte. Die 2 bei `margin` bedeutet Spalte (1 wäre die Zeile).
+`margin` bedeutet Rand und gibt an, entlang welcher Dimension normiert wird (Zeile oder Spalte). Bei einer ANOVA-Tabelle machen wir so etwas ähnliches, benutzen jedoch Mittelwerte. Die 2 bei `margin` bedeutet Spalte (1 wäre die Zeile).
 
 Okay. Dann probier Du es nun mal. Zeig mir die Häufigkeitsverteilung der Abiturnoten aufgeteilt nach dem Geschlecht:
 
@@ -140,7 +116,7 @@ proportions(table(data$abi, data$geschlecht))
 q_n(0.009, "Welchen Anteil hat die Note 1.0 bei Männern? Runde auf 3 Dezimalstellen.")
 ```
 
-Gib mir den relativen Anteil der Punkte in Deutsch nach dem Geschlecht aus. Die Summe über das Geschlecht soll in diesem Fall 100% ergeben. Zum Beispiel: für 6 Punkte, männlich 25%, weiblich 75%.
+Gib mir den relativen Anteil der Punkte in Deutsch nach dem Geschlecht aus. Die Summe über das Geschlecht soll in diesem Fall 1 (entspricht 100%) ergeben. Zum Beispiel: für 6 Punkte, männlich 0.25, weiblich 0.75.
 
 ```{r deskp3, exercise=TRUE}
 
@@ -200,7 +176,7 @@ Welche Maße sind sonst noch relevant in der Methodenlehre? Berechne mir vom Alt
 ```{r lage1-solution}
 var(data$alter)
 range(data$alter)
-mad(data$alter, center = mean(data$alter)) # aufpassen!
+mean(abs(data$alter - mean(data$alter))) # aufpassen!
 quantile(data$alter, c(0.3, 0.6))
 IQR(data$alter)
 ```
@@ -213,13 +189,244 @@ question("Welcher von den Streuungswerten ist am kleinsten?",
   answer("Varianz"),
   answer("IQA"),
   answer("Range"),
-  random_answer_order = T
+  random_answer_order = TRUE
 )
 ```
 
-Uns fehlt nur noch der Modus. Wie Du schon aus Tag 1 weißt, gibt es keine Funktion in `R` für den Modus (zumindest ohne Zusatzpakete). Wir werden uns jetzt eine eigene Funktion dafür schreiben. Das ist ein relativ fortgeschrittenes Thema, aber wir sind ja auch schon bei Tag 3. Konzentrier Dich gut, dann hast Du bald die Möglichkeit `R`  so zu erweitern, wie Du willst.
+Nun haben wir die wichtigsten Lage- u. Streuungsmaße behandelt. Bevor wir weitermachen, gibt es noch einen kleinen Exkurs zu Hilfsfunktionen, die bei der Berechnung von deskriptiven Statistiken hilfreich sind.
+
+## Hilfsfunktionen
+
+Wenn Du den Mittelwert nicht nur für **eine** Spalte, sondern gleich für **mehrere Spalten** berechnen willst, hilft Dir die Funktion `colMeans`:
+
+```{r lage2, echo = TRUE}
+colMeans(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
+```
+
+Hier wird also für jede ausgewählte Variable der Mittelwert berechnet.
+
+Es geht aber auch andersherum. Mit `rowMeans` kannst Du für **jede Person** den Mittelwert über mehrere Variablen berechnen:
+
+```{r lage3, echo = TRUE}
+rowMeans(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
+```
+
+Hier wird für jede Zeile ein Mittelwert gebildet.
+
+Probier es nun selbst. Berechne mit `colMeans` die Mittelwerte der Variablen **alter**, **mathe**, **deutsch**, **abi** und **lebenszufriedenheit**.
+
+```{r lage5, exercise=TRUE}
+
+```
+
+```{r lage5-solution}
+colMeans(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
+```
+
+Und nun mit `rowMeans`: Berechne für jede Person den Mittelwert über genau diese fünf Variablen.
+
+```{r lage6, exercise=TRUE}
+
+```
+
+```{r lage6-solution}
+rowMeans(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
+```
+
+Das ganze geht auch für **Summen** über `rowSums` und `colSums`. Aber was machen wir, wenn wir z. B. die **Standardabweichung** (`sd`) oder die **Varianz** (`var`) über mehrere Variablen berechnen wollen? Dafür gibt es keine speziellen Funktionen wie `rowSd` oder `colSd`.
+
+In solchen Fällen kann man die Funktion `apply` benutzen.
+
+```{r echo=TRUE}
+apply(data[, c("alter", "mathe", "deutsch")], 2, sd)
+```
+
+Das sieht erst einmal etwas kryptisch aus. Die Funktion `apply` hat aber eine einfache Logik:
+
+- Das **erste Argument** ist der Datensatz oder die Matrix, auf die wir die Funktion anwenden wollen.
+- Das **zweite Argument** bestimmt, ob wir über **Zeilen** oder **Spalten** gehen.
+- Das **dritte Argument** ist die Funktion, die angewendet werden soll.
+
+Die Zahl **2** bedeutet hier: *wende die Funktion auf die Spalten an*. In diesem Beispiel wird also für jede Variable (`alter`, `mathe`, `deutsch`) die Standardabweichung berechnet.
+
+Für **Zeilen** funktioniert das genauso:
+
+```{r, echo = T}
+apply(data[, c("alter", "mathe", "deutsch")], 1, sd)
+```
+
+Hier bedeutet die **1**, dass die Funktion auf **Zeilen** angewendet wird. Es wird also für jede Person die Standardabweichung über die drei Variablen berechnet.
+
+Du kannst `sd` natürlich auch durch eine andere Funktion ersetzen, zum Beispiel `mean`, `var` oder `sum`.
+
+Probier Du es jetzt mal selbst.
+
+Berechne mit `apply` die **Varianz der Variablen** `alter`, `mathe` und `deutsch`.
+
+```{r apply1, exercise=TRUE}
+
+```
+
+```{r apply1-solution}
+apply(data[, c("alter", "mathe", "deutsch")], 2, var)
+```
+
+Berechne nun mit `apply` den **Median über die Variablen** `alter`, `mathe` und `deutsch` für **jede Person**.
+
+```{r apply2, exercise=TRUE}
+
+```
+
+```{r apply2-solution}
+apply(data[, c("alter", "mathe", "deutsch")], 1, median)
+```
+
+## Fehlende Werte
+
+In echten Datensätzen fehlen oft einzelne Angaben. In `R` werden fehlende Werte als `NA` gespeichert.  
+Für Beispiele zu fehlenden Werten verwenden wir hier den Datensatz `bfi` aus dem Paket `psych`, da dieser tatsächlich fehlende Werte enthält.
+
+```{r na0, echo=TRUE}
+library(psych)
+data(bfi)
+```
+
+Schauen wir uns das am Beispiel der Variable `A1` an:
+
+```{r na1, echo=TRUE}
+table(bfi$A1, useNA = "always")
+sum(is.na(bfi$A1))
+```
+
+Mit `useNA = "always"` wird in einer Tabelle auch angezeigt, wie viele fehlende Werte es gibt. Die Funktion `is.na()` prüft für jeden Wert, ob er fehlt, und mit `sum()` zählen wir dann die fehlenden Werte.
+
+Viele Funktionen geben `NA` zurück, sobald fehlende Werte vorkommen:
+
+```{r na2, echo=TRUE}
+mean(bfi$A1)
+sd(bfi$A1)
+```
+
+Mit `na.rm = TRUE` werden fehlende Werte vor der Berechnung entfernt:
+
+```{r na3, echo=TRUE}
+mean(bfi$A1, na.rm = TRUE)
+sd(bfi$A1, na.rm = TRUE)
+median(bfi$A1, na.rm = TRUE)
+```
+
+Auch bei Korrelationen muss man aufpassen. Hier kann man vollständige Fälle verwenden:
+
+```{r na4, echo=TRUE}
+cor(bfi$A1, bfi$A2, use = "complete.obs")
+```
+
+Das bedeutet: Es werden nur die Personen berücksichtigt, für die auf beiden Variablen tatsächlich Werte vorliegen.
+
+### Übungsbeispiele
+
+Zähle die Anzahl fehlender Werte in der Variable `education`. Speichere anschließend den Mittelwert, die Standardabweichung und eine Tabelle der Werte so, dass fehlende Werte angemessen berücksichtigt werden.
+
+```{r na6, exercise=TRUE, exercise.reveal_solution = FALSE}
+n_missing <- ___
+mean_no_na <- ___
+sd_no_na <- ___
+tab_with_na <- ___
+```
+
+```{r na6-hint-1}
+# Schau Dir die Beispiele oben nochmal an.
+# Du brauchst is.na(), na.rm = TRUE und useNA = "always".
+```
+
+```{r na6-solution}
+n_missing <- sum(is.na(bfi$education))
+mean_no_na <- mean(bfi$education, na.rm = TRUE)
+sd_no_na <- sd(bfi$education, na.rm = TRUE)
+tab_with_na <- table(bfi$education, useNA = "always")
+```
+
+```{r na6-check}
+grade_this({
+  grade_auto()
+})
+```
+
+Berechne die Korrelation zwischen `A1` und `A2`, sodass nur vollständige Fälle verwendet werden.
+
+```{r na7, exercise=TRUE}
+
+```
+
+```{r na7-hint-1}
+# Die Funktion cor() hat ein Argument namens use.
+```
+
+```{r na7-solution}
+cor(bfi$A1, bfi$A2, use = "complete.obs")
+```
+
+```{r na7-check}
+grade_this({
+  grade_auto()
+})
+```
+
+### Manuelle Entfernung von fehlenden Werten
+
+Bisher haben wir Funktionen kennengelernt, die das Argument `na.rm = TRUE` besitzen. Damit können fehlende Werte automatisch vor der Berechnung entfernt werden.
+
+Es gibt jedoch auch Funktionen in `R`, die **kein solches Argument haben**. In diesen Fällen müssen wir fehlende Werte **manuell entfernen**.
+
+Da wir bisher nicht so viele Funktionen kennen, machen wir einfach ein konstruiertes Beispiel. Sagen wir mal, dass wir nicht wissen, dass `median` das Argument `na.rm` besitzt. Die normal Eingabe führt mit NA-Werten natürlich zu keinem sinnvollen Ergebnis:
+
+```{r na8, echo=TRUE, error=TRUE}
+median(bfi$A1)
+```
+
+Um das Problem zu lösen, entfernen wir die fehlenden Werte **vor der Berechnung** über `na.omit`.
+
+```{r na9, echo=TRUE}
+median(na.omit(bfi$A1))
+```
+
+Das Ergebnis ist also ein Vektor **ohne fehlende Werte**, auf den wir dann `median()` anwenden können.
+
+Berechne die Varianz der Variable `A2`, ohne dass fehlende Werte das Ergebnis beeinflussen. Nutze `na.omit`!
+
+```{r na11, exercise=TRUE}
+
+```
+
+```{r na11-hint-1}
+# Entferne fehlende Werte vor der Berechnung mit na.omit().
+```
+
+```{r na11-solution}
+median(na.omit(bfi$A2))
+```
+
+```{r na11-check}
+grade_this({
+  grade_auto()
+})
+```
+
+Dieses Vorgehen ist immer dann notwendig, wenn eine Funktion kein Argument wie `na.rm` besitzt. Die meisten Basisfunktionen in `R` haben jedoch ein solches Argument, sodass wir `na.omit` nicht so häufig brauchen werden.
+
+`na.omit` funktioniert auch bei einem data.frame und entfernt alle Zeilen, die mindestens einen fehlenden Wert enthalten:
+
+```{r echo=TRUE}
+nrow(bfi)
+bfi_without_na <- na.omit(bfi)
+nrow(bfi_without_na)
+```
+
+Hier sehen wir, dass sich die Anzahl der Zeilen (`nrow`) deutlich reduziert hat, nachdem wir `na.omit` eingesetzt haben. Falls zu viele Werte fehlen, ist dieses Vorgehen nicht zu empfehlen und man sollte stattdessen Imputations-Verfahren anwenden (also fehlende Werte durch plausible Werte ersetzen). Das ist jedoch ein sehr komplexes Thema, das wir hier nicht behandeln werden.
 
 ## Exkurs: Eigene Funktionen schreiben
+
+Tatsächlich fehlt uns noch ein Lagemaß, nämlich der Modus. Wie Du schon aus Tag 1 weißt, gibt es keine Funktion in `R` für den Modus (zumindest ohne Zusatzpakete). Wir werden uns jetzt eine eigene Funktion dafür schreiben. Das ist ein relativ fortgeschrittenes Thema, aber wir sind ja auch schon bei Tag 3. Konzentrier Dich gut, dann hast Du bald die Möglichkeit `R`  so zu erweitern, wie Du willst.
 
 Wir überlegen uns zunächst was die Funktion Modus leisten soll, welche Eingaben sie braucht und welche Ausgabe sie produziert.
 
@@ -263,7 +470,7 @@ Das sollte für unsere Zwecke reichen. Wie Du siehst, braucht man doch einige Op
 ```{r function, echo = TRUE}
 modus <- function(x) {
   tab <- table(x)
-  max_frequency <- max(table(x))
+  max_frequency <- max(tab)
   modus <- as.numeric(names(tab[tab == max_frequency]))
   return(modus)
 }
@@ -275,7 +482,7 @@ Wir erzeugen also eine Funktion indem wir einer Variablen den Wert `function` zu
 ```{r function1a, exercise=TRUE, exercise.eval=FALSE}
 modus <- function(x) {
   tab <- table(____)
-  max_frequency <- max(table(x))
+  max_frequency <- max(tab)
   modus <- as.numeric(names(tab[tab == max_frequency]))
   return(modus)
 }
@@ -311,7 +518,7 @@ Nach den Parametern kommen geschweifte Klammern `{}`, die die Funktion definiere
 ```{r function1c, exercise=TRUE}
 modus <- function(x) {
   tab <- table(x)
-  max_frequency <- max(table(x))
+  max_frequency <- max(tab)
   modus <- as.numeric(names(tab[tab == max_frequency]))
   ____
 }
@@ -416,7 +623,7 @@ Boxplot mit Gruppierung:
 boxplot(data$abi ~ data$geschlecht)
 ```
 
-Hier benutzen wir die Tilde `~`. Das ist ein spezielles Symbol in `R`, wir werden es uns später nochmal genauer anschauen. Merk Dir einfach, dass die Syntax der Idee folgt `AV ~ UV1 + UV2 + ... + UVn` (links steht die AV, rechts die UVs, getrennt durch die Tilde) -- bitte frag mich jetzt nicht wo die Tilde auf der Tastatur ist. Ein echter Programmierer weiß das intuitiv!
+Hier benutzen wir die Tilde `~`. Das ist ein spezielles Symbol in `R`, wir werden es uns später nochmal genauer anschauen. Merk Dir einfach, dass die Syntax der Idee folgt `AV ~ UV1 + UV2 + ... + UVn` (links steht die AV, rechts die UVs, getrennt durch die Tilde) -- bitte frag mich jetzt nicht wo die Tilde auf der Tastatur ist.
 
 Histogramm:
 ```{r hist, echo = TRUE}
@@ -434,7 +641,7 @@ und dazu noch die Korrelation als Statistik:
 cor(data$mathe, data$deutsch)
 ```
 
-Viele behaupten ja, dass man entweder gut in Deutsch oder Mathe ist. Dies ist offensichtlich nicht der Fall, denn die Korrelation zwischen beiden ist sehr hoch (wenn man den Messfehler berücksichtigt wäre die Korrelation noch deutlich höher). Aus Perspektive der meisten Intelligenztheorien ist dies ein zu erwartendes Resultat.
+Viele behaupten ja, dass man entweder gut in Deutsch oder Mathe ist. Dies ist offensichtlich nicht der Fall, denn die Korrelation zwischen beiden ist sehr hoch (unter Annahmen der KTT könnte die wahre Korrelation noch höher sein). Aus Perspektive der meisten Intelligenztheorien ist dies ein zu erwartendes Resultat.
 
 Unschön bei der Abbildung ist das Problem des Overplottings. Man sieht nicht, wenn mehrere Punkte aufeinanderliegen. Das lässt sich mit einem Sonnenblumendiagramm beheben:
 
@@ -496,7 +703,7 @@ boxplot(data$lebenszufriedenheit ~ data$vegetarier + data$meditation)
 question("Welche Gruppe hat den niedrigsten Median in Lebenszufriedenheit?",
   answer("Fleischessende nicht-Meditierer", correct = TRUE),
   answer("vegetarische nicht-Meditierer"),
-  answer("vegeatrische Meditierer"),
+  answer("vegetarische Meditierer"),
   answer("Fleischessende Meditierer"),
   answer("alle Mediane sind gleich"),
   random_answer_order = T
@@ -627,7 +834,7 @@ Viel mehr wollen wir heute gar nicht machen, denn gute Abbildungen zu erstellen,
 
 ## Übungsaufgaben Tag 3
 
-Programmiere eine eigene Funktion, die eine Variable $z$-standardisiert. Wende Sie anschließend auf die Mathe- und Deutschnote an. Multipliziere schließlich alle $z$-Werte der Mathe- und Deutschpunkte, summiere alle Wert auf und teile durch die Stichprobengröße (109).
+Programmiere eine eigene Funktion, die eine Variable $z$-standardisiert. Wende Sie anschließend auf die Mathe- und Deutschnote an. Multipliziere schließlich alle $z$-Werte der Mathe- und Deutschpunkte, summiere alle Wert auf und teile durch die Stichprobengröße (`nrow(data)`).
 
 ```{r test, exercise=TRUE}
 
@@ -643,7 +850,7 @@ zstandardisere <- function(x){
 zstandardisiere <- function(x){
   (x - mean(x)) / sd(x)
 }
-sum(zstandardisiere(data$mathe) * zstandardisiere(data$deutsch)) / 109
+sum(zstandardisiere(data$mathe) * zstandardisiere(data$deutsch)) / nrow(data)
 ```
 
 ```{r test-mpc, echo=FALSE}
@@ -670,7 +877,7 @@ round(proportions(table(data$studium, data$geschlecht)), 2)
 q_n(13, "Welchen Anteil haben männliche Psychologie-Studierende an allen Studierenden in der Stichprobe? Angabe in Prozent auf eine ganze Zahl gerundet.")
 ```
 
-Die Varianz die `R` über `var` berechnet ist die geschätzte Populationsvarianz (im Nenner steht $n-1$). Schreib eine Funktion, die die Stichprobenvarianz berechnet (im Nenner steht $n$). Vergleiche anschließend die absolute Abweichung der beiden Funktionen für die Variable Alter.
+Die Funktion var() berechnet die Stichprobenvarianz mit Nenner $n - 1$. Diese wird verwendet, um die Populationsvarianz unverzerrt zu schätzen. Schreib eine Funktion, die die Varianz einer Stichprobe berechnet (im Nenner steht $n$). Vergleiche anschließend die absolute Abweichung der beiden Funktionen für die Variable Alter.
 
 ```{r var, exercise=TRUE}
 
@@ -697,7 +904,7 @@ plot(data$sport, data$lebenszufriedenheit, pch = 18, col = rgb(0, 0, 1, 0.15),
 text(9, 3, "r = 0.21")
 ```
 
-Nun Du. Wenn Du nicht weiter weist, dann mache eine Websuche und finde die notwendigen Parameter.
+Nun Du. Wenn Du nicht weiter weißt, dann mache eine Websuche und finde die notwendigen Parameter.
 
 ```{r bauen1, exercise=TRUE}
 
