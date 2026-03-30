@@ -1,6 +1,8 @@
 .onAttach <- function(libname, pkgname) {
-  # to show a startup message
-  packageStartupMessage(check_rlernen_update())
+  msg <- check_rlernen_update()
+  if (!is.null(msg) && nzchar(msg)) {
+    suppressPackageStartupMessages(msg)
+  }
 }
 
 .onLoad <- function(libname, pkgname) {
