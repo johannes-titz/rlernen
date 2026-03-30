@@ -15,8 +15,8 @@ output:
 
 ```{r setup, include=FALSE}
 librarian::shelf(ez, sjPlot, learnr)
-source("setup.R")
-knitr::opts_chunk$set(cache = F)
+librarian::shelf(rlernen)
+tutorial_setup()
 
 data <- readRDS("data/ws19.rds")
 imdb <- readRDS("data/imdb.rds")

@@ -14,9 +14,9 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-source("setup.R")
+librarian::shelf(rlernen)
+tutorial_setup()
 librarian::shelf(ez, cofad)
-knitr::opts_chunk$set(cache = F)
 
 #  data sets -------
 
