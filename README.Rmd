@@ -48,6 +48,15 @@ Die Abgabe der Hausaufgaben erfolgt über OPAL:
 
 https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/8420720649/CourseNode/91305593842947
 
+<details><summary>Todos (intern)</summary>
+
+- Hausaufgaben besser auf Inhalt abstimmen bzw. andersherum
+- fehlende Inhalte: rep, in dataframe Werte ändern o. löschen, rbind?, fehlende Werte
+- fehlende Inhalt ein Hausaufgaben: dataframe komplett selbst erstellen
+- code check wie bei swirl
+- bessere beispiele (psycholgoie-nah)
+- antworten der studis speichern
+
 <details><summary><b>Notes for self-hosting this tutorial</b>
 </summary>
 This repository contains the learnr-based tutorial *rlernen*. It is primarily intended for personal use but may also be useful for others who wish to modify or host the *rlernen* tutorial.
