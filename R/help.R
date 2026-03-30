@@ -1,4 +1,8 @@
-#" browseVignettes()
+#' Methods for printing help search results, package info, and data/vignette
+#'
+#' browseVignettes()
+#' @param x An R object to be printed
+#' @param ... Additional arguments passed to knit_print()
 #' @export
 knit_print.browseVignettes = function(x, ...) {
   if (length(x) == 0) return('No vignettes found')
@@ -13,7 +17,12 @@ knit_print.browseVignettes = function(x, ...) {
   knit_print(x, ...)
 }
 
-#" ?foo / help(foo)
+#' Methods for printing help search results, package info, and data/vignette
+#'
+#' ?foo / help(foo)
+#' @param x An R object to be printed
+#' @param options A list of options passed to knit_print()
+#' @param ... Additional arguments passed to knit_print()
 #' @export
 knit_print.help_files_with_topic = function(x, options, ...) {
   n = length(x)
@@ -48,8 +57,8 @@ knit_print.help_files_with_topic = function(x, options, ...) {
   }
 
   # call tools::Rd2[txt,HTML,latex]
-  convert = getFromNamespace(paste('Rd', type, sep = '2'), 'tools')
-  out = capture.output(convert(Rd))
+  convert = utils::getFromNamespace(paste('Rd', type, sep = '2'), 'tools')
+  out = utils::capture.output(convert(Rd))
   out = paste(out, collapse = '\n')
   # only need the body fragment (Rd2HTML(fragment = TRUE) does not really work)
   if (type == 'HTML') {
@@ -71,7 +80,11 @@ extract_Rd = function(Rd, section) {
   Rd
 }
 
-#" help.search()
+#' Methods for printing help search results, package info, and data/vignette
+#'
+#' @param x An R object to be printed
+#' @param ... Additional arguments passed to knit_print()
+#' help.search()
 #' @export
 knit_print.hsearch = function(x, ...) {
   # case-insensitive matching of column names (e.g. R 3.2.0 uses 'Topic' but R
@@ -88,13 +101,22 @@ knit_print.hsearch = function(x, ...) {
   knit_print(out, ...)
 }
 
-#" library(help = foo)
+#' Methods for printing help search results, package info, and data/vignette
+#'
+#' @param x An R object to be printed
+#' @param ... Additional arguments passed to knit_print()
+#' library(help = foo)
 #' @export
 knit_print.packageInfo = function(x, ...) {
   sub('^\n', '', paste(format(x), collapse = '\n'))
 }
 
-#" data()/vignette()
+#' Methods for printing help search results, package info, and data/vignette
+#'
+#' @param x An R object to be printed
+#' @param options A list of options passed to knit_print()
+#' @param ... Additional arguments passed to knit_print()
+#' data()/vignette()
 #' @export
 knit_print.packageIQR = function(x, options, ...) {
   if (nrow(x$results) == 0) return(paste(x$title, 'not found'))
