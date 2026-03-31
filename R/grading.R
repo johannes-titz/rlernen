@@ -12,8 +12,6 @@ get_solution_env <- function(solution_code, envir_prep) {
 
 # ---------- object extraction ----------
 
-# Extract all objects from an environment. Optionally include the returned result
-# as an additional pseudo-object named ".result".
 extract_objects <- function(env, include = NULL) {
   objs <- ls(env)
   out <- stats::setNames(lapply(objs, function(x) get(x, envir = env)), objs)
@@ -25,10 +23,94 @@ extract_objects <- function(env, include = NULL) {
   out
 }
 
+# ---------- plot helpers ----------
+
+is_plot_call <- function(expr) {
+  if (!is.call(expr)) return(FALSE)
+  nm <- call_name(expr)
+
+  nm %in% c(
+    "plot", "boxplot", "hist", "barplot", "pairs",
+    "funnel", "forest", "metafor::funnel", "metafor::forest"
+  )
+}
+
+downsample_matrix <- function(mat, n = 64) {
+  nr <- nrow(mat)
+  nc <- ncol(mat)
+
+  r_idx <- cut(seq_len(nr), breaks = n, labels = FALSE)
+  c_idx <- cut(seq_len(nc), breaks = n, labels = FALSE)
+
+  out <- matrix(NA_real_, nrow = n, ncol = n)
+
+  for (i in seq_len(n)) {
+    rows <- which(r_idx == i)
+    for (j in seq_len(n)) {
+      cols <- which(c_idx == j)
+      out[i, j] <- mean(mat[rows, cols, drop = FALSE])
+    }
+  }
+
+  out
+}
+
+capture_plot_signature <- function(code, env, width = 700, height = 700, res = 96, n = 64) {
+  tf <- tempfile(fileext = ".png")
+
+  grDevices::png(filename = tf, width = width, height = height, res = res, bg = "white")
+  on.exit({
+    if (grDevices::dev.cur() > 1) grDevices::dev.off()
+    unlink(tf)
+  }, add = TRUE)
+
+  result <- try(eval(parse(text = code), envir = env), silent = TRUE)
+
+  grDevices::dev.off()
+
+  if (inherits(result, "try-error")) {
+    return(structure(list(error = TRUE), class = "plot_signature"))
+  }
+
+  img <- png::readPNG(tf)
+
+  gray <- if (length(dim(img)) == 3) {
+    # RGB -> grayscale
+    0.2989 * img[, , 1] + 0.5870 * img[, , 2] + 0.1140 * img[, , 3]
+  } else {
+    img
+  }
+
+  # invert so darker lines/points have larger values
+  gray <- 1 - gray
+
+  structure(
+    list(
+      error = FALSE,
+      img = downsample_matrix(gray, n = n)
+    ),
+    class = "plot_signature"
+  )
+}
+
+compare_plot_signature <- function(x, y, tol = 0.08) {
+  if (!inherits(x, "plot_signature")) return(FALSE)
+  if (!inherits(y, "plot_signature")) return(FALSE)
+  if (isTRUE(x$error) || isTRUE(y$error)) return(FALSE)
+
+  if (!identical(dim(x$img), dim(y$img))) return(FALSE)
+
+  mean(abs(x$img - y$img)) <= tol
+}
+
 # ---------- type detection ----------
 
 detect_target_type <- function(value) {
-  if (is.numeric(value) && length(value) == 1) {
+  if (inherits(value, "plot_signature")) {
+    "plot_signature"
+  } else if (inherits(value, "rma")) {
+    "rma"
+  } else if (is.numeric(value) && length(value) == 1) {
     "scalar"
   } else if (inherits(value, "table")) {
     "table"
@@ -62,7 +144,39 @@ compare_anova <- function(x, y, tol = 1e-8) {
   isTRUE(all.equal(dx, dy, tolerance = tol, check.attributes = FALSE))
 }
 
+compare_rma <- function(x, y, tol = 1e-8) {
+  if (!inherits(x, "rma") || !inherits(y, "rma")) return(FALSE)
+
+  get_num <- function(obj, name) {
+    val <- try(obj[[name]], silent = TRUE)
+    if (inherits(val, "try-error") || is.null(val)) return(NULL)
+    as.numeric(val)
+  }
+
+  bx <- get_num(x, "beta")
+  by <- get_num(y, "beta")
+
+  px <- get_num(x, "pval")
+  py <- get_num(y, "pval")
+
+  if (is.null(bx) || is.null(by) || is.null(px) || is.null(py)) {
+    return(FALSE)
+  }
+
+  if (length(bx) != length(by)) return(FALSE)
+  if (length(px) != length(py)) return(FALSE)
+
+  isTRUE(all.equal(bx, by, tolerance = tol, check.attributes = FALSE)) &&
+    isTRUE(all.equal(px, py, tolerance = tol, check.attributes = FALSE))
+}
+
 comparators <- list(
+  plot_signature = function(x, y, tol = 0.08) {
+    compare_plot_signature(x, y, tol = tol)
+  },
+  rma = function(x, y, tol = 1e-8) {
+    compare_rma(x, y, tol = tol)
+  },
   scalar = function(x, y, tol = 1e-8) {
     is.numeric(x) &&
       length(x) == 1 &&
@@ -94,54 +208,85 @@ has_target_object <- function(objects, target, type, tol = 1e-8) {
 }
 
 # ---------- target extraction ----------
-# If the solution created objects, use them.
-# Otherwise fall back to .solution as one target named ".result".
+# Extended:
+# - assigned objects are still targets
+# - top-level plot calls become synthetic targets .plot1, .plot2, ...
 
 extract_targets_from_solution <- function(solution_env, solution_code, solution_result = NULL) {
   expr <- parse(text = solution_code, keep.source = FALSE)
 
-  objs <- vapply(
-    Filter(
-      function(e) is.call(e) && identical(as.character(e[[1]]), "<-"),
-      as.list(expr)
-    ),
-    function(e) as.character(e[[2]]),
-    character(1)
-  )
+  targets <- list()
+  obj_names <- character()
+  plot_i <- 0L
 
-  if (length(objs) == 0 && !is.null(solution_result)) {
+  for (i in seq_along(expr)) {
+    e <- expr[[i]]
+
+    if (is.call(e) && identical(as.character(e[[1]]), "<-")) {
+      obj_name <- as.character(e[[2]])
+      obj_names <- c(obj_names, obj_name)
+
+      value <- get(obj_name, envir = solution_env)
+
+      targets[[length(targets) + 1]] <- list(
+        name = obj_name,
+        type = detect_target_type(value),
+        value = value
+      )
+      next
+    }
+
+    if (is_plot_call(e)) {
+      plot_i <- plot_i + 1L
+      plot_code <- paste(deparse(e), collapse = "\n")
+
+      targets[[length(targets) + 1]] <- list(
+        name = paste0(".plot", plot_i),
+        type = "plot_signature",
+        value = capture_plot_signature(plot_code, solution_env)
+      )
+    }
+  }
+
+  if (length(obj_names) == 0 && plot_i == 0 && !is.null(solution_result)) {
     value <- solution_result
 
-    return(list(list(
+    targets[[length(targets) + 1]] <- list(
       name = ".result",
       type = detect_target_type(value),
       value = value
-    )))
+    )
   }
 
-  lapply(objs, function(obj_name) {
-    value <- get(obj_name, envir = solution_env)
-
-    list(
-      name = obj_name,
-      type = detect_target_type(value),
-      value = value
-    )
-  })
+  targets
 }
 
 # ---------- checking targets ----------
+# Extended:
+# - plot targets are checked by rendering the user's whole code off-screen
 
-check_targets <- function(targets, user_env, user_result = NULL, tol = 1e-8) {
+check_targets <- function(targets, user_env, user_result = NULL, user_code = NULL, tol = 1e-8) {
   user_objects <- extract_objects(user_env, include = user_result)
 
+  needs_plot_check <- any(vapply(targets, function(x) identical(x$type, "plot_signature"), logical(1)))
+
+  user_plot <- NULL
+  if (needs_plot_check && !is.null(user_code)) {
+    user_plot <- try(capture_plot_signature(user_code, user_env), silent = TRUE)
+  }
+
   lapply(targets, function(trg) {
-    found <- has_target_object(
-      objects = user_objects,
-      target = trg$value,
-      type = trg$type,
-      tol = tol
-    )
+    found <- if (identical(trg$type, "plot_signature")) {
+      !inherits(user_plot, "try-error") &&
+        compare_plot_signature(user_plot, trg$value, tol = tol)
+    } else {
+      has_target_object(
+        objects = user_objects,
+        target = trg$value,
+        type = trg$type,
+        tol = tol
+      )
+    }
 
     list(
       name = trg$name,
@@ -152,7 +297,6 @@ check_targets <- function(targets, user_env, user_result = NULL, tol = 1e-8) {
 }
 
 # ---------- code parsing ----------
-# Parse code and collect all function calls recursively.
 
 collect_calls <- function(code) {
   expr <- parse(text = code, keep.source = FALSE)
@@ -198,19 +342,14 @@ used_functions <- function(code, funs) {
 }
 
 # ---------- argument usage ----------
-# Supports both named and positional arguments.
-# Example:
-# arg_spec = list(use = list(position = 3, value = "complete.obs"))
 
 get_call_arg <- function(cl, arg_name = NULL, position = NULL) {
   nms <- names(cl)
 
-  # named argument
   if (!is.null(arg_name) && arg_name %in% nms) {
     return(cl[[which(nms == arg_name)[1]]])
   }
 
-  # positional argument (counted among function arguments, not including function name)
   if (!is.null(position)) {
     idx <- position + 1
     if (length(cl) >= idx) {
@@ -235,7 +374,6 @@ arg_used_in_calls <- function(calls, arg_name = NULL, position = NULL) {
 }
 
 # ---------- argument values ----------
-# Evaluate the used argument expression in the user's result environment if possible.
 
 arg_value_matches_in_calls <- function(calls, user_env, expected,
                                        arg_name = NULL, position = NULL) {
@@ -278,7 +416,6 @@ suggest_code_features_for_missing_targets <- function(checks, user_code, user_en
     if (is.null(spec)) next
     if (is.atomic(spec)) spec <- list(functions = spec, args = list())
 
-    # 1) function hints
     funs <- spec$functions %||% character()
     if (length(funs) > 0) {
       used <- used_functions(user_code, funs)
@@ -296,7 +433,6 @@ suggest_code_features_for_missing_targets <- function(checks, user_code, user_en
       }
     }
 
-    # 2) argument-name / position hints
     arg_specs <- spec$args %||% list()
     for (fun in names(arg_specs)) {
       calls <- find_calls_to(user_code, fun)
@@ -319,7 +455,6 @@ suggest_code_features_for_missing_targets <- function(checks, user_code, user_en
       }
     }
 
-    # 3) argument-value hints
     for (fun in names(arg_specs)) {
       calls <- find_calls_to(user_code, fun)
       if (length(calls) == 0) next
@@ -335,7 +470,7 @@ suggest_code_features_for_missing_targets <- function(checks, user_code, user_en
           return(
             paste0(
               "Noch nicht ganz richtig (`", target_name, "`). ",
-              "Das Argument `", arg_nm, "` in `", fun, "()` scheint noch nicht zu stimmen."
+              "Der Wert des Arguments `", arg_nm, "` in `", fun, "()` scheint noch nicht zu stimmen."
             )
           )
         }
@@ -380,7 +515,13 @@ grade_targets_with_soft_hints <- function(
     solution_code = solution_code,
     solution_result = solution_result
   )
-  checks   <- check_targets(targets, user_env, user_result = user_result, tol = tol)
+  checks   <- check_targets(
+    targets,
+    user_env,
+    user_result = user_result,
+    user_code = user_code,
+    tol = tol
+  )
 
   all_found <- all(vapply(checks, function(x) x$found, logical(1)))
   if (all_found) {
@@ -451,14 +592,12 @@ extract_call_args <- function(cl, keep_values = TRUE, eval_env = baseenv()) {
     supplied_pos <- i - 1
     arg_expr <- cl[[i]]
 
-    # if unnamed, try to recover the formal argument name from the function
     if (identical(nm, "") && length(formal_names) >= supplied_pos) {
       nm <- formal_names[supplied_pos]
     }
 
     pos <- if (!identical(nm, "") && nm %in% formal_names) match(nm, formal_names) else supplied_pos
 
-    # if unnamed, try to recover the formal argument name from the function
     if (identical(nm, "") && length(formal_names) >= pos) {
       nm <- formal_names[pos]
     }
@@ -516,6 +655,8 @@ infer_suggestion_map_from_solution <- function(solution_code, keep_values = TRUE
       lhs <- as.character(e[[2]])
       rhs <- e[[3]]
       out[[lhs]] <- make_spec(rhs)
+    } else if (is_plot_call(e)) {
+      out[[paste0(".plot", i)]] <- make_spec(e)
     } else {
       out[[".result"]] <- make_spec(e)
     }
