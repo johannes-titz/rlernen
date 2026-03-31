@@ -48,12 +48,18 @@ Die Abgabe der Hausaufgaben erfolgt über OPAL:
 
 https://bildungsportal.sachsen.de/opal/auth/RepositoryEntry/8420720649/CourseNode/91305593842947
 
+## Development
+
+Dies ist zwar ein R-Paket, aber es enthält hauptsächlich learnr-Tutorials. Für die Entwicklung bedeutet dies: ich nutze Imports für Abhängigkeiten in learnr, was eine NOTE produziert, da die imports nicht verwendet werden im Paket.
+
+`knitr:::out_format` und `remotes:::local_sha` verursachen benfalls eine NOTE, was aber nachvollziehbar ist.
+
 <details><summary>Todos (intern)</summary>
 
+- check if all tutorials run..are startable without error
 - Hausaufgaben besser auf Inhalt abstimmen bzw. andersherum
 - fehlende Inhalte: rep, in dataframe Werte ändern o. löschen, rbind?, fehlende Werte
 - fehlende Inhalt ein Hausaufgaben: dataframe komplett selbst erstellen
-- code check wie bei swirl
 - bessere beispiele (psycholgoie-nah)
 - antworten der studis speichern
 
