@@ -23,6 +23,8 @@ Imports:
     rmarkdown,
     shiny,
     sjPlot,
+    metafor,
+    metadat,
     WebPower,
     librarian,
     meme,
