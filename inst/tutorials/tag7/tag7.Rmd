@@ -1,5 +1,5 @@
 ---
-title: "Meta-Analyse"
+title: "7. Meta-Analyse"
 output: learnr::tutorial
 runtime: shiny_prerendered
 ---
@@ -181,15 +181,14 @@ Im Random-Effects-Modell wird zusätzlich die Varianz zwischen den wahren Effekt
 
 Sonst tut sich gar nicht so viel. Der geschätzte Gesamteffekt ist hier etwas größer als im Fixed-Effect-Modell, aber die Unsicherheit ist auch größer, was sich in einem breiteren Konfidenzintervall zeigt. Das liegt daran, dass das Random-Effects-Modell die zusätzliche Variabilität zwischen den Studien berücksichtigt, was zu einer größeren Unsicherheit führt.
 
-Der Forest-Plot für das Random-Effects-Modell enthält nun natürlich andere Werte. Versuche ihn zu erstellen, nutze auch die korrekte Bezeichnung für die Studien.
+Der Forest-Plot für das Random-Effects-Modell enthält nun natürlich andere Werte. Versuche ihn zu erstellen, nutze auch die korrekte Bezeichnung für die Studien. Der Autor reicht diesmal aus.
 
 ```{r forest-random, exercise = TRUE, exercise.setup='random-model-demo'}
 
 ```
 
 ```{r forest-random-solution, include=FALSE}
-forest(res_random, slab = paste(dat.raudenbush1985$author,
-                                dat.raudenbush1985$year, sep = ", "))
+forest(res_random, slab = dat.raudenbush1985$author)
 ```
 
 ```{r forest-random-check}
