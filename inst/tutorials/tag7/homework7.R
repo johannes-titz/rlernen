@@ -1,47 +1,122 @@
-# Hausaufgabe 7
-#
-# Wir verwenden den Datensatz 'mtcars', der in R verfügbar ist. Es werden nur
-# ausgewählte metrische Variablen untersucht: mpg, disp, hp, wt, qsec
-#
-# Lade den Datensatz und selektiere zunächst diese Variablen:
+# Hausaufgaben 7: Meta-Analyse
+# --------------------------------------------------
+# Verwende die Datensätze dat.cohen1981 und dat.bangertdrowns2004
+# aus dem Paket {metadat}. Bearbeite die Aufgaben direkt im Code.
+
+library(metafor)
+library(metadat)
+
+# --------------------------------------------------
+# Aufgabe 1: Datenverständnis (dat.cohen1981)
+# --------------------------------------------------
+
+# a) Lade den Datensatz und verschaffe dir einen Überblick
+# z. B.über head(), str()
+
+# b) Welche Variablen enthalten:
+# - die Effektgröße?
+# - die Unsicherheit der Effektgröße (Varianz / SE)?
+
+# c) Worum geht es inhaltlich? (siehe ?dat.cohen1981)
 
 
-# Führe nun eine Faktoranalyse mit einem Faktor durch. Nutze die
-# Varimax-Rotation.
+# --------------------------------------------------
+# Aufgabe 2: Effektgrößen vorbereiten
+# --------------------------------------------------
+
+# a) Welches Effektgrößenmaß ist hier sinnvoll?
+
+# b) Berechne yi und vi mit escalc()
+
+# c) Warum ist die Berechnung der Effektgröße hier notwendig?
 
 
-# Wie groß ist die Varianzaufklärung des Faktors?
-# Wie groß ist die Faktorladung für die Variable 'wt'?
-# Wie groß ist die Kommunalität dieser Variable?
+# --------------------------------------------------
+# Aufgabe 3: Fixed-Effect-Modell
+# --------------------------------------------------
+
+# a) Schätze ein Fixed-Effect-Modell mit rma() und transformiere den Effekt ggf.
+# zurück in die ursprüngliche Einheit
+
+# b) Interpretiere:
+# - Effekt
+# - KI
+# - p-Wert
+
+# c) Interpretiere I^2 und den Q-Test
+
+# d) Ist FE plausibel?
 
 
-# Führe nun eine Faktoranalyse mit zwei Faktoren durch.
-# Welche Items laden jeweils auf welchen Faktoren?
-# Erscheint die Zweifaktorlösung sinnvoller als die Einfaktorlösung?
+# --------------------------------------------------
+# Aufgabe 4: Random-Effects-Modell
+# --------------------------------------------------
+
+# a) Schätze ein Random-Effects-Modell (REML) und transformiere den Effekt ggf.
+# zurück in die ursprüngliche Einheit
+
+# b) Vergleiche mit FE:
+# - Effektgröße
+# - Unsicherheit
+
+# c) Interpretiere tau^2
 
 
-# Teil 2 -----------------------------------------------------------------------
-#
-# Wir nutzen den Datensatz 'USArrests', der direkt in R verfügbar ist. Der
-# Datensatz enthält Verbrechen pro 100 000 Einwohner in den 50 US Bundesstaaten
-# aus dem Jahr 1973.
+# --------------------------------------------------
+# Aufgabe 5: Forest Plot
+# --------------------------------------------------
 
-# Führe eine Cluster-Analyse mit hclust durch. Standardisiere zunächst die
-# Variablen.
+# a) Erstelle einen Forest Plot
 
+# b) Beschreibe:
+# - Streuung
+# - Studiengrößen
+# - Gesamteffekt
 
-# Erstelle ein Dendrogramm.
-
-
-# Wie viele Cluster erscheinen im Dendrogramm sinnvoll? Begründe kurz.
+# c) Gibt es Ausreißer?
 
 
-# Schneide den Baum so, dass 4 Cluster entstehen. Wie groß sind die jeweiligen
-# Cluster?
+# --------------------------------------------------
+# Aufgabe 6: Funnel Plot
+# --------------------------------------------------
+
+# a) Erstelle einen Funnel Plot
+
+# b) Ist er symmetrisch?
+
+# c) Warum sollte man einen Funnel Plot nicht überinterpretieren?
 
 
-# Welche Bundesstaaten gehören jeweils zu Cluster 1?
+# --------------------------------------------------
+# Aufgabe 7: Datenverständnis (dat.bangertdrowns2004)
+# --------------------------------------------------
+
+# a) Überblick über Datensatz
+
+# b) Welche Effektgröße liegt hier vor?
+
+# c) Worum geht es inhaltlich?
 
 
-# Erstelle ein Streudiagramm für die zwei Variablen Assault und UrbanPop und
-# färbe die Punkte nach Clusterzugehörigkeit.
+# --------------------------------------------------
+# Aufgabe 8: Meta-Analyse (Bangert-Drowns)
+# --------------------------------------------------
+
+# a) Bereite Effektgrößen ggf. vor
+
+# b) Schätze Random-Effects-Modell
+
+# c) Transformiere ggf. zurück
+
+# d) Interpretiere Effekt
+
+
+# --------------------------------------------------
+# Aufgabe 9: Vergleich
+# --------------------------------------------------
+
+# a) Vergleiche beide (cohen1981 und bangertdrowns2004) Analysen:
+# - Vorgehensweise
+# - Heterogenität
+
+# b) Wo ist RE besonders wichtig? Warum?

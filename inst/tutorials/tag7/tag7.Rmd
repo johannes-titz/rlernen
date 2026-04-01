@@ -7,7 +7,7 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message = FALSE)
 # Pakete installieren (falls noch nicht vorhanden)
-librarian::shelf(c("learnr", "metafor", "metadat", "dplyr", "rlernen"))
+librarian::shelf(c("learnr", "metafor", "metadat", "rlernen"))
 gradethis::gradethis_setup()
 tutorial_setup()
 ```
@@ -32,7 +32,8 @@ Heute behandeln wir die Basics der Meta-Analyse in R. Wir arbeiten mit dem Paket
 
 Am Ende solltest Du:
 
-- verstehen, was eine Meta-Analyse macht,
+- einen Output von `rma()` lesen und interpretieren können,
+- zwischen FE und RE begründet entscheiden können,
 - ein Fixed-Effect-Modell schätzen,
 - ein Random-Effects-Modell schätzen,
 - einen Forest Plot und einen Funnel Plot erstellen und lesen,
@@ -61,7 +62,7 @@ Das Wichtigste bei der Meta-Analyse sind zwei Größen:
 (1) die Effektgröße (hier `yi`) und  
 (2) die zugehörige Varianz (hier `vi`).  
 
-Über `?dat.raudenbusch1985` erhalten wir zusätzliche Informationen dazu, was genau gemessen wurde und wie die Daten zustande gekommen sind (wenn auch nicht bis ins letzte Detail).
+Über `?dat.raudenbush1985` erhalten wir zusätzliche Informationen dazu, was genau gemessen wurde und wie die Daten zustande gekommen sind (wenn auch nicht bis ins letzte Detail).
 
 `yi` ist in diesem Fall ein standardisierter Mittelwertsunterschied im IQ zwischen Experimental- und Kontrollgruppe. Es gab also eine Gruppe von Schülern, die Lehrern als „begabt“ angepriesen wurden, sowie eine Kontrollgruppe mit „normalen“ Schülern. Tatsächlich wurde diese Zuordnung jedoch zufällig vorgenommen.
 
@@ -94,9 +95,10 @@ Und wie interpretiert man das Ganze?
 - Estimate: Das ist die geschätzte durchschnittliche Effektgröße über alle Studien hinweg.
 - se: Das ist der Standardfehler der Schätzung, also die Unsicherheit um den geschätzten Effekt.
 - pval: Das ist der p-Wert für die Nullhypothese, dass der wahre Effekt 0 ist. Ein kleiner p-Wert deutet darauf hin, dass es wahrscheinlich einen echten Effekt gibt.
-- ci.lb und ci.ub: Das sind die unteren und oberen Grenzen des 95%-Konfidenzintervalls für den wahren Effekt. Wenn das Intervall 0 nicht enthält, ist das äquivalent zu einem zweiseitigem Signifikantest auf dem ensprechenden Alpha-Niveau.
+- ci.lb und ci.ub: Das sind die unteren und oberen Grenzen des 95%-Konfidenzintervalls für den wahren Effekt. Wenn das Intervall 0 nicht enthält, ist das äquivalent zu einem zweiseitigem Signifikantest auf dem entsprechenden Alpha-Niveau.
 
-Außerdem haben wir die Heterogenität der Studien geschätzt, hier mithilfe von $I^2$ und $H^2$. In einem Fixed-Effect-Modell sollte die Heterogenität idealerweise bei 0 liegen, da angenommen wird, dass alle Studien denselben wahren Effekt teilen. Liegt $I^2$ jedoch deutlich über 0, kann das darauf hindeuten, dass diese Annahme nicht erfüllt ist. In unserem Fall lassen sich etwa 50 \% der beobachteten Varianz nicht durch zufälliges Rauschen erklären, sondern durch tatsächliche Unterschiede zwischen den Studien. Entsprechend ist die Gesamtvariabilität ungefähr doppelt so hoch, wie sie allein aufgrund von Stichprobenfehlern zu erwarten wäre. Der Test auf Heterogenität zeigt zusätzlich, ob diese Abweichung statistisch signifikant ist. Das ist hier der Fall — zumindest dann, wenn $\alpha$ nicht außergewöhnlich klein gewählt wurde.
+Außerdem haben wir die Heterogenität der Studien geschätzt, hier mithilfe von $I^2$ und $H^2$. Im Fixed-Effect-Modell wird angenommen, dass es keine echte Heterogenität gibt.
+Ein erhöhtes I² ist daher ein Hinweis darauf, dass diese Annahme verletzt sein könnte. Ein $I^2$ von etwa 50 % deutet darauf hin, dass ein substanzieller Teil der beobachteten Variation nicht allein durch Stichprobenfehler erklärt wird. Entsprechend ist die Gesamtvariabilität ungefähr doppelt so hoch, wie sie allein aufgrund von Stichprobenfehlern zu erwarten wäre. Der Test auf Heterogenität zeigt zusätzlich, ob diese Abweichung statistisch signifikant ist. Das ist hier der Fall — zumindest dann, wenn $\alpha$ nicht außergewöhnlich klein gewählt wurde.
 
 Es gibt typischerweise auch zwei Abbildungen bei Meta-Analysen: den Forest Plot und den Funnel Plot.
 
@@ -135,9 +137,13 @@ Der Code für unser Beispiel:
 funnel(res)
 ```
 
-Hier deutet sich tatsächlich ein Publication-Bias an, denn es fehlen Studien in der unteren linken Hälfte des Funnels. Also Studien mit großem Standardfehler (z. B. kleinen Stichproben), die nahe 0 oder gar negativ sind. Bei negativen Studien, die statistisch signifikant werden, sollte eigentlich kein Publication-Bias auftreten, aber es kann trotzdem sein, dass solche Studien systematisch abgelehnt werden.
+Hier deutet sich tatsächlich ein Publication-Bias an, denn es fehlen Studien in der unteren linken Hälfte des Funnels. Also Studien mit großem Standardfehler (z. B. kleinen Stichproben), die nahe 0 oder gar negativ sind. Allein aus dem Plot lässt sich das aber nicht sicher schließen und man sollte noch weitere Argumente finden. Das übersteigt aber eine Einführung in die Meta-Analyse.
+
+<!-- Bei negativen Studien, die statistisch signifikant werden, sollte eigentlich kein Publication-Bias auftreten, aber es kann trotzdem sein, dass solche Studien systematisch abgelehnt werden. -->
 
 Beachte, dass die `y`-Skala beim Funnel-Plot verkehrt ist, also nach unten hin größer wird. Das liegt daran, dass größere Standardfehler (also kleinere Studien) zu einer größeren Streuung führen, also unten liegen müssen für die Funnel-Metapher.
+
+Da wir in den verschiedenen Ergebnissen gesehen haben, dass die Studien heterogen sind, ist die Annahme eines gemeinsamen Effekts fraglich. Daher betrachten wir nun ein Modell, das diese Unterschiede explizit berücksichtigt.
 
 ## Random-Effects-Modell
 
@@ -157,7 +163,7 @@ Das ist in der Psychologie oft realistischer, weil sich Studien unterscheiden k�
 - Operationalisierung des Outcomes.
 - ...
 
-So richtig klar ist aber wohl nicht, was es bedeteutet, dass es mehrere Effekte gibt. Heißt das, dass es so viele Pygmalion-Effekte gibt, wie es Studien gibt? Warum sollten diese einer bestimmten Verteilung folgen? Man kann also diese Vorgehensweise auch kritisch sehen, aber sie ist absoluter Standard in der Psychologie. Aber schauen wir uns doch einfach das Beispiel an.
+So richtig klar ist aber wohl nicht, was es bedeutet, dass es mehrere Effekte gibt. Formal wird angenommen, dass die wahren Effekte aus einer Verteilung stammen (meist normalverteilt), deren Varianz durch $\tau^2$ beschrieben wird. Heißt das, dass es so viele Pygmalion-Effekte gibt, wie es Studien gibt? Warum sollten diese einer bestimmten Verteilung folgen? Man kann also diese Vorgehensweise auch kritisch sehen, aber sie ist absoluter Standard in der Psychologie. Schauen wir uns doch einfach das Beispiel an.
 
 Das Random-Effects-Modell schätzen wir mit:
 
@@ -212,7 +218,7 @@ Und jetzt üben wir weiter mit einem anderen Datensatz.
 
 ## Analyse 2: Interviewleistung und Arbeitsleistung
 
-Diesmal schauen wir uns den Datensatz dat.mcdaniel1994` an. Er enthält Daten zu Job-Interviews, genauer gesagt zum Zusammenhang zwischen Interview-Bewertung und späterer Arbeitsleistung.
+Diesmal schauen wir uns den Datensatz `dat.mcdaniel1994` an. Er enthält Daten zu Job-Interviews, genauer gesagt zum Zusammenhang zwischen Interview-Bewertung und späterer Arbeitsleistung.
 
 Ein Blick in `?dat.mcdaniel1994` zeigt, dass die Effektgrößen `ri` und die Stichprobengrößen `ni` vorliegen, jedoch keine Varianzen. Bei Korrelationen ist es auch üblich diese erstmal umzurechnen, da die Stichprobenverteilungen bei Korrelationen asymmetrisch sind. Der erste Schritt ist also:
 
@@ -244,7 +250,7 @@ dat_mcdaniel_es <- escalc(measure = "ZCOR", ri = ri, ni = ni, data = dat.mcdanie
 
 
 ```{r fixed-full-back-transform, echo=TRUE}
-### meta-analysis of the transformed correlations using a random-effects model
+### meta-analysis of the transformed correlations using a fixed-effect model
 res <- rma(yi, vi, data=dat_mcdaniel_es, method = "FE")
 res
 
@@ -252,12 +258,12 @@ res
 predict(res, transf=transf.ztor, digits=2)
 ```
 
-In diesem Fall ist das kein großer Unterschied, aber die Transformation ist natürlich zwingend notwendig.
+In diesem Fall ist das kein großer Unterschied, aber die Rück-Transformation ist natürlich zwingend notwendig, da wir die Korrelation interpretieren wollen, nicht den $z$-Wert.
 
 Nun rechne die Random-Effects-Meta-Analyse:
 
 ```{r exercise-random-full, exercise=TRUE, exercise.setup='mcdaniel-es'}
-res <- ___
+res <- rma(___, ___, data = ___, method = ___)
 ```
 
 ```{r exercise-random-full-solution, include=FALSE}
@@ -339,7 +345,7 @@ question(
   "Welche Aussage zum Funnel Plot ist am besten?",
   answer("Ein asymmetrischer Funnel Plot beweist automatisch einen Publication-Bias", correct = FALSE),
   answer("Ein Funnel Plot ist nutzlos, sobald mehr als 10 Studien vorliegen.", correct = FALSE),
-  answer("Ein Funnel Plot kann Hinweise auf einen Publication-Bias geben, seine Intepretation ist jedoch oft subjektiv.", correct = TRUE),
+  answer("Ein Funnel Plot kann Hinweise auf einen Publication-Bias geben, seine Interpretation ist jedoch oft subjektiv.", correct = TRUE),
   answer("Ein Funnel Plot kann als Alternative für den Forest Plot verwendet werden.", correct = FALSE)
 )
 ```
@@ -363,4 +369,7 @@ In diesem Tutorial hast Du gelernt:
 - was eine Meta-Analyse macht,
 - wie man mit {metafor} Meta-Analyse rechnet,
 - worin sich Fixed-Effect und Random-Effects unterscheiden,
-- wie ein Forest Plot und ein Funnel Plot eingesetzt werden
+- wie ein Forest Plot und ein Funnel Plot eingesetzt und interpretiert werden.
+Hier ist eine stilistisch flüssigere und etwas präzisere Version deines Textes:
+
+Das waren jedoch nur die Grundlagen – es gibt noch deutlich mehr zu lernen. So können beispielsweise Kovariate in eine Meta-Analyse integriert werden (Meta-Regression). Darüber hinaus existiert eine Vielzahl weiterer Effektgrößen, etwa Odds-Ratios oder Anteile. Auch stehen unterschiedliche Verfahren zur Schätzung der Varianz zwischen den wahren Effekten zur Verfügung oder zur Diagnose und Korrektur eines Publication-Bias.
