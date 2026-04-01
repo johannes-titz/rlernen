@@ -70,12 +70,19 @@ Und nun das Modell:
 
 ```{r, echo = TRUE}
 model1 <- lm(imdb_score ~ budget + duration + age, data = imdb)
-summary(model1)
 ```
 
 Mit `lm` machen wir ein **l**ineares **M**odell, was äquivalent zu einer Regression ist. Die Syntax bedient sich hier der Formelschreibweise von `R`. Zunächst kommt die AV, dann die Tilde `~` und dann die UVs mit einem `+` voneinander getrennt. Genau wie beim Boxplot mit mehreren UVs (siehe Tag 3). Schließlich sagen wir `lm` noch in welchem Datensatz sich diese Variablen befinden. Das ist sehr praktisch, ansonsten müssten wir immer wieder `data$` vor die Variablen schreiben (`data$imdb_score ~ data$action + ...`), was viel mehr Tipparbeit wäre.
 
-Der Output erfolgt dann am einfachsten über `summary`, wobei dies zugegebenerweise etwas unübersichtlich ist. Wir können uns hier eines schönen Pakets von Daniel Lüdecke bedienen:
+Der Output der Analyse erfolgt am einfachsten über `summary`:
+
+```{r}
+summary(model1)
+```
+
+Koeffizienten, R², F-Statistik, Signifikanz, Standardfehler, Residualstandardfehler, usw. Das ist zwar alles da, aber nicht so schön aufbereitet.
+
+Wir können uns hier auch eines schönen Pakets von Daniel Lüdecke bedienen:
 
 ```{r, eval=FALSE, echo = TRUE}
 install.packages("sjPlot")
@@ -89,6 +96,10 @@ tab_model(model1)
 ```
 
 Das ist mehr als nur gut und lässt Deinen Abschluss-Arbeits-Betreuer, der nur SPSS kann, ganz schön staunen!
+
+Der Output kann über die Parameter von `tab_model` auch noch erweitert werden, schau mal in die Hilfe rein: `?tab_model`. Ein Nachteil ist allerdings, dass der Standardschätzfehler nicht angezeigt werden kann. Im summary-Output von oben ist er unter "Residual standard error" zu finden (1.028 in unserem Beispiel).
+
+Nun zur Interpretation des Regressions-Outputs:
 
 ```{r model1-mpc1, echo=FALSE}
 question("Wie kann man den Einfluss des Alters eines Films auf seine Bewertung interpretieren?",
@@ -349,7 +360,16 @@ plot(mtcars$wt, mtcars$mpg)
 lines(lowess(x = mtcars$wt, y = mtcars$mpg))
 ```
 
-Eine leichte nicht-Linearität ist zu erkennen. Wir können laut Potenzleiter entweder $x$ oder $y$ mit einem Exponenten der kleiner 1 ist versehen. Üblicherweise transformiert man eher $x$, da die Interpretation für ein transformiertes $y$ schwierig ist. Aber wir müssen nicht unbedingt transformieren, sondern können einfach die gewünschte Beziehung mit `lm` spezifizieren. Vergleichen wir mal einen linearen Zusammenhang mit einem Exponenten von 0.5.
+Eine leichte nicht-Linearität ist zu erkennen. Man sollte diese auch im Residual-Plot einer einfachen Regression sehen, den wir ganz einfach über plot bekommen:
+
+```{r, echo = TRUE}
+model1 <- lm(mpg ~ wt, data = mtcars)
+plot(model1, which = 1)
+```
+
+Hier sehen wir die Residuen auf der Y-Achse und die vorhergesagten Werte auf der X-Achse. Es sollte kein Muster erkennbar sein, sondern die Punkte sollten zufällig verteilt sein -- Du erinnerst dich bestimmt daran noch aus der Vorlesung. Und dies ist hier eben nicht der Fall, wir sehen, dass niedrige und hohe Werte systematisch positive Residuen erzeugen. Dies ist ein Hinweis auf nicht-Linearität.
+
+Wir können nun laut Potenzleiter entweder $x$ oder $y$ mit einem Exponenten der kleiner 1 ist versehen um die Krümmung auszugleichen. Üblicherweise transformiert man eher $x$, da die Interpretation für ein transformiertes $y$ schwierig ist. Aber wir müssen nicht unbedingt transformieren, sondern können einfach die gewünschte Beziehung mit `lm` spezifizieren. Vergleichen wir mal einen linearen Zusammenhang mit einem Exponenten von 0.5.
 
 ```{r, echo = TRUE}
 tab_model(lm(mpg ~ wt, data = mtcars),        # model 1, linearer Zusammenhang
@@ -426,6 +446,8 @@ $\frac{\partial y}{\partial b_i}$
 und schaut ob diese von anderen Parametern abhängen. Wenn Du das machst, wirst Du sehen, dass nur eine Gleichung nicht-linear ist, die vierte: $\frac{\partial y}{\partial b_1} = e^{b_2x}$ und $\frac{\partial y}{\partial b_2} = b_1x e^{b_2x}$.
 
 Beide Ableitungen sind abhängig von einem anderen Parameter ($b_2$, $b_1$), also ist das Modell nicht-linear. Mehr dazu hier: https://youtu.be/40w50jAOBsY?feature=shared
+
+Ein letzter, aber wichtiger Hinweis: obwohl wir uns hier hauptsächlich auf Transformationen über Potenzen konzentriert haben, kann man natürlich auch ganz andere Transformationen vornehmen. Wenn man z. B. denkt, dass der Zusammenhang sinus-förmig ist, spricht nichts dagegen einfach sin(x) als Transformation zu verwenden.
 
 ## Standardisierung
 

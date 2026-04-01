@@ -1,24 +1,6 @@
-# Hausaufgabe 6
-
-# Aus der Methodenlehre-Übung kennst Du bereits das Ancsombe-Quartett
-# (https://de.wikipedia.org/wiki/Anscombe-Quartett). In R gibt es den Datensatz
-# im Paket datasets. Führe den folgenden Code aus um den Datensatz zu laden:
-
-library(datasets)
-data("anscombe")
-
-# Rechne die 4 Regressionen und prüfe, ob stets die selbe Gleichung
-# herauskommst.
-
-
-# Versuche die Abbildung zum Anscombe-Quartett nachzubauen. Hinweis: über die
-# Funktion par kannst Du Grafik-Parameter festlegen. Nutze den Parameter mfrow
-# oder mfcol um mehrere Sub-Plots zu erstellen. Diese Aufgabe ist optional, wenn
-# Du nicht weiterkommst, ist dies nicht schlimm. Wir besprechen die Lösung im
-# Kurs.
-
-
---------------------------------------------------------------------------------
+# Hausaufgabe 6: Regression
+#
+# -----------------------------------------------------------------------------
 # Der folgende Befehl kopiert den Ordner data aus dem rlernen-Paket direkt in
 # das aktuelle Verzeichnis. Führe den Befehl aus um die nächsten Aufgaben zu
 # bearbeiten
@@ -32,20 +14,28 @@ file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 # Sohnes) in Inch (Zoll).
 
 # Lies den Datensatz ein. Rechne nun eine Regression, um die Körpergröße der
-# Söhne anhand ihrer Väter vorherzusagen.
+# Söhne anhand ihrer Väter vorherzusagen. Interpretiere die Regression. Wie groß
+# ist R²? Wie groß ist der Standardschätzfehler? Bestimme die
+# Regressionsgleichung.
 
 
 # Wenn man auf das lm-Objekt die Funktion plot anwendet, gibt R verschiedene
 # Grafiken aus um die Regression zu beurteilen. Schau Dir den ersten Plot an.
 # Wie bezeichnet man diesen Plot? Hinweis: Du musst das Ergebnis von lm zunächst
-# speichern und darauf dann plot anwenden.
+# speichern und darauf dann plot anwenden. Also plot(lm_output, which = 1),
+# wobei lm_output das Objekt ist, in dem Du die Regression gespeichert hast.
 
 
 # Zeichne nun eine Grafik mit der Größe der Väter auf der X-Achse und der Größe
 # der Söhne auf der Y-Achse. Zeichne die Regressionsgerade in rot und die
-# Ursprungs-Gerade in blau ein und erkläre die Regression zur Mitte. Hinweis:
-# Nutze die Funktion abline, für die Du als Input direkt den lm-Output benutzen
-# kannst. Für die Ursprungsgerade setze die Parameter a und b entsprechend.
+# Ursprungs-Gerade in blau ein. Hinweis: Nutze die Funktion abline, für die Du
+# als Input direkt den lm-Output benutzen kannst. Für die Ursprungsgerade setze
+# die Parameter a und b entsprechend. Siehe auch ?abline.
+#
+# Erkläre abschließend das Konzept "Regression zur Mitte". Was bedeutet das?
+# Schaue Dir dafür an welche Körpergrößen in der Grafik systematisch überschätzt
+# und unterschätzt werden. Hinweis: Dies ist eine Transfer-Aufgabe, wir haben
+# das im Tutorial nicht explizit behandelt.
 
 
 --------------------------------------------------------------------------------
@@ -79,9 +69,8 @@ file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 # Koeffizient beeinflusst am stärksten DEXfat?
 
 
-# Prüfe nun den Residualplot. Welche Schlussfolgerungen können aus dem
-# Residualplot gezogen werden, wenn es um Vorhersagen für hohe Körperfettanteile
-# geht?
+# Prüfe nun den Residualplot. Beschreibe, ob die Residuen bei hohen
+# vorhergesagten Werten zufällig um 0 streuen oder ein Muster zeigen.
 
 --------------------------------------------------------------------------------
 # Der folgende Code erzeugt eine verrauschte Sinus-Kurve. Führe ihn aus um die
@@ -98,9 +87,14 @@ y <- sin(x) + rnorm(length(x), 0, 0.1)
 
 # Rechne nun eine Regression, die den nicht-linearen Zusammenhang
 # berücksichtigt.
+#
+# Hinweis: Im Tutorial haben wir nicht-lineare Zusammenhänge über
+# Potenz-Transformationen dargestellt, z. B. statt eifnach x, haben wir x^2
+# genommen. Das funktioniert auch mit anderen Funktionen, es muss keine
+# Potenz-Funktion sein. Welche Funktion ist hier passend?
 
 
 # Erstelle eine Abbildung der geschätzten y-Werte in Abhängigkeit der x-Werte.
-# Diese sollte ähnlich zur Lowess-Kurve sein. Warum ist es vorteilhaft ein
+# Diese sollte ähnlich zur Lowess-Kurve aussehen. Warum ist es vorteilhaft ein
 # Regressionsmodell zu fitten, obwohl wir auch mit der lowess-Kurve den
 # Zusammenhang gut darstellen können?
