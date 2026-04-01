@@ -10,6 +10,14 @@ get_solution_env <- function(solution_code, envir_prep) {
   env
 }
 
+target_label <- function(x) {
+  if (identical(x, ".result")) {
+    "Das Ergebnis selbst stimmt noch nicht."
+  } else {
+    paste0("`", x, "`")
+  }
+}
+
 # ---------- object extraction ----------
 
 extract_objects <- function(env, include = NULL) {
@@ -424,7 +432,7 @@ suggest_code_features_for_missing_targets <- function(checks, user_code, user_en
       if (length(missing_funs) > 0) {
         return(
           paste0(
-            "Noch nicht ganz richtig (`", target_name, "`). ",
+            "Noch nicht ganz richtig (`", target_label(target_name), "`). ",
             "Ich h\u00e4tte hier vielleicht die Funktionen ",
             paste(sprintf("`%s()`", missing_funs), collapse = ", "),
             " erwartet, obwohl auch andere korrekte L\u00F6sungen m\u00F6glich sein k\u00F6nnen."
@@ -445,7 +453,7 @@ suggest_code_features_for_missing_targets <- function(checks, user_code, user_en
         if (!arg_used_in_calls(calls, arg_name = arg_nm, position = pos)) {
           return(
             paste0(
-              "Noch nicht ganz richtig (`", target_name, "`). ",
+              "Noch nicht ganz richtig (`",target_label(target_name), "`). ",
               "Ich h\u00e4tte bei `", fun, "()` wahrscheinlich das Argument ",
               "`", arg_nm, "` erwartet",
               ", obwohl auch andere L\u00F6sungen m\u00F6glich sind."
@@ -469,7 +477,7 @@ suggest_code_features_for_missing_targets <- function(checks, user_code, user_en
                                         arg_name = arg_nm, position = pos)) {
           return(
             paste0(
-              "Noch nicht ganz richtig (`", target_name, "`). ",
+              "Noch nicht ganz richtig (`", target_label(target_name), "`). ",
               "Der Wert des Arguments `", arg_nm, "` in `", fun, "()` scheint noch nicht zu stimmen."
             )
           )
@@ -546,7 +554,7 @@ grade_targets_with_soft_hints <- function(
       paste(
         vapply(
           checks[!vapply(checks, function(x) x$found, logical(1))],
-          function(x) x$name,
+          function(x) target_label(x$name),
           character(1)
         ),
         collapse = ", "
