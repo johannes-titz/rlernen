@@ -1,5 +1,5 @@
 ---
-title: "7. Faktorenanalyse, Clusteranalyse"
+title: "8. Faktorenanalyse, Clusteranalyse"
 runtime: shiny_prerendered
 description: >
   Faktorenanalyse (Big-Five): Parallelanalyse, Interpretation; Clusteranalyse: hierarchisches Clustern mit hclust, Dendrogramm
