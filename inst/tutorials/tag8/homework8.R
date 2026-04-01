@@ -1,4 +1,4 @@
-# Hausaufgabe 7
+# Hausaufgabe 8
 #
 # Wir verwenden den Datensatz 'mtcars', der in R verfügbar ist. Es werden nur
 # ausgewählte metrische Variablen untersucht: mpg, disp, hp, wt, qsec
