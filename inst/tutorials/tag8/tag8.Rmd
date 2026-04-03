@@ -65,6 +65,8 @@ Das ist schon unsere Faktorenanalyse mit 5 extrahierten Faktoren und einer Varim
 
 Naja, nicht ganz. Wir müssen die Ergebnisse natürlich auch interpretieren können. Wie sieht's mit der Varianzaufklärung aus? Die sehen wir in der Spalte `Cumulative Var` in der letzten Tabelle und mit 5 Faktoren haben wir 23.2% der Varianz erklärt. Wenn wir uns überlegen, dass wir ursprünglich 240 Items hatten, ist das sehr viel. Wenn wir uns überlegen, dass 23.2% Varianzaufklärung einer der Grundpfeiler der Psychologie sind, *hust, hust*,... lassen wir das.
 
+Falls Du vergessen hast, wie man die Faktorladungen interpretiert: das sind einfach Korrelationen der Items mit den Faktoren. Also z. B. N1 korreliert mit Faktor 1 mit 0.537 und mit Faktor 5 mit 0.104. Mit den anderen Faktoren unter 0.1 -- dies wird standardmäßig beim Output ausgeblendet. Negative Korrelationen sind natürlich auch möglich, insbesondere wenn Items negativ codiert sind.
+
 Wie kommt man auf die Eigenwerte (hier SS loadings, letzte Tabelle)? Die Faktorladungen über die Faktoren quadrieren und aufsummieren. Zum Beispiel für den ersten Faktor:
 
 ```{r}
@@ -271,7 +273,38 @@ table(groups)
 q_n(1, "Zu welchem Cluster gehört der Maserati Bora?")
 ```
 
-Sehr gut! Du hast nun gelernt wie man eine einfache Cluster-Analyse in `R` rechnen kann und wie man ein Dendrogramm erstellt. Das soll es für heute auch schon gewesen sein. Willst Du Dich intensiver mit der Cluster-Analyse beschäftigen, wirst Du online viele Materialien finden. Das gleiche trifft auch auf die Faktorenanalyse zu. Einen Tipp gebe ich aber trotzdem noch: Das Buch *Multivariate Analysemethoden* von Backhaus und Kollegen gibt ausgezeichnete Einführungen in beide Themen. Auch die ANOVA ist dort sehr intuitiv erklärt. Ein Must-Have für jeden Methodiker! Außerdem findest Du sehr gute und knappe Kommando-Übersichten für die Faktoren-Analyse und Cluster-Analyse in den Essential R Cheatsheets (https://johannestitz.com/post/2023-10-03-rcheatsheets2/).
+Zuletzt noch ein kleiner Trick: wenn man eine grobe Vorstellung über die Cluster beokmmen möchte, bietet es sich an zwei Variablen auszuwählen und ein Streudiagramm zu erstellen, in dem die Punkte nach Clusterzugehörigkeit gefärbt werden:
+
+```{r prepare-mtcars-plot, include=FALSE}
+fit <- hclust(distance, method = "ward.D")
+groups <- cutree(fit, 3) 
+groups
+table(groups)
+```
+
+```{r mtcars-plot}
+plot(mtcars$drat, mtcars$qsec,
+     col = groups,
+     pch = 19,
+     xlab = "Übersetzungsleistung auf Hinterachse",
+     ylab = "s für 1/4 Meile",
+     main = "Cluster-Visualisierung")
+
+legend("topright",
+       legend = paste("Cluster", sort(unique(groups))),
+       col = sort(unique(groups)),
+       pch = 19,
+       title = "Cluster")
+```
+
+Interpretation:
+- Schwarze Punkte liegen eher bei niedrigen `qsec`-Werten und beschleunigen daher schneller, passend zu eher höheren Werten in der Achsenübersetzung (`drat`).
+- Rote Punkte haben tendenziell höhere `qsec`-Werte und beschleunigen langsamer; dabei treten sowohl niedrige als auch hohe Werte in `drat` auf.
+- Die grünen Punkte bilden eine kompakte Gruppe mit eher niedrigen `drat`-Werten, bei gleichzeitig relativ guter Beschleunigung.
+
+Das ist natürlich ein recht grober Überblick und ein Auto-Experte würde die Interpretatoin bestimmt besser hinbekommen. Trotzdem ist ein solcher Plot grundsätzlich hilfreich um einen ersten Eindruck zu bekommen.
+
+Du hast nun gelernt wie man eine einfache Cluster-Analyse in `R` rechnen kann und wie man ein Dendrogramm erstellt. Das soll es für heute auch schon gewesen sein. Willst Du Dich intensiver mit der Cluster-Analyse beschäftigen, wirst Du online viele Materialien finden. Das gleiche trifft auch auf die Faktorenanalyse zu. Einen Tipp gebe ich aber trotzdem noch: Das Buch *Multivariate Analysemethoden* von Backhaus und Kollegen gibt ausgezeichnete Einführungen in beide Themen. Auch die ANOVA ist dort sehr intuitiv erklärt. Ein Must-Have für jeden Methodiker! Außerdem findest Du sehr gute und knappe Kommando-Übersichten für die Faktoren-Analyse und Cluster-Analyse in den Essential R Cheatsheets (https://johannestitz.com/post/2023-10-03-rcheatsheets2/).
 
 ## Ausblick
 

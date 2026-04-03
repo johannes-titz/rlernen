@@ -6,18 +6,21 @@
 # Lade den Datensatz und selektiere zunächst diese Variablen:
 
 
-# Führe nun eine Faktoranalyse mit einem Faktor durch. Nutze die
-# Varimax-Rotation.
+# Führe nun eine Faktoranalyse mit einem Faktor durch. Warum ist in diesem Fall
+# die Rotationsmethode irrelevant?
 
 
-# Wie groß ist die Varianzaufklärung des Faktors?
-# Wie groß ist die Faktorladung für die Variable 'wt'?
-# Wie groß ist die Kommunalität dieser Variable?
+# Wie groß ist die Varianzaufklärung des Faktors? Wie groß ist die Faktorladung
+# für die Variable 'wt'? Wie groß ist die Kommunalität dieser Variable? Berechne
+# den Eigenwert von Faktor 1 aus den Faktorladungen (nicht direkt aus dem Output
+# ablesen).
 
 
-# Führe nun eine Faktoranalyse mit zwei Faktoren durch.
-# Welche Items laden jeweils auf welchen Faktoren?
-# Erscheint die Zweifaktorlösung sinnvoller als die Einfaktorlösung?
+# Führe nun eine Faktoranalyse mit zwei Faktoren durch. Welche Items laden
+# jeweils auf welchen Faktoren? Erscheint die Zweifaktorlösung sinnvoller als
+# die Einfaktorlösung? Nutze zur Beantwortung der Frage auch die
+# Parallel-Analyse und das Kaiser-Kriterium, aber auch eine inhaltliche
+# (subjektive) Einschätzung.
 
 
 # Teil 2 -----------------------------------------------------------------------
