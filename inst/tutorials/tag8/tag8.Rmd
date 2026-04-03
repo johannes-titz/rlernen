@@ -298,11 +298,12 @@ legend("topright",
 ```
 
 Interpretation:
-- Schwarze Punkte liegen eher bei niedrigen `qsec`-Werten und beschleunigen daher schneller, passend zu eher höheren Werten in der Achsenübersetzung (`drat`).
-- Rote Punkte haben tendenziell höhere `qsec`-Werte und beschleunigen langsamer; dabei treten sowohl niedrige als auch hohe Werte in `drat` auf.
-- Die grünen Punkte bilden eine kompakte Gruppe mit eher niedrigen `drat`-Werten, bei gleichzeitig relativ guter Beschleunigung.
 
-Das ist natürlich ein recht grober Überblick und ein Auto-Experte würde die Interpretatoin bestimmt besser hinbekommen. Trotzdem ist ein solcher Plot grundsätzlich hilfreich um einen ersten Eindruck zu bekommen.
+- Schwarze Punkte liegen eher bei niedrigen `qsec`-Werten und beschleunigen daher schneller, passend zu eher mittelhohen Werten in der Achsenübersetzung (`drat`).
+- Rote Punkte haben tendenziell höhere `qsec`-Werte und beschleunigen langsamer; dabei treten sowohl niedrige, mittlere als auch hohe Werte in `drat` auf.
+- Die grünen Punkte bilden eine kompakte Gruppe mit eher niedrigen `drat`-Werten, bei gleichzeitig relativ guter Beschleunigung; es gibt aber auch einen Ausreißer.
+
+Das ist natürlich nur ein recht grober Überblick und ein Auto-Experte würde die Interpretation bestimmt besser hinbekommen. Trotzdem ist ein solcher Plot grundsätzlich hilfreich um einen ersten Eindruck zu bekommen.
 
 Du hast nun gelernt wie man eine einfache Cluster-Analyse in `R` rechnen kann und wie man ein Dendrogramm erstellt. Das soll es für heute auch schon gewesen sein. Willst Du Dich intensiver mit der Cluster-Analyse beschäftigen, wirst Du online viele Materialien finden. Das gleiche trifft auch auf die Faktorenanalyse zu. Einen Tipp gebe ich aber trotzdem noch: Das Buch *Multivariate Analysemethoden* von Backhaus und Kollegen gibt ausgezeichnete Einführungen in beide Themen. Auch die ANOVA ist dort sehr intuitiv erklärt. Ein Must-Have für jeden Methodiker! Außerdem findest Du sehr gute und knappe Kommando-Übersichten für die Faktoren-Analyse und Cluster-Analyse in den Essential R Cheatsheets (https://johannestitz.com/post/2023-10-03-rcheatsheets2/).
 
