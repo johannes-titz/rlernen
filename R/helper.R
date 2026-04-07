@@ -19,7 +19,8 @@ Datum,Thema
 24.06.2026,Meta-Analyse
 01.07.2026,Freies Thema / Vertiefung
 08.07.2026,Zusatztermin / Uebung
-15.07.2026,Pruefung
+15.07.2026,Pruefungsvorbereitung
+18.07.2026,Pruefung
 "
 
   df <- read.csv(textConnection(kurs_kalender), stringsAsFactors = FALSE)
