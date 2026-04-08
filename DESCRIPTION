@@ -32,5 +32,7 @@ Imports:
     ids,
     rstudioapi,
     gradethis
+Remotes:
+    rstudio/gradethis
 Depends: R (>= 3.5.0)
-LazyData: true
+LazyData: false
