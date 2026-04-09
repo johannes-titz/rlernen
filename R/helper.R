@@ -149,7 +149,7 @@ tutorial_setup <- function() {
   learnr::tutorial_options(exercise.startover = TRUE)
 
   Sys.setenv(
-    TUTORIAL_DATA_DIR = system.file("extdata", "data", package = "rlernen")
+    TUTORIAL_DATA_DIR = "data"
   )
 
   invisible(TRUE)
