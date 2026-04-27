@@ -54,14 +54,17 @@ Dies ist zwar ein R-Paket, aber es enthält hauptsächlich learnr-Tutorials. Fü
 
 `knitr:::out_format` und `remotes:::local_sha` verursachen benfalls eine NOTE, was aber nachvollziehbar ist.
 
+Hinweis: Datei test.R ist ein Skript, was die Kommandos der Tutorials enthält für Tests der Pakete in Debian vom URZ.
+
 <details><summary>Todos (intern)</summary>
 
-- check if all tutorials run..are startable without error
+- [x] check if all tutorials run..are startable without error, there is a script for that now
 - Hausaufgaben besser auf Inhalt abstimmen bzw. andersherum
 - fehlende Inhalte: rep, in dataframe Werte ändern o. löschen, rbind?, fehlende Werte
 - fehlende Inhalt ein Hausaufgaben: dataframe komplett selbst erstellen
 - bessere beispiele (psycholgoie-nah)
 - antworten der studis speichern
+- kurze umfragen für schwierigkeit, feedback
 
 <details><summary><b>Notes for self-hosting this tutorial</b>
 </summary>
