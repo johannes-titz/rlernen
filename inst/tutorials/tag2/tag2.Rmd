@@ -570,7 +570,7 @@ aggregate(imdb_score ~ color, FUN = mean, data = imdb_auswahl)
 
 Die Schreibweise `imdb_score ~ color` bedeutet, dass die AV `imdb_score` ist und die UV `color`, es wird also nach `color` gruppiert. `FUN` steht für die Aggregations-Funktion (in diesem Fall Mittelwert) und `data` für den Datensatz. Das Ergebnis ist das gleiche, nur, dass bei `aggregate` eine Statistik berechnet wurde und nicht mehrere. Auch gibt es nur eine AV, wobei auch prinzipiell mehrere gehen würden (siehe `?aggregate`).
 
-Nun Du! Selektiere zunächst aus dem Dataframe **imdb** die Variablen **imdb_score**, **movie_title** und **title_year**. Wähle anschließend alle Filme aus, die ab 2010 produziert wurden. Vergleiche schließlich den Datensatz über ``describeBy`` oder ``aggregate`` gruppiert nach dem Jahr (**title_year**). *Achtung: diese Aufgabe ist sehr anspruchsvoll, da sie mehrere Schritte erfordert. Nimm Dir dafür also etwas mehr Zeit und versuche Schritt für Schritt voranzukommen. Wenn Du es nicht schaffst, nicht schlimm, schau Dir einfach die Musterlösung an und versuch es in einer Woche nochmal.*
+Nun Du! Selektiere zunächst aus dem Dataframe **imdb** die Variablen **imdb_score**, **movie_title** und **title_year**. Wähle anschließend alle Filme aus, die ab 2010 produziert wurden. Vergleiche schließlich den Datensatz über ``describeBy`` oder ``aggregate`` gruppiert nach dem Jahr (**title_year**). Falls Du `aggregate` benutzt, nutze als Funktion `sd` und als AV `imdb_score`. *Achtung: diese Aufgabe ist sehr anspruchsvoll, da sie mehrere Schritte erfordert. Nimm Dir dafür also etwas mehr Zeit und versuche Schritt für Schritt voranzukommen. Wenn Du es nicht schaffst, nicht schlimm, schau Dir einfach die Musterlösung an und versuch es in einer Woche nochmal.*
 
 ```{r aggregieren3, exercise = TRUE}
 
@@ -607,7 +607,7 @@ Gerade zu Beginn ist es aber sinnvoll, die Befehle zu nutzen, die R bereits von 
 
 Sobald Du diese beherrschst, kannst Du Dein Vokabular nach und nach um ein paar geschmeidigere Ausdrücke erweitern. `describeBy` aus dem `psych`-Paket ist nur ein Beispiel -- es gibt Hunderte weiterer nützlicher Funktionen. Mit der Zeit wirst Du eine Vorliebe für bestimmte Pakete entwickeln und so Deinen ganz eigenen R-Stil finden. Manche R-Leute schwören auf `tidyverse`-Pakete, andere wiederum lieben `data.table`.
 
-![](images/Dtr7sjCVYAAfbeJ.jpg){width=450}
+![](images/Dtr7sjCVYAAfbeJ.jpg){width=100%}
 
 Was Dir besser gefällt, wirst Du erst später merken. Probier verschiedene Pakete einfach aus und entscheide dann selbst.
 
@@ -790,7 +790,7 @@ question("Wie groß sind Frauen und Männer durchschnittlich (gerundet)?",
 
 Klasse! Jetzt solltest Du wirklich solide Kenntnisse im Selektieren und Filtern haben. Weißt Du was das heißt? Wir können in Tag 3 anfangen richtige Methodenlehre und Statistik zu betreiben. Bis dahin, erhol Dich mal von diesem anstrengenden Tag, vielleicht mit einem guten Film. Starwars anyone?
 
-![](images/luke.jpg){width=450}
+![](images/luke.jpg){width=100%}
 
 <!-- libraries laden? -->
 
