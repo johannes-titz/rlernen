@@ -95,7 +95,7 @@ file.copy(system.file("data", package = "rlernen"), ".", recursive = TRUE)
 
 
 # Der folgende Code erzeugt das Datum für die Klausur, führe ihn aus:
-klausur <- lubridate::ymd(20250714)
+klausur <- lubridate::ymd(20260718)
 
 # Erstelle nun das Datum für heute und berechne die Anzahl der Tage bis zur
 # Klausur.
