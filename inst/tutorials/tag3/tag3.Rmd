@@ -213,27 +213,28 @@ rowMeans(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
 
 Hier wird für jede Zeile ein Mittelwert gebildet.
 
-Probier es nun selbst. Berechne mit `colMeans` die Mittelwerte der Variablen **alter**, **mathe**, **deutsch**, **abi** und **lebenszufriedenheit**.
+
+Das ganze geht auch für **Summen** über `rowSums` und `colSums`. Probier es selbst. Berechne mit `colSums` die Summen der Variablen **alter**, **mathe**, **deutsch**, **abi** und **lebenszufriedenheit**.
 
 ```{r lage5, exercise=TRUE}
 
 ```
 
 ```{r lage5-solution}
-colMeans(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
+colSums(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
 ```
 
-Und nun mit `rowMeans`: Berechne für jede Person den Mittelwert über genau diese fünf Variablen.
+Und nun mit `rowSums`: Berechne für jede Person den Mittelwert über genau diese fünf Variablen.
 
 ```{r lage6, exercise=TRUE}
 
 ```
 
 ```{r lage6-solution}
-rowMeans(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
+rowSums(data[, c("alter", "mathe", "deutsch", "abi", "lebenszufriedenheit")])
 ```
 
-Das ganze geht auch für **Summen** über `rowSums` und `colSums`. Aber was machen wir, wenn wir z. B. die **Standardabweichung** (`sd`) oder die **Varianz** (`var`) über mehrere Variablen berechnen wollen? Dafür gibt es keine speziellen Funktionen wie `rowSd` oder `colSd`.
+Was machen wir, wenn wir z. B. die **Standardabweichung** (`sd`) oder die **Varianz** (`var`) über mehrere Variablen berechnen wollen? Dafür gibt es keine speziellen Funktionen wie `rowSd` oder `colSd`.
 
 In solchen Fällen kann man die Funktion `apply` benutzen.
 
