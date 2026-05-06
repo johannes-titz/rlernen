@@ -404,7 +404,7 @@ Berechne die Varianz der Variable `A2`, ohne dass fehlende Werte das Ergebnis be
 ```
 
 ```{r na11-solution}
-median(na.omit(bfi$A2))
+var(na.omit(bfi$A2))
 ```
 
 ```{r na11-check}
@@ -805,7 +805,7 @@ cor(data$abi, data$lebenszufriedenheit)
 
 
 ```{r corr-mpc, echo=FALSE}
-q_n(17, "Wie groß ist die aufgeklärte *Varianz* in der Lebenszufriedenheit durch die Abiturnote? (in Prozent auf eine ganze Zahl gerundet)")
+q_n(0, "Wie groß ist die aufgeklärte *Varianz* in der Lebenszufriedenheit durch die Abiturnote? (in Prozent auf eine ganze Zahl gerundet)")
 ```
 
 Zum Abschluss hätte ich gerne noch die Mittelwerte und das 68%-Konfidenzintervall für das Mögen von Hunden und Katzen (Variablen `hunde_m` und `katzen_m`). Nutze hier für die Funktion `error.bars` aus dem `psych` Paket und den Parameter `alpha` (Achtung: Alpha ist nicht das Konfidenzniveau!).
